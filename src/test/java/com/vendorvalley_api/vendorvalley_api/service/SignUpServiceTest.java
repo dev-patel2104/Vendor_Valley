@@ -17,6 +17,11 @@ public class SignUpServiceTest {
     @MockBean
     SignUpService signUpService;
 
+
+    @MockBean
+    SignUpRepository signUpRepository;
+
+
     @Test
     public void signUpVendorTest() {
         signUpService = new SignUpService();
