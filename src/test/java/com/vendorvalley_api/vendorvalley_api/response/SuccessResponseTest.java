@@ -9,7 +9,6 @@ public class SuccessResponseTest {
     @Test
     public void SuccessResponse_Constructor_Test() {
         SuccessResponse successResponse = new SuccessResponse("Test response message");
-
         assertEquals("Test response message", successResponse.toString());
     }
 }
