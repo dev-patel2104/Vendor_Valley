@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +33,7 @@ public class SignUpControllerTest {
                 mockMvc.perform(post("/signup")).andExpect(status().is2xxSuccessful());
 
                 //service should be mocked to save a user
-                signUpService.signUpVendor();
+                signUpService.signUpVendor(signUpModel);
         }
 
 }
