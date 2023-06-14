@@ -28,8 +28,9 @@ public class SignUpServiceTest {
         signUpService = new SignUpService();
         assertNotNull(signUpService);
 
-        SignUpModel signUpModel = new SignUpModel();
+        SignUpModel signUpModel = new SignUpModel().builder();
         signUpRepository.saveVendor(signUpModel);
+
         SuccessResponse successResponseExpected = new SuccessResponse("");
         SuccessResponse successResponseActual = signUpService.signUpVendor(new SignUpModel());
         assertEquals(successResponseExpected.toString(), successResponseActual.toString());
