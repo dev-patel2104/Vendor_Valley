@@ -6,6 +6,6 @@ import com.vendorvalley_api.vendorvalley_api.response.SuccessResponse;
 public class SignUpService {
 
     public SuccessResponse signUpVendor(SignUpModel signUpModel) {
-        return new SuccessResponse();
+        return new SuccessResponse("");
     }
 }
