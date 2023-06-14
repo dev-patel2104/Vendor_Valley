@@ -25,7 +25,7 @@ public class SignUpControllerTest {
         MockMvc mockMvc; //encapsulates all our web app beans(classes with @Component, @Service, @Repository, or @Controller annotations) and makes them available for testing
 
         @MockBean
-        SignUpService signUpService; //now we are in a need of service to help the controller
+        SignUpService signUpService;
 
         @Test
         public void signUpVendorTest() throws Exception {
