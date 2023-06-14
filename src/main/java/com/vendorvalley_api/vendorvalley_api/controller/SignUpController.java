@@ -17,6 +17,5 @@ public class SignUpController {
     @PostMapping("/signup")
     public void signUpVendor(@RequestBody SignUpModel signUpModel) {
         signUpService.signUpVendor(signUpModel);
-        return;
     }
 }

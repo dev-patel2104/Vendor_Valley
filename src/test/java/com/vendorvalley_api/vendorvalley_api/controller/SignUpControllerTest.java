@@ -34,7 +34,6 @@ public class SignUpControllerTest {
         public void signUpVendorTest() throws Exception {
                 //service should be mocked to save a user
                 given(signUpService.signUpVendor(new SignUpModel())).willReturn(new SuccessResponse("Vendor sign up successful"));
-
                 mockMvc.perform(post("/signup")).andExpect(status().is2xxSuccessful());
         }
 
