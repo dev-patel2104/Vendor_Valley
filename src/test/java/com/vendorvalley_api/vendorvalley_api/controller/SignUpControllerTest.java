@@ -1,6 +1,7 @@
 package com.vendorvalley_api.vendorvalley_api.controller;
 
 import com.vendorvalley_api.vendorvalley_api.model.SignUpModel;
+import com.vendorvalley_api.vendorvalley_api.response.SuccessResponse;
 import com.vendorvalley_api.vendorvalley_api.service.SignUpService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
