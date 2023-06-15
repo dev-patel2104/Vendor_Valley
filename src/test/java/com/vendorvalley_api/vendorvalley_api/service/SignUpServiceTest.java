@@ -28,11 +28,11 @@ public class SignUpServiceTest {
         signUpService = new SignUpService();
         assertNotNull(signUpService);
 
-        SignUpModel signUpModel = new SignUpModel().builder();
+        SignUpModel signUpModel = SignUpModel.builder().user_id(666);
         signUpRepository.saveVendor(signUpModel);
 
         SuccessResponse successResponseExpected = new SuccessResponse("");
-        SuccessResponse successResponseActual = signUpService.signUpVendor(new SignUpModel());
+        SuccessResponse successResponseActual = signUpService.signUpVendor();
         assertEquals(successResponseExpected.toString(), successResponseActual.toString());
     }
 
