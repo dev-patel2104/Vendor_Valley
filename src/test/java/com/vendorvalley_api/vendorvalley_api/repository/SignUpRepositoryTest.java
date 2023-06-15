@@ -22,6 +22,8 @@ public class SignUpRepositoryTest {
         assertNotNull(databaseConnector);
 
         Connection connection = databaseConnector.connect();
+        assertNotNull(connection);
+
     }
 
 
