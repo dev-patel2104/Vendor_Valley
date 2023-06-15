@@ -1,5 +1,6 @@
 package com.vendorvalley_api.vendorvalley_api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendorvalley_api.vendorvalley_api.model.SignUpModel;
 import com.vendorvalley_api.vendorvalley_api.response.SuccessResponse;
 import com.vendorvalley_api.vendorvalley_api.service.SignUpService;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,11 +32,14 @@ public class SignUpControllerTest {
         @MockBean
         SignUpService signUpService;
 
+        @Autowired
+        ObjectMapper objectMapper;
+
         @Test
         public void signUpVendorTest() throws Exception {
                 //service should be mocked to save a user
-                given(signUpService.signUpVendor(new SignUpModel())).willReturn(new SuccessResponse("Vendor sign up successful"));
-                mockMvc.perform(post("/signup")).andExpect(status().is2xxSuccessful());
+                given(signUpService.signUpVendor(SignUpModel.builder().build())).willReturn(new SuccessResponse("Vendor sign up successful"));
+                mockMvc.perform(post("/signup").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(SignUpModel.builder().build()))).andExpect(status().is2xxSuccessful());
         }
 
 }
