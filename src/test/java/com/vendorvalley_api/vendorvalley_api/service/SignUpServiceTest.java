@@ -28,7 +28,17 @@ public class SignUpServiceTest {
         signUpService = new SignUpService();
         assertNotNull(signUpService);
 
-        SignUpModel signUpModel = SignUpModel.builder().user_id(666).build();
+        SignUpModel signUpModel = SignUpModel.builder().userId(666).
+                userRole("role").
+                companyName("Google").
+                companyEmail("boon@g.com").
+                companyRegistrationID("g7x3L").
+                companyMobile("9029895043").
+                companyStreet("Clyde St").
+                companyCity("Halifax").
+                companyProvince("NS").
+                companyCountry("CA").build();
+
         signUpRepository.saveVendor(signUpModel);
 
         SuccessResponse successResponseExpected = new SuccessResponse("");
