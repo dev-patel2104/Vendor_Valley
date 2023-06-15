@@ -28,7 +28,7 @@ public class SignUpServiceTest {
         signUpService = new SignUpService();
         assertNotNull(signUpService);
 
-        SignUpModel signUpModel = SignUpModel.builder().user_id(666);
+        SignUpModel signUpModel = SignUpModel.builder().user_id(666).build();
         signUpRepository.saveVendor(signUpModel);
 
         SuccessResponse successResponseExpected = new SuccessResponse("");

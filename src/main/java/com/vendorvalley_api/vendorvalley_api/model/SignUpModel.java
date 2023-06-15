@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public class SignUpModel {
 
+    private int user_id;
 
 }
