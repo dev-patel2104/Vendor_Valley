@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
 public class SignUpServiceTest {
@@ -39,9 +40,10 @@ public class SignUpServiceTest {
                 companyProvince("NS").
                 companyCountry("CA").build();
 
-        signUpRepository.saveVendor(signUpModel);
-
         SuccessResponse successResponseExpected = new SuccessResponse("");
+        given(signUpRepository.saveVendor(signUpModel)).willReturn(successResponseExpected);
+
+
         SuccessResponse successResponseActual = signUpService.signUpVendor();
         assertEquals(successResponseExpected.toString(), successResponseActual.toString());
     }
