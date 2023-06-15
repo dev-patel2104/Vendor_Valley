@@ -2,7 +2,6 @@ package com.vendorvalley_api.vendorvalley_api.service;
 
 import com.vendorvalley_api.vendorvalley_api.model.SignUpModel;
 import com.vendorvalley_api.vendorvalley_api.repository.SignUpRepository;
-import com.vendorvalley_api.vendorvalley_api.response.SuccessResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +24,6 @@ public class SignUpServiceTest {
 
     @Test
     public void signUpVendorTest() {
-        signUpService = new SignUpService();
         assertNotNull(signUpService);
 
         SignUpModel signUpModel = SignUpModel.builder().userId(666).
