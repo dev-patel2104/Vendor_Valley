@@ -13,19 +13,12 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 public class SignUpServiceTest {
 
-
-    @MockBean
-    SignUpService signUpService;
-
-
     @MockBean
     SignUpRepository signUpRepository;
 
 
     @Test
     public void signUpVendorTest() {
-        assertNotNull(signUpService);
-
         SignUpModel signUpModel = SignUpModel.builder().userId(666).
                 userRole("role").
                 companyName("Google").
