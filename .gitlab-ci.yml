@@ -1,0 +1,79 @@
+# This YAML file demonstrates building a gradle console app and deploying it to your
+# Timberlea account via secure copy.
+
+# NOTE: It does not upload your test results to GitLab, you will need
+# to figure that out still.
+
+# NOTE: You will need to adjust the following variable to the build output of your app
+#       right now it's configured to deploy an Android APK file from another class I taught.
+# variables:
+#   EXECUTABLE_TO_DEPLOY: "app/build/outputs/apk/debug/app-debug.apk"
+#   DESTINATION_FILE: "App-${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.apk"
+
+stages:
+  - build
+  - test
+  - deploy
+
+build-backend:
+  stage: build
+  image: maven:latest
+  script:
+    - cd backend
+    - echo "Building backend"
+    - mvn clean install
+  artifacts:
+    paths:
+    - backend/target/site/*
+  tags:
+    - dalfcs_docker_autoscale
+
+# build-frontend:
+#   stage: build
+#   image: node:latest
+#   script:
+#     - cd frontend
+#     - echo "Building frontend"
+#     - npm run build
+#   artifacts:
+#     paths:
+#     - frontend/target/site/*
+  # tags:
+  #   - dalfcs_docker_autoscale
+  # only:
+  #   refs:
+  #     - branches
+
+test-backend:
+  stage: test
+  image: maven:latest
+  script:
+    - cd backend
+    - echo "Testing backend"
+    - mvn clean test
+  artifacts:
+    paths:
+    - backend/target/site/*
+  tags:
+    - dalfcs_docker_autoscale  
+
+deploy-backend:
+  stage: deploy
+  artifacts:
+    paths:
+    - backend/target/site/*
+  script:
+    - echo "Deploying Success"
+  tags:
+    - dalfcs_docker_autoscale
+
+# deployJob:
+#   stage: deploy
+#   tags:
+#     - ugrad
+#   artifacts:
+#     paths:
+#       - app/build/outputs
+#   script:
+#     - chmod og-rwx ${DEPLOY_SSH_KEY}
+#     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_SSH_KEY}" ${EXECUTABLE_TO_DEPLOY} "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${DESTINATION_FILE}"
