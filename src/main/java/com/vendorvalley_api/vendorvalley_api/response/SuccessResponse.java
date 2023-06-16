@@ -1,5 +1,8 @@
 package com.vendorvalley_api.vendorvalley_api.response;
 
+import lombok.Getter;
+
+@Getter
 public class SuccessResponse {
 
     private String message;
