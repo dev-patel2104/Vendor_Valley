@@ -28,21 +28,21 @@ build-backend:
   tags:
     - dalfcs_docker_autoscale
 
-# build-frontend:
-#   stage: build
-#   image: node:latest
-#   script:
-#     - cd frontend
-#     - echo "Building frontend"
-#     - npm run build
-#   artifacts:
-#     paths:
-#     - frontend/target/site/*
-  # tags:
-  #   - dalfcs_docker_autoscale
-  # only:
-  #   refs:
-  #     - branches
+build-frontend:
+  stage: build
+  image: node:latest
+  script:
+    - cd frontend
+    - echo "Building frontend"
+    - npm run build
+  artifacts:
+    paths:
+    - frontend/target/site/*
+  tags:
+    - dalfcs_docker_autoscale
+  only:
+    refs:
+      - branches
 
 test-backend:
   stage: test
