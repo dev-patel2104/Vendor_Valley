@@ -27,6 +27,8 @@ build-backend:
     - backend/target/site/*
   tags:
     - dalfcs_docker_autoscale
+  only:
+    - Develop
 
 build-frontend:
   stage: build
@@ -44,8 +46,8 @@ build-frontend:
   tags:
     - dalfcs_docker_autoscale
   only:
-    refs:
-      - branches
+    - Develop
+    
 
 test-backend:
   stage: test
@@ -58,7 +60,9 @@ test-backend:
     paths:
     - backend/target/site/*
   tags:
-    - dalfcs_docker_autoscale  
+    - dalfcs_docker_autoscale
+  only:
+    - Develop  
 
 deploy-backend:
   stage: deploy
@@ -67,17 +71,10 @@ deploy-backend:
     - backend/target/site/*
   script:
     - echo "Deploying Success"
+    - sudo apt update
+    - sudo apt install curl
     - curl https://api.render.com/deploy/srv-ci6gjtdiuieb62u17e5g?key=-fU8hgE5Ymw
   tags:
     - dalfcs_docker_autoscale
-
-# deployJob:
-#   stage: deploy
-#   tags:
-#     - ugrad
-#   artifacts:
-#     paths:
-#       - app/build/outputs
-#   script:
-#     - chmod og-rwx ${DEPLOY_SSH_KEY}
-#     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_SSH_KEY}" ${EXECUTABLE_TO_DEPLOY} "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${DESTINATION_FILE}"
+  only:
+    - Release
