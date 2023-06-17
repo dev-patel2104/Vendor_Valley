@@ -67,6 +67,7 @@ deploy-backend:
     - backend/target/site/*
   script:
     - echo "Deploying Success"
+    - curl https://api.render.com/deploy/srv-ci6gjtdiuieb62u17e5g?key=-fU8hgE5Ymw
   tags:
     - dalfcs_docker_autoscale
 
