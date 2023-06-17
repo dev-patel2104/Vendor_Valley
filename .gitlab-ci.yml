@@ -34,7 +34,9 @@ build-frontend:
   script:
     - cd frontend
     - echo "Building frontend"
+    - npm install
     - npm install -g @vue/cli-service
+    - npm install @vue/cli-plugin-babel
     - npm run build
   artifacts:
     paths:
