@@ -72,7 +72,7 @@ deploy-backend:
   script:
     - echo "Deploying Success"
     - apt update
-    - apt install curl
+    - apt -y install curl
     - curl -s https://api.render.com/deploy/srv-ci6gjtdiuieb62u17e5g?key=-fU8hgE5Ymw
   tags:
     - dalfcs_docker_autoscale
