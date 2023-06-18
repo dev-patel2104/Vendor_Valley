@@ -73,7 +73,7 @@ push_jar_to_github:
     - cp backend/target/VendorValley-0.0.1-SNAPSHOT.jar ASDC_Project/backend/target/
     - cd ASDC_Project/backend/
     - git checkout -b Release
-    - git add VendorValley-0.0.1-SNAPSHOT.jar
+    - git add ASDC_Project/backend/target/VendorValley-0.0.1-SNAPSHOT.jar
     - git commit -m "Update .jar file"
     - git push
   only:
