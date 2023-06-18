@@ -24,7 +24,7 @@ build-backend:
     - mvn clean install
   artifacts:
     paths:
-    - backend/target/site/*
+    - backend/target/*.jar
   tags:
     - dalfcs_docker_autoscale
   only:
@@ -40,9 +40,6 @@ build-frontend:
     - npm install -g @vue/cli-service
     - npm install @vue/cli-plugin-babel
     - npm run build
-  artifacts:
-    paths:
-    - frontend/target/site/*
   tags:
     - dalfcs_docker_autoscale
   only:
@@ -56,9 +53,6 @@ test-backend:
     - cd backend
     - echo "Testing backend"
     - mvn clean test
-  artifacts:
-    paths:
-    - backend/target/site/*
   tags:
     - dalfcs_docker_autoscale
   only:
