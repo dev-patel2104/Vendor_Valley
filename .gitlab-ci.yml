@@ -65,9 +65,9 @@ push_jar_to_github:
     - apt install -y git
     - echo "Pushing .jar file to GitHub"
     - git config --global user.email "dev2104patel@gmail.com"
-    - git config --global user.name "dev-patel2104"
+    - git config --global user.name ${USER}
     - git config --global credential.helper store
-    - echo "https://github.com:${PAT}" | git credential approve
+    - echo "username=${USER}\npassword=${PAT}" | git 
     - git clone https://${PAT}@github.com/dev-patel2104/ASDC_Project.git
     - cp target/VendorValley-0.0.1-SNAPSHOT.jar ASDC_Project/backend/
     - cd ASDC_Project/backend/
