@@ -58,29 +58,6 @@ test-backend:
   only:
     - Develop  
 
-push_jar_to_github:
-  stage: deploy
-  dependencies:
-    - build-backend
-  script:
-    - apt update
-    - apt install -y git
-    - echo "Pushing .jar file to GitHub"
-    - git config --global user.email "dev2104patel@gmail.com"
-    - git config --global user.name ${USER}
-    - git config --global credential.helper store
-    - echo "username=${USER}\npassword=${PAT}" | git credential approve
-    - git clone https://${PAT}@github.com/dev-patel2104/ASDC_Project.git
-    - echo $(ls)
-    - cp backend/target/VendorValley-0.0.1-SNAPSHOT.jar ASDC_Project/backend/target/
-    - cd ASDC_Project/backend/
-    - git checkout -b Release
-    - git add .
-    - git commit -m "Update .jar file -- after merge"
-    - git push
-  only:
-    - Release
-
 deploy-backend:
   stage: deploy
   script:
