@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.MailSendException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class ResetPasswordController {
     @Autowired
     private ResetPasswordService resetPasswordService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> credentials) {
         boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
@@ -61,6 +63,7 @@ public class ResetPasswordController {
         return ResponseEntity.ok("Verification Code will be sent to your email shortly!");
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/verifyConfirmationCode")
     public ResponseEntity<String> verifyConfirmationCode(@RequestBody Map<String, String> credentials) {
         boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
@@ -89,6 +92,7 @@ public class ResetPasswordController {
         return ResponseEntity.ok("Success! You can now change update your password!");
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/updatePassword")
     public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> credentials) {
         boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
