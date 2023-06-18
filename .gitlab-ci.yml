@@ -27,8 +27,7 @@ build-backend:
     - backend/target/*.jar
   tags:
     - dalfcs_docker_autoscale
-  only:
-    - Develop
+
 
 build-frontend:
   stage: build
@@ -42,8 +41,7 @@ build-frontend:
     - npm run build
   tags:
     - dalfcs_docker_autoscale
-  only:
-    - Develop
+
     
 
 test-backend:
@@ -55,8 +53,7 @@ test-backend:
     - mvn clean test
   tags:
     - dalfcs_docker_autoscale
-  only:
-    - Develop  
+
 
 push_jar_to_github:
   stage: deploy
