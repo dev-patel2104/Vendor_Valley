@@ -69,7 +69,7 @@ push_jar_to_github:
     - git config --global credential.helper store
     - echo "username=${USER}\npassword=${PAT}" | git credential approve
     - git clone https://${PAT}@github.com/dev-patel2104/ASDC_Project.git
-    - echo $(ls target/)
+    - echo $(ls)
     - cp target/VendorValley-0.0.1-SNAPSHOT.jar ASDC_Project/backend/
     - cd ASDC_Project/backend/
     - git checkout -b Release
