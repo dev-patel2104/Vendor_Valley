@@ -1,12 +1,15 @@
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ExceptionTests\NoInformationFoundExceptionTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\VendorValley\VendorValleyApplicationTests.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ExceptionTests\PasswordsCantBeSameExceptionTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ControllerTests\ResetPasswordControllerTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ControllerTests\LoginControllerTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\UtilTests\UserUtilTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ServiceTests\LoginServiceTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ExceptionTests\UserDoesntExistExceptionTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\UtilTests\EmailUtilTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ServiceTests\ResetPasswordServiceTest.java
-C:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\test\java\com\group10\ExceptionTests\InvalidPasswordExceptionTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ControllerTests\LoginControllerTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ExceptionTests\UserDoesntExistExceptionTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\UtilTests\EmailUtilTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ControllerTests\CheckHTTPResponse.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ServiceTests\LoginServiceTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ServiceTests\ResetPasswordServiceTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ServiceTests\SignInServiceTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\UtilTests\UserUtilTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ControllerTests\ResetPasswordControllerTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ExceptionTests\InvalidPasswordExceptionTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\VendorValley\VendorValleyApplicationTests.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ExceptionTests\NoInformationFoundExceptionTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ControllerTests\SignInControllerTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ExceptionTests\PasswordsCantBeSameExceptionTest.java
+C:\JavaCodes\group10\backend\src\test\java\com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.java
