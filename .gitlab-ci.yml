@@ -62,7 +62,7 @@ push_jar_to_github:
   stage: deploy
   script:
     - apt update
-    - apt install git
+    - apt install -y git
     - echo "Pushing .jar file to GitHub"
     - git config --global user.email "dev2104patel@gmail.com"
     - git config --global user.name "dev-patel2104"
