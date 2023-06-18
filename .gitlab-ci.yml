@@ -54,23 +54,6 @@ test-backend:
   tags:
     - dalfcs_docker_autoscale
 
-
-push_jar_to_github:
-  stage: deploy
-  script:
-    - echo "Pushing .jar file to GitHub"
-    - git config --global user.email "dev2104patel@gmail.com"
-    - git config --global user.name "dev-patel2104"
-    - git clone https://github.com/dev-patel2104/ASDC_Project.git
-    - cp target/VendorValley-0.0.1-SNAPSHOT.jar ASDC_Project/backend/
-    - cd ASDC_Project/backend/
-    - git checkout -b Release
-    - git add VendorValley-0.0.1-SNAPSHOT.jar
-    - git commit -m "Update .jar file"
-    - git push
-  only:
-    - Release
-
 deploy-backend:
   stage: deploy
   script:
