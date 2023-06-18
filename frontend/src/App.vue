@@ -1,13 +1,14 @@
-<template> 
-<div class="w-100 bg-black text-center p-2">
-  <h3 class="text-white">Vendor Valley</h3>
-</div>
+<template>
+  <NavBar />
 
-<div>
-  <VendorHome />
-</div>
+  <router-view />
+  
 </template>
 
-<script setup>
-import VendorHome from '@/components/VendorHome.vue'
+<script>
+import NavBar from '@/components/VendorHome'
+export default {
+  components: {NavBar}
+}
+
 </script>
