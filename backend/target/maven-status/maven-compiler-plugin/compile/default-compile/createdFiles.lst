@@ -4,13 +4,16 @@ com\group10\Repository\UserRepository.class
 com\group10\Service\LoginService.class
 com\group10\Controller\Home.class
 com\group10\Model\User.class
+com\group10\Service\SignInService.class
 com\group10\Exceptions\VerificationCodeExpiredException.class
 com\group10\Exceptions\InvalidPasswordException.class
 com\group10\Exceptions\UserDoesntExistException.class
 com\group10\Exceptions\PasswordsCantBeSameException.class
+com\group10\Controller\SignInController.class
 com\group10\Service\ResetPasswordService.class
 com\group10\Model\EmailDetails.class
 com\group10\Repository\ResetPasswordRepository.class
+com\group10\Exceptions\UserAlreadyPresentException.class
 com\group10\Util\EmailUtil.class
 com\group10\Exceptions\NoInformationFoundException.class
 com\group10\VendorValleyApplication.class
