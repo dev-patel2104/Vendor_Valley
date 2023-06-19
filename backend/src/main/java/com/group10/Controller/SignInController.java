@@ -32,7 +32,11 @@ public class SignInController {
         {
             try
             {
-                signInService.SignIn(user);
+                if(!signInService.SignIn(user))
+                {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+                }
+
             }
             catch (SQLException e)
             {
