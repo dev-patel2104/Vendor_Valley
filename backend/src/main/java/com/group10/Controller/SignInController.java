@@ -23,6 +23,7 @@ public class SignInController {
     @Autowired
     private SignInService signInService;
 
+    
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
     public ResponseEntity<String> signIn(@RequestBody User user) {
@@ -31,11 +32,7 @@ public class SignInController {
         {
             try
             {
-                if(!signInService.SignIn(user))
-                {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
-                }
-
+                signInService.SignIn(user);
             }
             catch (SQLException e)
             {
