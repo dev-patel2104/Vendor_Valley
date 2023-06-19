@@ -22,7 +22,9 @@ public class SignInController {
 
     @Autowired
     private SignInService signInService;
-    @CrossOrigin(origins = "", allowedHeaders = "")
+
+    
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
     public ResponseEntity<String> signIn(@RequestBody User user) {
         userMap.put(user.getEmail(),user);
