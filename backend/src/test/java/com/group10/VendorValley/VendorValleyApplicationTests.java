@@ -1,4 +1,4 @@
-package com.group10;
+package com.group10.VendorValley;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
