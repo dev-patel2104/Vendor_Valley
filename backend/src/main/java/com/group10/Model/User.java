@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class User {
 
-    public static User object;
     private int userId;
     private String lastName;
     private String firstName;
@@ -108,5 +107,4 @@ public class User {
         this.country = country;
     }
 
-    // Other getters/setters as needed
 }
