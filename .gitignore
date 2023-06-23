@@ -2,5 +2,3 @@
 .vscode/settings.json
 .idea
 backend/HELP.md
-backend/src/main/resources/application.properties
-backend/src/main/resources
