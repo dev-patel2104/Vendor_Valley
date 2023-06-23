@@ -3,6 +3,7 @@ package com.group10.Service;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.User;
 import com.group10.Repository.UserRepository;
+import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,63 +17,50 @@ public class SignInService
 
     public boolean SignIn(User user) throws UserAlreadyPresentException, SQLException
     {
-        if(user == null)
-        {
+        if (user == null) {
             return false;
         }
-        if(user.getFirstName() == null || user.getFirstName().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getFirstName())) {
             return false;
         }
-        if(user.getLastName() == null || user.getLastName().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getLastName())) {
             return false;
         }
-        if(user.getMobile() == null || user.getMobile().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getMobile())) {
             return false;
         }
         if(user.getVendor() != 0 && user.getVendor() != 1)
         {
             return false;
         }
-        if(user.getStreet() == null || user.getStreet().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getStreet())) {
             return false;
         }
-        if(user.getCity() == null || user.getCity().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getCity())) {
             return false;
         }
-        if(user.getProvince() == null || user.getProvince().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getProvince())) {
             return false;
         }
-        if(user.getCountry() == null || user.getCountry().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getCountry())) {
             return false;
         }
-        if(user.getEmail() == null || user.getEmail().isEmpty())
-        {
+        if (!StringUtil.isNotNullAndNotEmpty(user.getEmail())) {
             return false;
         }
-        if(user.getPassword() == null || user.getPassword().length() < 8 || user.getPassword().isEmpty())
-        {
+        if(!StringUtil.isNotNullAndNotEmpty(user.getPassword()) || user.getPassword().length() < 8) {
             return false;
         }
 
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        if(!user.getEmail().matches(emailRegex))
-        {
+
+        if(!user.getEmail().matches(emailRegex)) {
             return false;
         }
-        if(userRepository.addUser(user))
-        {
-            return true;
-        }
 
-        else
-        {
+        if(userRepository.addUser(user)) {
+            return true;
+        } else {
             throw new UserAlreadyPresentException("The user is already present");
         }
 
