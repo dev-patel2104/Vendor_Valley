@@ -1,5 +1,6 @@
 package com.group10.Repository;
 
+import com.group10.Model.SignUpModel;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserRepository {
     private UserUtil UserUtilObj = new UserUtil();
     public User findByEmail(String email) throws SQLException {
         try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getAllUsers);)
+             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
         {
             getUsersPreparedStatement.setString(1, email);
             try(ResultSet resultSet = getUsersPreparedStatement.executeQuery();)
@@ -100,9 +101,6 @@ public class UserRepository {
             addUserPreparedStatement.setString(10, user.getPassword());
             addUserPreparedStatement.executeUpdate();
 
-            if(user.getVendor() == 1) {
-                // call boon's method
-            }
             return true;
         }
         catch(SQLException e) {

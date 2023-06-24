@@ -19,19 +19,17 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(SpringExtension.class)
-public class SignUpRepositoryTest {
+public class VendorRepositoryTest {
 
-    @MockBean
-    DatabaseService databaseConfig;
 
     @Test
     public void saveVendorTest() throws SQLException { //ref: https://stackoverflow.com/questions/69283087/how-to-write-test-case-for-the-preparedstatement-in-java-using-mockito
-        assertNotNull(databaseConfig.connect());
         Connection connection = mock(Connection.class);
         PreparedStatement preparedStatementMock = mock(PreparedStatement.class);
 
         given(connection.prepareStatement(SQLQuery.insertVendorQuery)).willReturn(preparedStatementMock);
         connection.prepareStatement(SQLQuery.insertVendorQuery).setString(SignUpVendorSQLQueryEnum.COMPANY_CITY.queryIndex, "CityName");
+
         verify(preparedStatementMock).setString(SignUpVendorSQLQueryEnum.COMPANY_CITY.queryIndex, "CityName");
 
         when(preparedStatementMock.executeUpdate()).thenReturn(1);

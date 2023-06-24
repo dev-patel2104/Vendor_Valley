@@ -1,7 +1,8 @@
 package com.group10.Controller;
 
 import com.group10.Exceptions.UserAlreadyPresentException;
-import com.group10.Model.User;
+import com.group10.Exceptions.VendorDetailsAbsentForUserException;
+import com.group10.Model.SignUpModel;
 import com.group10.Service.SignInService;
 import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,18 @@ public class SignInController {
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
-    public ResponseEntity<String> signIn(@RequestBody User user) {
+    public ResponseEntity<String> signIn(@RequestBody SignUpModel signUpModel) {
 
-        if (StringUtil.isNotNullAndNotEmpty(user.getEmail())) {
+        if (StringUtil.isNotNullAndNotEmpty(signUpModel.getEmail())) {
             try {
-                if (!signInService.SignIn(user)) {
+                if (!signInService.SignIn(signUpModel)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
                 }
-            }
-            catch (SQLException e) {
+            } catch (SQLException | VendorDetailsAbsentForUserException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-            }
-            catch (UserAlreadyPresentException e) {
+            } catch (UserAlreadyPresentException e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-            }
-            catch(Exception e) {
+            } catch(Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
             }
         }

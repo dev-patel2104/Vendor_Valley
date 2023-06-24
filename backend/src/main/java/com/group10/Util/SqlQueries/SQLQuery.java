@@ -6,6 +6,6 @@ public class SQLQuery {
     public static final String addUserQuery = "INSERT INTO users (first_name, last_name, street, city, " +
             "province, country, email, mobile, is_vendor, Password)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    public static final String getAllUsers = "SELECT * FROM users WHERE email = ?";
+    public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";
     public static final String updateUserQuery = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";
 }
