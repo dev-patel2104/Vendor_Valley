@@ -1,5 +1,6 @@
 package com.group10.Repository;
 
+import com.group10.Enums.SignUpUserSQLQueryEnum;
 import com.group10.Model.SignUpModel;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
@@ -53,17 +54,17 @@ public class UserRepository {
 
         try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
              PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery)) {
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getLastName());
-            statement.setString(3, user.getStreet());
-            statement.setString(4, user.getCity());
-            statement.setString(5, user.getProvince());
-            statement.setString(6, user.getCountry());
-            statement.setString(7, user.getEmail());
-            statement.setString(8, user.getMobile());
-            statement.setInt(9, user.getVendor());
-            statement.setString(10, user.getPassword());
-            statement.setInt(11, user.getUserId());
+            statement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
+            statement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
+            statement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
+            statement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
+            statement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
+            statement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
+            statement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
+            statement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
+            statement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
+            statement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
+            statement.setInt(SignUpUserSQLQueryEnum.USER_ID.queryIndex, user.getUserId());
 
             int rowsUpdated = statement.executeUpdate();
             // User found
@@ -89,16 +90,16 @@ public class UserRepository {
                 return false;
             }
 
-            addUserPreparedStatement.setString(1, user.getFirstName());
-            addUserPreparedStatement.setString(2, user.getLastName());
-            addUserPreparedStatement.setString(3, user.getStreet());
-            addUserPreparedStatement.setString(4, user.getCity());
-            addUserPreparedStatement.setString(5, user.getProvince());
-            addUserPreparedStatement.setString(6, user.getCountry());
-            addUserPreparedStatement.setString(7, user.getEmail());
-            addUserPreparedStatement.setString(8, user.getMobile());
-            addUserPreparedStatement.setInt(9, user.getVendor());
-            addUserPreparedStatement.setString(10, user.getPassword());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
+            addUserPreparedStatement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
             addUserPreparedStatement.executeUpdate();
 
             return true;
