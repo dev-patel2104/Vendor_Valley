@@ -8,27 +8,21 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ResetPasswordRepository {
-    
-    @Value("${spring.datasource.url}")
-    private String DBURL;
 
-    @Value("${spring.datasource.username}")
-    private String DBUSERNAME;
-
-    @Value("${spring.datasource.password}")
-    private String DBPASSWORD;
-
+    @Autowired
+    DatabaseService databaseService;
 
     public boolean storeVerificationCode(int id, int code) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-             PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserRestPasswordEntry);)
-        {
+        try (Connection connection = databaseService.connect();
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserRestPasswordEntry)) {
             statement.setInt(1, id);
             statement.setInt(2, code);
             statement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
@@ -48,9 +42,8 @@ public class ResetPasswordRepository {
     } 
 
     public int getVerificationCode(String email) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-             PreparedStatement statement = connection.prepareStatement(SQLQuery.getPasswordRestInfoByUserId);)
-        {
+        try (Connection connection = databaseService.connect();
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.getPasswordRestInfoByUserId)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             // Row Inserted

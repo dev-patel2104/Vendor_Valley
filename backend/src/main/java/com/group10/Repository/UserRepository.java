@@ -1,6 +1,7 @@
 package com.group10.Repository;
 
 import com.group10.Enums.SignUpUserSQLQueryEnum;
+import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,16 @@ public class UserRepository {
     private String DBPASSWORD;
 
     @Autowired
+    DatabaseService databaseService;
+
+    @Autowired
     private User user;
+
     private UserUtil UserUtilObj = new UserUtil();
+
+
     public User findByEmail(String email) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
+        try (Connection connection = databaseService.connect();
              PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
         {
             getUsersPreparedStatement.setString(1, email);
@@ -51,7 +58,7 @@ public class UserRepository {
 
     public boolean updateUser(User user) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
+        try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery)) {
             statement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
             statement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
@@ -82,7 +89,7 @@ public class UserRepository {
 
     public boolean addUser(User user) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
+        try (Connection connection = databaseService.connect();
              PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery)) {
 
             if(findByEmail(user.getEmail()) != null) {
