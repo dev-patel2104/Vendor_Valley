@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.group10.Util.SqlQueries.SQLQuery;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,7 @@ public class ResetPasswordRepository {
 
     public boolean storeVerificationCode(int id, int code) throws SQLException {
         try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-            PreparedStatement statement = connection.prepareStatement("insert into user_password_reset (user_id, verification_code, created_at) values(?,?,?)");) 
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserRestPasswordEntry);)
         {
             statement.setInt(1, id);
             statement.setInt(2, code);
@@ -47,9 +48,8 @@ public class ResetPasswordRepository {
     } 
 
     public int getVerificationCode(String email) throws SQLException {
-        String query = "select verification_code, created_at from user_password_reset where user_id = (select user_id from users where email = ?) order by created_at DESC limit 1";
         try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-            PreparedStatement statement = connection.prepareStatement(query);) 
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.getPasswordRestInfoByUserId);)
         {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();

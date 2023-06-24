@@ -1,7 +1,6 @@
 package com.group10.Repository;
 
 import com.group10.Enums.SignUpUserSQLQueryEnum;
-import com.group10.Model.SignUpModel;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
