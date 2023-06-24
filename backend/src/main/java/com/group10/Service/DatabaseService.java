@@ -8,8 +8,7 @@ import java.sql.*;
 @Service
 public class DatabaseService {
 
-    private static DatabaseService dbInstance = new DatabaseService();
-    private static Connection dbConnection = null;
+    private Connection dbConnection = null;
 
     @Value("${spring.datasource.url}")
     private String datasourceURL;
@@ -20,20 +19,13 @@ public class DatabaseService {
     @Value("${spring.datasource.password}")
     private String datasourcePassword;
 
-    public static DatabaseService getInstance() {
-        return dbInstance;
-    }
 
     public Connection connect() {
         if (dbConnection == null) {
             try {
-                Class.forName("com.mysql.jdbc.Driver");
                 dbConnection = DriverManager.getConnection(datasourceURL,
                         datasourceUserName,
                         datasourcePassword);
-
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
             } catch (SQLException e) {
                 System.out.println("Failed to connect to database: " + e.getMessage());
                 throw new RuntimeException(e);

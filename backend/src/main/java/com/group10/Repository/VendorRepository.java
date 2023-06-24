@@ -4,6 +4,7 @@ import com.group10.Enums.SignUpVendorSQLQueryEnum;
 import com.group10.Model.Vendor;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -14,10 +15,13 @@ import java.sql.SQLException;
 @Repository
 public class VendorRepository {
 
+
+    @Autowired
+    DatabaseService databaseService;
+
     public boolean saveVendor(Vendor vendorModel) {
-        Connection connection = DatabaseService.getInstance().connect();
-        try {
-            PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQuery.insertVendorQuery);
+        try (Connection connection = databaseService.connect();
+             PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQuery.insertVendorQuery)) {
 
             prepareInsertVendorQuery(sqlPreparedStatement, vendorModel);
 
