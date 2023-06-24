@@ -1,7 +1,6 @@
 package com.group10.Repository;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository

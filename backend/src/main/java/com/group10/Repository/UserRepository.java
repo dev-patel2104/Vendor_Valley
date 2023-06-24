@@ -5,7 +5,6 @@ import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import com.group10.Model.User;
 
@@ -13,15 +12,6 @@ import java.sql.*;
 
 @Repository
 public class UserRepository {
-
-    @Value("${spring.datasource.url}")
-    private String DBURL;
-
-    @Value("${spring.datasource.username}")
-    private String DBUSERNAME;
-
-    @Value("${spring.datasource.password}")
-    private String DBPASSWORD;
 
     @Autowired
     DatabaseService databaseService;
