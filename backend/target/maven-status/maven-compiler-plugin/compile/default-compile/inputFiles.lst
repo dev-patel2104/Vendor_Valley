@@ -1,20 +1,28 @@
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Controller\ResetPasswordController.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\InvalidPasswordException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Service\LoginService.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Controller\Home.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\UserAlreadyPresentException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\VerificationCodeExpiredException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Controller\LoginController.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\UserDoesntExistException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Util\EmailUtil.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Repository\ResetPasswordRepository.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\VendorValleyApplication.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Service\SignInService.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\NoInformationFoundException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Model\EmailDetails.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Model\User.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Controller\SignInController.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Repository\UserRepository.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Service\ResetPasswordService.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\PasswordsCantBeSameException.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\Dal Assignments\asdc\GroupProject\group10\backend\src\main\java\com\group10\Util\UserUtil.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Util/SqlQueries/SQLQuery.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Service/SignInService.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Controller/LoginController.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Repository/SignUpRepository.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Util/UserUtil.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Controller/Home.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Service/SignUpService.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Service/DatabaseService.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/UserAlreadyPresentException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/InvalidPasswordException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Controller/ResetPasswordController.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Service/LoginService.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/UserDoesntExistException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/NoInformationFoundException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Model/User.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Controller/SignUpController.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/VendorValleyApplication.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Enums/SignUpVendorSQLQueryEnum.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Repository/UserRepository.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Response/SuccessResponse.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Model/SignUpModel.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Controller/SignInController.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Model/EmailDetails.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Repository/ResetPasswordRepository.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/VerificationCodeExpiredException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Exceptions/PasswordsCantBeSameException.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Service/ResetPasswordService.java
+/Users/boon/Documents/group10/backend/src/main/java/com/group10/Util/EmailUtil.java

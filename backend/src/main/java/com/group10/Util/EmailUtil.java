@@ -13,6 +13,8 @@ import com.group10.Model.EmailDetails;
 @Component
 public class EmailUtil {
 
+    private static final String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+
     @Autowired 
     private JavaMailSender javaMailSender;
     
@@ -49,4 +51,10 @@ public class EmailUtil {
             throw new MailParseException("Improper email format!");
         }
     }
+
+    public static boolean isValidEmail(String emailID) {
+        return emailID.matches(emailRegex);
+    }
+
+
 }
