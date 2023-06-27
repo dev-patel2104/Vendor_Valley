@@ -1,9 +1,12 @@
+com\group10\ExceptionTests\VendorDetailsAbsentForUserExceptionTest.class
 com\group10\UtilTests\EmailUtilTest.class
+com\group10\UtilTests\PasswordUtilTest.class
 com\group10\ControllerTests\LoginControllerTest.class
 com\group10\ServiceTests\ResetPasswordServiceTest.class
 com\group10\ControllerTests\CheckHTTPResponse.class
 com\group10\ServiceTests\LoginServiceTest.class
 com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.class
+com\group10\UtilTests\StringUtilTest.class
 com\group10\ExceptionTests\InvalidPasswordExceptionTest.class
 com\group10\UtilTests\UserUtilTest.class
 com\group10\ExceptionTests\PasswordsCantBeSameExceptionTest.class

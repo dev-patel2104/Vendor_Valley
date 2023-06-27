@@ -1,32 +1,35 @@
 package com.group10.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 import com.group10.Constants.IntegerConstants;
-import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import static com.group10.Enums.UserResetPasswordTableColumnOrder.*;
+
 
 @Repository
 public class ResetPasswordRepository {
 
-    @Autowired
-    DatabaseService databaseService;
+    @Value("${spring.datasource.url}")
+    private String datasourceURL;
+
+    @Value("${spring.datasource.username}")
+    private String datasourceUserName;
+
+    @Value("${spring.datasource.password}")
+    private String datasourcePassword;
 
     public boolean storeVerificationCode(int id, int code) throws SQLException {
-        try (Connection connection = databaseService.connect();
+        try (Connection connection = DriverManager.getConnection(datasourceURL,
+                datasourceUserName,
+                datasourcePassword);
              PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserResetPasswordEntry)) {
-            statement.setInt(USER_ID.queryIndex, id);
-            statement.setInt(VERIFICATION_CODE.queryIndex, code);
-            statement.setTimestamp(CREATED_AT.queryIndex, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setInt(1, id);
+            statement.setInt(2, code);
+            statement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             int rows = statement.executeUpdate();
             // Row Inserted
             if (rows>0) {
@@ -43,7 +46,9 @@ public class ResetPasswordRepository {
     } 
 
     public int getVerificationCode(String email) throws SQLException {
-        try (Connection connection = databaseService.connect();
+        try (Connection connection = DriverManager.getConnection(datasourceURL,
+                datasourceUserName,
+                datasourcePassword);
              PreparedStatement statement = connection.prepareStatement(SQLQuery.getPasswordRestInfoByUserId)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();

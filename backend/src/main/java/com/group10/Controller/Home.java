@@ -13,4 +13,5 @@ public class Home {
     public ResponseEntity<String> home() {
         return ResponseEntity.ok("This is spring boot home/landing page!");
     }
+
 }
