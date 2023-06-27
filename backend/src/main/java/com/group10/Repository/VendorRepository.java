@@ -2,6 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
+import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,23 +15,15 @@ import java.sql.*;
 @Repository
 public class VendorRepository {
 
-    @Value("${spring.datasource.url}")
-    private String datasourceURL;
-
-    @Value("${spring.datasource.username}")
-    private String datasourceUserName;
-
-    @Value("${spring.datasource.password}")
-    private String datasourcePassword;
+    @Autowired
+    DatabaseService databaseService;
 
     @Autowired
     private UserRepository userRepository;
 
     public boolean saveVendor(User user, Vendor vendorModel) throws SQLException{
 
-        try(Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);)
+        try(Connection connection = databaseService.connect();)
         {
             try (PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQuery.insertVendorQuery);
                  PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery, Statement.RETURN_GENERATED_KEYS);) {

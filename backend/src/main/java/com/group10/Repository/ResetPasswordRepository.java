@@ -4,7 +4,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 import com.group10.Constants.IntegerConstants;
+import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -13,19 +15,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ResetPasswordRepository {
 
-    @Value("${spring.datasource.url}")
-    private String datasourceURL;
-
-    @Value("${spring.datasource.username}")
-    private String datasourceUserName;
-
-    @Value("${spring.datasource.password}")
-    private String datasourcePassword;
+    @Autowired
+    DatabaseService databaseService;
 
     public boolean storeVerificationCode(int id, int code) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);
+        try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserResetPasswordEntry)) {
             statement.setInt(1, id);
             statement.setInt(2, code);
@@ -46,9 +40,7 @@ public class ResetPasswordRepository {
     } 
 
     public int getVerificationCode(String email) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);
+        try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQuery.getPasswordRestInfoByUserId)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();

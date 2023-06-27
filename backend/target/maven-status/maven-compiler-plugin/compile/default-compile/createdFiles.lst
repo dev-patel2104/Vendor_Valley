@@ -19,6 +19,7 @@ com\group10\Util\UserUtil.class
 com\group10\Model\SignUpModel.class
 com\group10\Model\Vendor$VendorBuilder.class
 com\group10\Util\PasswordUtil.class
+com\group10\Service\DatabaseService.class
 com\group10\Controller\Home.class
 com\group10\Service\SignInService.class
 com\group10\Exceptions\UserDoesntExistException.class

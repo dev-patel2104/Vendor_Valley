@@ -1,6 +1,7 @@
 package com.group10.Repository;
 
 import com.group10.Model.SignUpModel;
+import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,9 @@ import java.sql.*;
 @Repository
 public class UserRepository {
 
-    @Value("${spring.datasource.url}")
-    private String datasourceURL;
+    @Autowired
+    DatabaseService databaseService;
 
-    @Value("${spring.datasource.username}")
-    private String datasourceUserName;
-
-    @Value("${spring.datasource.password}")
-    private String datasourcePassword;
 
     @Autowired
     private User user;
@@ -30,9 +26,7 @@ public class UserRepository {
 
     public User findByEmail(String email) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);
+        try (Connection connection = databaseService.connect();
              PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
         {
             getUsersPreparedStatement.setString(1, email);
@@ -57,9 +51,7 @@ public class UserRepository {
 
     public boolean updateUser(User user) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);
+        try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery);) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
@@ -90,9 +82,7 @@ public class UserRepository {
 
     public int addUser(User user) throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(datasourceURL,
-                datasourceUserName,
-                datasourcePassword);
+        try (Connection connection = databaseService.connect();
              PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
         {
 
