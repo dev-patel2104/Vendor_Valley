@@ -1,8 +1,10 @@
 package com.group10.Repository;
 
+import com.group10.Enums.SignUpUserSQLQueryEnum;
+import com.group10.Service.DatabaseService;
+import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import com.group10.Model.User;
 
@@ -11,24 +13,21 @@ import java.sql.*;
 @Repository
 public class UserRepository {
 
-    @Value("${spring.datasource.url}")
-    private String DBURL;
-
-    @Value("${spring.datasource.username}")
-    private String DBUSERNAME;
-
-    @Value("${spring.datasource.password}")
-    private String DBPASSWORD;
+    @Autowired
+    DatabaseService databaseService;
 
     @Autowired
     private User user;
+
     private UserUtil UserUtilObj = new UserUtil();
+
+
     public User findByEmail(String email) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");)
+        try (Connection connection = databaseService.connect();
+             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
         {
-            statement.setString(1, email);
-            try(ResultSet resultSet = statement.executeQuery();)
+            getUsersPreparedStatement.setString(1, email);
+            try(ResultSet resultSet = getUsersPreparedStatement.executeQuery();)
             {
                 // User found
                 if (resultSet.next()) {
@@ -48,21 +47,20 @@ public class UserRepository {
     }
 
     public boolean updateUser(User user) throws SQLException {
-        String query = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-             PreparedStatement statement = connection.prepareStatement(query);)
-        {
-            statement.setString(1, user.getFirstName());
-            statement.setString(2, user.getLastName());
-            statement.setString(3, user.getStreet());
-            statement.setString(4, user.getCity());
-            statement.setString(5, user.getProvince());
-            statement.setString(6, user.getCountry());
-            statement.setString(7, user.getEmail());
-            statement.setString(8, user.getMobile());
-            statement.setInt(9, user.getVendor());
-            statement.setString(10, user.getPassword());
-            statement.setInt(11, user.getUserId());
+
+        try (Connection connection = databaseService.connect();
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery)) {
+            statement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
+            statement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
+            statement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
+            statement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
+            statement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
+            statement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
+            statement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
+            statement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
+            statement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
+            statement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
+            statement.setInt(SignUpUserSQLQueryEnum.USER_ID.queryIndex, user.getUserId());
 
             int rowsUpdated = statement.executeUpdate();
             // User found
@@ -79,85 +77,30 @@ public class UserRepository {
         }
     }
 
-    public boolean addUser(User user) throws SQLException
-    {
-        if(user == null)
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getFirstName().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getLastName().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getMobile().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getVendor() != 0 && user.getVendor() != 1)
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getStreet().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getCity().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getProvince().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getCountry().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getEmail().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
-        if(user.getPassword().length() < 8 || user.getPassword().isEmpty())
-        {
-            throw new SQLException("data not being added");
-        }
+    public boolean addUser(User user) throws SQLException {
 
-        String query = "INSERT INTO users (first_name, last_name, street, city, " +
-                "province, country, email, mobile, is_vendor, Password)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        try (Connection connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
-            PreparedStatement ps = connection.prepareStatement(query);)
-        {
+        try (Connection connection = databaseService.connect();
+             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery)) {
 
-            if(findByEmail(user.getEmail()) != null)
-            {
+            if(findByEmail(user.getEmail()) != null) {
                 return false;
             }
 
-            ps.setString(1, user.getFirstName());
-            ps.setString(2, user.getLastName());
-            ps.setString(3, user.getStreet());
-            ps.setString(4, user.getCity());
-            ps.setString(5, user.getProvince());
-            ps.setString(6, user.getCountry());
-            ps.setString(7, user.getEmail());
-            ps.setString(8, user.getMobile());
-            ps.setInt(9, user.getVendor());
-            ps.setString(10, user.getPassword());
-            ps.executeUpdate();
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
+            addUserPreparedStatement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
+            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
+            addUserPreparedStatement.executeUpdate();
 
-            if(user.getVendor() == 1)
-            {
-                // call boon's method
-            }
             return true;
         }
-        catch(SQLException e)
-        {
+        catch(SQLException e) {
             throw new SQLException("data not being added");
         }
     }

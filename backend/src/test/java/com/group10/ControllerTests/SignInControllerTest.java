@@ -2,7 +2,7 @@ package com.group10.ControllerTests;
 
 import com.group10.Controller.SignInController;
 import com.group10.Exceptions.UserAlreadyPresentException;
-import com.group10.Model.User;
+import com.group10.Model.SignUpModel;
 import com.group10.Service.SignInService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,55 +30,61 @@ public class SignInControllerTest
     @Mock
     private SignInService signInService;
 
-    private User user = new User();
+    private SignUpModel signUpModel;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        initializeUser();
     }
 
-    private void intializeUser()
-    {
-        user.setFirstName("Manu");
-        user.setLastName("Patel");
-        user.setMobile("9099929025");
-        user.setVendor(0);
-        user.setStreet("111 Highpark");
-        user.setCity("Toronto");
-        user.setProvince("ON");
-        user.setCountry("Canada");
-        user.setEmail("131eu@gmail.com");
-        user.setPassword("IDKTHEPASSWORD");
+    private void initializeUser() {
+        signUpModel = SignUpModel.builder().
+            userId(543).
+            firstName("Manu").
+            lastName("Patel").
+            mobile("9099929025").
+            isVendor(0).
+            street("111 Highpark").
+            city("Toronto").
+            province("Ontario").
+            country("Canada").
+            email("131eu@gmail.com").
+            password("IDKTHEPASSWORD").
+            userRole("manager").
+            companyName("Dal").
+            companyEmail("boon@dal.ca").
+            companyRegistrationID("352523").
+            companyMobile("9029895043").
+            companyStreet("Clyde St").
+            companyCity("Halifax").
+            companyProvince("Nova Scotia").
+            companyCountry("Canada").
+            build();
     }
+
+
     @Test
-    public void SignInSuccessfull() throws Exception
-    {
-        intializeUser();
-        when(signInService.SignIn(user)).thenReturn(true);
+    public void SignInSuccessful() throws UserAlreadyPresentException, SQLException {
+        when(signInService.SignIn(signUpModel)).thenReturn(true);
         ResponseEntity<String> res;
         res = ResponseEntity.ok("User has been added successfully");
-        assertEquals(res, signInController.signIn(user));
+        assertEquals(res, signInController.signIn(signUpModel));
     }
 
     @Test
-    public void SignIn_SQLException() throws  Exception
-    {
-        intializeUser();
-        when(signInService.SignIn(user)).thenThrow(new SQLException("DBMS connection error"));
+    public void SignIn_SQLException() throws UserAlreadyPresentException, SQLException {
+        when(signInService.SignIn(signUpModel)).thenThrow(new SQLException("DBMS connection error"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("DBMS connection error");
-        assertEquals(res, signInController.signIn(user));
-
+        assertEquals(res, signInController.signIn(signUpModel));
     }
 
     @Test
-    public void SignIn_UserAlreadyPresentException() throws  Exception
-    {
-        intializeUser();
-        when(signInService.SignIn(user)).thenThrow(new UserAlreadyPresentException("The user is already present"));
+    public void SignIn_UserAlreadyPresentException() throws UserAlreadyPresentException, SQLException {
+        when(signInService.SignIn(signUpModel)).thenThrow(new UserAlreadyPresentException("The user is already present"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user is already present");
-        assertEquals(res, signInController.signIn(user));
-
+        assertEquals(res, signInController.signIn(signUpModel));
     }
-
 }
