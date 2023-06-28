@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Vendor {
+    private int userId;
     private String userRole;
     private String companyName;
     private String companyEmail;
@@ -15,4 +16,8 @@ public class Vendor {
     private String companyCity;
     private String companyProvince;
     private String companyCountry;
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }

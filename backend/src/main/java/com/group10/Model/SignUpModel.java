@@ -11,17 +11,29 @@ import lombok.Getter;
 public class SignUpModel {
 
     //TODO: add json properties based on FE call
+    @JsonProperty("user_id")
     private Integer userId;
+    @JsonProperty("first_name")
     private String firstName;
+    @JsonProperty("last_name")
     private String lastName;
+    @JsonProperty("mobile")
     private String mobile;
+    @JsonProperty("is_vendor")
     private Integer isVendor;
+    @JsonProperty("street")
     private String street;
+    @JsonProperty("city")
     private String city;
+    @JsonProperty("province")
     private String province;
+    @JsonProperty("country")
     private String country;
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("password")
     private String password;
+
 
     @JsonProperty("user_role")
     private String userRole;
@@ -52,7 +64,6 @@ public class SignUpModel {
 
     public User buildUserModel() {
         return User.builder().
-                userId(getUserId()).
                 firstName(getFirstName()).
                 lastName(getLastName()).
                 mobile(getMobile()).
