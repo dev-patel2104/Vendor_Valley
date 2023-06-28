@@ -21,15 +21,13 @@ public class DatabaseService {
 
 
     public Connection connect() {
-        if (dbConnection == null) {
-            try {
-                dbConnection = DriverManager.getConnection(datasourceURL,
-                        datasourceUserName,
-                        datasourcePassword);
-            } catch (SQLException e) {
-                System.out.println("Failed to connect to database: " + e.getMessage());
-                throw new RuntimeException(e);
-            }
+        try {
+            dbConnection = DriverManager.getConnection(datasourceURL,
+                    datasourceUserName,
+                    datasourcePassword);
+        } catch (SQLException e) {
+            System.out.println("Failed to connect to database: " + e.getMessage());
+            throw new RuntimeException(e);
         }
         return dbConnection;
     }

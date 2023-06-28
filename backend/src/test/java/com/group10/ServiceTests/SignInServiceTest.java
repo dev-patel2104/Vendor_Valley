@@ -76,8 +76,8 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(true);
-        when(vendorRepository.saveVendor(Mockito.any(Vendor.class))).thenReturn(true);
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(1);
+        when(vendorRepository.saveVendor(Mockito.any(User.class),Mockito.any(Vendor.class))).thenReturn(true);
         boolean signUpUser = signInService.SignIn(signUpModel);
         assertEquals(true, signUpUser);
 
@@ -218,18 +218,18 @@ public class SignInServiceTest
         assertFalse(signInService.SignIn(signUpModel));
 
         signUpModel.setIsVendor(0);
-        when(userRepository.addUser(any(User.class))).thenReturn(true);
+        when(userRepository.addUser(any(User.class))).thenReturn(1);
         assertTrue(signInService.SignIn(signUpModel));
 
         signUpModel.setIsVendor(1);
-        when(vendorRepository.saveVendor(any(Vendor.class))).thenReturn(true);
+        when(vendorRepository.saveVendor(any(User.class), any(Vendor.class))).thenReturn(true);
         assertTrue(signInService.SignIn(signUpModel));
     }
 
     @Test(expected = UserAlreadyPresentException.class)
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(false);
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(0);
         signInService.SignIn(signUpModel);
     }
 

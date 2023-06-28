@@ -1,10 +1,11 @@
 package com.group10.Repository;
 
-import com.group10.Enums.SignUpUserSQLQueryEnum;
+import com.group10.Model.SignUpModel;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import com.group10.Model.User;
 
@@ -16,6 +17,7 @@ public class UserRepository {
     @Autowired
     DatabaseService databaseService;
 
+
     @Autowired
     private User user;
 
@@ -23,6 +25,7 @@ public class UserRepository {
 
 
     public User findByEmail(String email) throws SQLException {
+
         try (Connection connection = databaseService.connect();
              PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
         {
@@ -49,18 +52,18 @@ public class UserRepository {
     public boolean updateUser(User user) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery)) {
-            statement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
-            statement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
-            statement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
-            statement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
-            statement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
-            statement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
-            statement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
-            statement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
-            statement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
-            statement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
-            statement.setInt(SignUpUserSQLQueryEnum.USER_ID.queryIndex, user.getUserId());
+             PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery);) {
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setString(3, user.getStreet());
+            statement.setString(4, user.getCity());
+            statement.setString(5, user.getProvince());
+            statement.setString(6, user.getCountry());
+            statement.setString(7, user.getEmail());
+            statement.setString(8, user.getMobile());
+            statement.setInt(9, user.getVendor());
+            statement.setString(10, user.getPassword());
+            statement.setInt(11, user.getUserId());
 
             int rowsUpdated = statement.executeUpdate();
             // User found
@@ -77,28 +80,35 @@ public class UserRepository {
         }
     }
 
-    public boolean addUser(User user) throws SQLException {
+    public int addUser(User user) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery)) {
+             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
+        {
+
+            int userId = 0;
 
             if(findByEmail(user.getEmail()) != null) {
-                return false;
+                return userId;
             }
+            addUserPreparedStatement.setString(1, user.getFirstName());
+            addUserPreparedStatement.setString(2, user.getLastName());
+            addUserPreparedStatement.setString(3, user.getStreet());
+            addUserPreparedStatement.setString(4, user.getCity());
+            addUserPreparedStatement.setString(5, user.getProvince());
+            addUserPreparedStatement.setString(6, user.getCountry());
+            addUserPreparedStatement.setString(7, user.getEmail());
+            addUserPreparedStatement.setString(8, user.getMobile());
+            addUserPreparedStatement.setInt(9, user.getVendor());
+            addUserPreparedStatement.setString(10, user.getPassword());
 
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_FIRSTNAME.queryIndex, user.getFirstName());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_LASTNAME.queryIndex, user.getLastName());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_STREET.queryIndex, user.getStreet());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_CITY.queryIndex, user.getCity());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PROVINCE.queryIndex, user.getProvince());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_COUNTRY.queryIndex, user.getCountry());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_EMAIL.queryIndex, user.getEmail());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_MOBILE.queryIndex, user.getMobile());
-            addUserPreparedStatement.setInt(SignUpUserSQLQueryEnum.USER_IS_VENDOR.queryIndex, user.getVendor());
-            addUserPreparedStatement.setString(SignUpUserSQLQueryEnum.USER_PASSWORD.queryIndex, user.getPassword());
             addUserPreparedStatement.executeUpdate();
+            ResultSet rs = addUserPreparedStatement.getGeneratedKeys();
 
-            return true;
+            if (rs.next()) {
+                userId = rs.getInt(1);
+            }
+            return userId;
         }
         catch(SQLException e) {
             throw new SQLException("data not being added");

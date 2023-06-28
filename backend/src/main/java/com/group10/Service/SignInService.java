@@ -63,22 +63,31 @@ public class SignInService
         if(!EmailUtil.isValidEmail(signUpModel.getEmail())) {
             return false;
         }
-
+        int userId=0;
         User userModel = signUpModel.buildUserModel();
+        Vendor vendorModel = signUpModel.buildVendorModel();
 
-        if (userRepository.addUser(userModel)) {
-            if (signUpModel.getIsVendor() == 1) {
-                Vendor vendorModel = signUpModel.buildVendorModel();
-
-                if (vendorRepository.saveVendor(vendorModel)) {
-                    return true;
-                } else {
-                    throw new VendorDetailsAbsentForUserException("User details saved to db, but vendor details are missing in database");
-                }
+        if(signUpModel.getIsVendor() == 1)
+        {
+            if(vendorRepository.saveVendor(userModel, vendorModel))
+            {
+                return true;
             }
-            return true;
-        } else {
-            throw new UserAlreadyPresentException("The user is already present");
+            else {
+                throw new VendorDetailsAbsentForUserException("User details saved to db, but vendor details are missing in database");
+            }
+
+        }
+        else
+        {
+            userId = userRepository.addUser(userModel);
+            if(userId > 0)
+            {
+                return true;
+            }
+            else {
+                throw new UserAlreadyPresentException("The user is already present");
+            }
         }
 
     }
