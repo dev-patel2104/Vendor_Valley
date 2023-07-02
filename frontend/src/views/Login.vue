@@ -1,78 +1,68 @@
 <template>
-  <div class="text-center">
+<div class="text-center">
     <h1>Login Page</h1>
-  </div>
-  <div>
-    <form class="form-signin d-flex flex-column" @submit.prevent="login()">
-      <label for="inputEmail" class="sr-only">Email</label>
-      <input
-        type="email"
-        id="inputEmail"
-        class="form-control"
-        placeholder="Email address"
-        v-model="form.email"
-        required
-        autofocus
-      />
+</div>
+<form class="form-signin d-flex flex-column" @submit.prevent="login()">
+ 
+     
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" v-model="form.email" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="inputPassword"
-        class="form-control"
-        v-model="form.password"
-        placeholder="Password"
-        required
-      />
+      <input type="password" id="inputPassword" class="form-control"  v-model="form.password" placeholder="Password" required >
 
       <div class="mb-2">
-        <router-link to="#">
-          <a><small>Forgot password?</small></a>
-        </router-link>
-      </div>
+          <router-link to="/forgotpassword">
+            <a><small>Forgot password?</small></a>
+          </router-link>
+        </div>
 
-      <button type="submit" class="btn btn-lg btn-primary btn-block">
-        Login
-      </button>
-      <p class="text-danger">{{ msg }}</p>
-    </form>
-  </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+     
+  
+
+    <p class="text-danger">{{msg}}</p>
+  </form>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 
-export default {
-  name: "LoginPage",
-  data() {
-    return {
-      form: {
-        email: "",
-        password: "",
-      },
-      msg: "",
-    };
-  },
-  methods: {
-    login() {
-      console.log(this.form);
 
-      axios
-        .post("https://vendor-valley.onrender.com/login", this.form)
-        .then(() => {
-          alert("Login successful");
-          this.msg = "";
-        })
-        .catch((error) => {
-          console.error("error", error);
-          this.msg = error.response.data;
-        });
+export default{
+    name: 'LoginPage',
+   data(){
+        return {
+            form: {
+                email: '',
+                password: '',
+            },
+            msg: ""
+        }
     },
-  },
+    methods: {
+      login(){
+        console.log(this.form);
+   
+        axios.post('https://vendor-valley.onrender.com/login', this.form)
+  .then((resp) => {
+    
+    localStorage.setItem('userID', this.form.email);
+    localStorage.setItem('password', this.form.password);
+    this.msg = ""
+    alert('success',resp.data);
+  })
+  .catch((error) => {
+    console.error("error", error);
+  this.msg = "Invalid email or password"
 
-  mounted() {
-    this.msg = "";
-  },
-};
+  });
+      }
+    },
+
+    mounted() {
+       this.msg = ''
+    }
+}
 </script>
 
 <style>
