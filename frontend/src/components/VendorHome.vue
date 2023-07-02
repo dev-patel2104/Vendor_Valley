@@ -6,6 +6,7 @@
         </div>
     <div class="d-flex justify-content-center">
         <router-link to="/login" class="btn btn-light px-4 mx-2">Login</router-link>
+        <router-link to="/signup" class="btn btn-light px-4">Register</router-link>
     </div>  
 </div>
 </template>
