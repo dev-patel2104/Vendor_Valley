@@ -10,7 +10,11 @@ import Changepassword from '@/views/Changepassword.vue'
 
 const routes = [
   {path: '/', component: Home},
-  {path: '/login', component: Login}
+  {path: '/login', component: Login},
+  {path: '/forgotpassword', component: Forgotpassword},
+  {path: '/Enterverificationcode', component: Enterverificationcode},
+  {path: '/signup', component: Signup},
+  {path: '/changepassword', component: Changepassword}
 ]
 
 const router = createRouter({
