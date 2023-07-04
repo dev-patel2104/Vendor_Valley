@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.UtilTests.EmailUtilTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.188 s - in com.group10.UtilTests.EmailUtilTest
+=======
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.35 s - in com.group10.UtilTests.EmailUtilTest
+>>>>>>> asdc-project/Develop
