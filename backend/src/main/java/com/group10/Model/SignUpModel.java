@@ -10,7 +10,6 @@ import lombok.Getter;
 @Builder
 public class SignUpModel {
 
-    //TODO: add json properties based on FE call
     @JsonProperty("user_id")
     private Integer userId;
     @JsonProperty("first_name")

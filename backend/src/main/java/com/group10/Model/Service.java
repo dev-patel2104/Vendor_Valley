@@ -1,5 +1,8 @@
 package com.group10.Model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Service
 {
     private int serviceId;
@@ -7,7 +10,13 @@ public class Service
     private String serviceName;
     private String serviceDescription;
     private String servicePrice;
-    private int totalBookingsForService;
+    private String companyStreet;
+    private String companyProvince;
+    private String companyCity;
+    private String companyCountry;
+    private String averageRating;
+    private String totalBookings;
+
 
     public int getServiceId() {
         return serviceId;
@@ -50,6 +59,53 @@ public class Service
     }
     public void setTotalBookingsForService(int totalBookingsForService)
     {
-        this.totalBookingsForService = totalBookingsForService;
+    }
+
+    public String getCompanyStreet() {
+        return companyStreet;
+    }
+
+    public void setCompanyStreet(String companyStreet) {
+        this.companyStreet = companyStreet;
+    }
+
+    public String getCompanyProvince() {
+        return companyProvince;
+    }
+
+    public void setCompanyProvince(String companyProvince) {
+        this.companyProvince = companyProvince;
+    }
+
+    public String getCompanyCity() {
+        return companyCity;
+    }
+
+    public void setCompanyCity(String companyCity) {
+        this.companyCity = companyCity;
+    }
+
+    public String getCompanyCountry() {
+        return companyCountry;
+    }
+
+    public void setCompanyCountry(String companyCountry) {
+        this.companyCountry = companyCountry;
+    }
+
+    public String getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(String averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public String getTotalBookings() {
+        return totalBookings;
+    }
+
+    public void setTotalBookings(String totalBookings) {
+        this.totalBookings = totalBookings;
     }
 }

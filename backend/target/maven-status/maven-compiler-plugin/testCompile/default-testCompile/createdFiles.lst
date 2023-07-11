@@ -12,6 +12,7 @@ com\group10\ExceptionTests\InvalidPasswordExceptionTest.class
 com\group10\UtilTests\UserUtilTest.class
 com\group10\ExceptionTests\PasswordsCantBeSameExceptionTest.class
 com\group10\ExceptionTests\UserDoesntExistExceptionTest.class
+com\group10\ServiceTests\SearchServiceTest.class
 com\group10\ConstantTests\IntegerConstantsTest.class
 com\group10\ServiceTests\HomeServiceTest.class
 com\group10\ControllerTests\ResetPasswordControllerTest.class

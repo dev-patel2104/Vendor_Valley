@@ -5,7 +5,6 @@ import com.group10.Model.Service;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -21,6 +20,7 @@ public class CategoryRepository
     private int numberOfTrendingServices = 5;
     private List<Category> categoryList;
     private List<Service> serviceList;
+    
     public List<Category> getFeaturedCategories() throws SQLException
     {
         int cnt =0;
