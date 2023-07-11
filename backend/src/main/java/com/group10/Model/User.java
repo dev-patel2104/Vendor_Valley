@@ -1,8 +1,14 @@
 package com.group10.Model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     private int userId;

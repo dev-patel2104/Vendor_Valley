@@ -1,26 +1,26 @@
 package com.group10.ServiceTests;
 
 import com.group10.Exceptions.UserAlreadyPresentException;
+import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
+import com.group10.Model.Vendor;
+import com.group10.Repository.VendorRepository;
 import com.group10.Repository.UserRepository;
 import com.group10.Service.SignInService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class SignInServiceTest
 {
     @InjectMocks
@@ -29,7 +29,13 @@ public class SignInServiceTest
     @Mock
     private UserRepository userRepository;
 
-    private User user = new User();
+    @Mock
+    private VendorRepository vendorRepository;
+
+    private SignUpModel signUpModel;
+    private User user;
+    private Vendor vendorModel;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -37,24 +43,43 @@ public class SignInServiceTest
 
     private void intializeUser()
     {
-        user.setFirstName("Manu");
-        user.setLastName("Patel");
-        user.setMobile("9099929025");
-        user.setVendor(0);
-        user.setStreet("111 Highpark");
-        user.setCity("Toronto");
-        user.setProvince("ON");
-        user.setCountry("Canada");
-        user.setEmail("131eu@gmail.com");
-        user.setPassword("IDKTHEPASSWORD");
+        signUpModel = SignUpModel.builder().
+                userId(543).
+                firstName("Mau").
+                lastName("Patel").
+                mobile("9099929025").
+                isVendor(0).
+                street("111 Highpark").
+                city("Toronto").
+                province("Ontario").
+                country("Canada").
+                email("131eu@gmail.com").
+                password("IDKTHEPASSWORD").
+                userRole("manager").
+                companyName("Dal").
+                companyEmail("boon@dal.ca").
+                companyRegistrationID("352523").
+                companyMobile("9029895043").
+                companyStreet("Clyde St").
+                companyCity("Halifax").
+                companyProvince("Nova Scotia").
+                companyCountry("Canada").
+                build();
+
+        user = signUpModel.buildUserModel();
+        vendorModel = signUpModel.buildVendorModel();
     }
+
+
     @Test
     public void SignInTest() throws SQLException, UserAlreadyPresentException
     {
         intializeUser();
 
-        when(userRepository.addUser(user)).thenReturn(true);
-        assertEquals(true, signInService.SignIn(user));
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(1);
+        when(vendorRepository.saveVendor(Mockito.any(User.class),Mockito.any(Vendor.class))).thenReturn(true);
+        boolean signUpUser = signInService.SignIn(signUpModel);
+        assertEquals(true, signUpUser);
 
     }
 
@@ -62,27 +87,25 @@ public class SignInServiceTest
     public void SignInTest_FirstNameAbsent() throws SQLException, UserAlreadyPresentException
     {
         intializeUser();
-        user.setFirstName("");
 
+        signUpModel.setFirstName("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        assertEquals(false, signInService.SignIn(user));
-
-        user.setFirstName(null);
-
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setFirstName(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
     @Test
     public void SignInTest_LastNameAbsent() throws SQLException, UserAlreadyPresentException
     {
         intializeUser();
-        user.setLastName("");
+        signUpModel.setLastName("");
 
-        assertEquals(false, signInService.SignIn(user));
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setLastName(null);
+        signUpModel.setLastName(null);
 
-        assertEquals(false, signInService.SignIn(user));
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -91,11 +114,11 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setMobile("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setMobile("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setMobile(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setMobile(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -104,11 +127,11 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setStreet("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setStreet("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setStreet(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setStreet(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -117,11 +140,11 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setCity("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setCity("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setCity(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setCity(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -130,11 +153,11 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setProvince("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setProvince("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setProvince(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setProvince(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -143,11 +166,11 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setCountry("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setCountry("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setCountry(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setCountry(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -156,14 +179,14 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setEmail("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setEmail("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setEmail(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setEmail(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setEmail("131euail.com");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setEmail("131euail.com");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -172,14 +195,14 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setPassword("");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setPassword("");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setPassword(null);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setPassword(null);
+        assertEquals(false, signInService.SignIn(signUpModel));
 
-        user.setPassword("IDKTHE");
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setPassword("IDKTHE");
+        assertEquals(false, signInService.SignIn(signUpModel));
 
     }
 
@@ -188,49 +211,33 @@ public class SignInServiceTest
     {
         intializeUser();
 
-        user.setVendor(5);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setIsVendor(5);
+        assertFalse(signInService.SignIn(signUpModel));
 
-        user.setVendor(-1);
-        assertEquals(false, signInService.SignIn(user));
+        signUpModel.setIsVendor(-1);
+        assertFalse(signInService.SignIn(signUpModel));
 
+        signUpModel.setIsVendor(0);
+        when(userRepository.addUser(any(User.class))).thenReturn(1);
+        assertTrue(signInService.SignIn(signUpModel));
+
+        signUpModel.setIsVendor(1);
+        when(vendorRepository.saveVendor(any(User.class), any(Vendor.class))).thenReturn(true);
+        assertTrue(signInService.SignIn(signUpModel));
     }
+
     @Test(expected = UserAlreadyPresentException.class)
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
-        User user = new User();
-        user.setFirstName("Manu");
-        user.setLastName("Patel");
-        user.setMobile("9099929025");
-        user.setVendor(0);
-        user.setStreet("111 Highpark");
-        user.setCity("Toronto");
-        user.setProvince("ON");
-        user.setCountry("Canada");
-        user.setEmail("131eu@gmail.com");
-        user.setPassword("IDKTHEPASSWORD");
-
-
-        when(userRepository.addUser(user)).thenReturn(false);
-        signInService.SignIn(user);
+        intializeUser();
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(0);
+        signInService.SignIn(signUpModel);
     }
 
     @Test(expected = SQLException.class)
     public void SignInTest_SQLException() throws SQLException, UserAlreadyPresentException {
-        User user = new User();
-        user.setFirstName("Manu");
-        user.setLastName("Patel");
-        user.setMobile("9099929025");
-        user.setVendor(0);
-        user.setStreet("111 Highpark");
-        user.setCity("Toronto");
-        user.setProvince("ON");
-        user.setCountry("Canada");
-        user.setEmail("131eu@gmail.com");
-        user.setPassword("IDKTHEPASSWORD");
-
-
-        when(userRepository.addUser(user)).thenThrow(new SQLException());
-        signInService.SignIn(user);
+        intializeUser();
+        when(userRepository.addUser(Mockito.any(User.class))).thenThrow(new SQLException());
+        signInService.SignIn(signUpModel);
     }
 
 
