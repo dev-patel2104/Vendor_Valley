@@ -17,6 +17,7 @@ public class SQLQuery {
                 "order by totalBookingsForService desc;";
         public static final String trendingServiceQueryDefault = "select * from services order by service_id desc;";
         public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";
+        public static final String getUserByID = "select * from users Left join vendors on users.user_id = vendors.user_id where users.user_id = ?;";
         public static final String updateUserQuery = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";
         public static final String getPasswordRestInfoByUserId = "select verification_code, created_at from user_password_reset where user_id = (select user_id from users where email = ?) order by created_at DESC limit 1";
         public static final String insertUserResetPasswordEntry = "insert into user_password_reset (user_id, verification_code, created_at) values(?,?,?)";

@@ -1,5 +1,6 @@
 package com.group10.Repository;
 
+import com.group10.Model.SignUpModel;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
 import com.group10.Util.UserUtil;
@@ -9,8 +10,9 @@ import com.group10.Model.User;
 
 import java.sql.*;
 
+// ToDo: Change the name of the class to CustomerRespository
 @Repository
-public class UserRepository {
+public class UserRepository{
 
     @Autowired
     DatabaseService databaseService;
@@ -113,4 +115,44 @@ public class UserRepository {
         }
     }
 
+    public SignUpModel getUser(int user_id) throws SQLException {
+        SignUpModel customer = null;
+        try(Connection connection = databaseService.connect();
+        PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQuery.getUserByID))
+        {
+            getCustomerPreparedStatement.setInt(1,user_id);
+            ResultSet rs = getCustomerPreparedStatement.executeQuery();
+            //ToDo: add the check to see if cnt is greater than 1 then throw and exception saying more than one user
+            while(rs.next())
+            {
+                customer =  SignUpModel.builder().userId(rs.getInt(1)).
+                        firstName(rs.getString(2)).
+                        lastName(rs.getString(3)).
+                        street(rs.getString(4)).
+                        city(rs.getString(5)).
+                        province(rs.getString(6)).
+                        country(rs.getString(7)).
+                        email(rs.getString(8)).
+                        mobile(rs.getString(9)).
+                        isVendor(rs.getInt(10)).
+                        password(rs.getString(11)).
+                        userRole(rs.getString(13)).
+                        companyName(rs.getString(14)).
+                        companyEmail(rs.getString(15)).
+                        companyRegistrationID(rs.getString(16)).
+                        companyMobile(rs.getString(17)).
+                        companyStreet(rs.getString(18)).
+                        companyCity(rs.getString(19)).
+                        companyProvince(rs.getString(20)).
+                        companyCountry(rs.getString(21)).
+                        build();
+                
+            }
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException(e.getMessage());
+        }
+       return customer;
+    }
 }
