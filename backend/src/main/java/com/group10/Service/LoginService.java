@@ -18,7 +18,7 @@ public class LoginService {
     @Autowired
     private User user;
 
-    public boolean login(String email, String password) throws UserDoesntExistException, InvalidPasswordException, SQLException {
+    public User login(String email, String password) throws UserDoesntExistException, InvalidPasswordException, SQLException {
         try{
             user = userRepository.findByEmail(email);
         }
@@ -31,6 +31,6 @@ public class LoginService {
         if (!user.getPassword().equalsIgnoreCase(password)){
             throw new InvalidPasswordException("Wrong Password Entered!");
         }
-        return true;
+        return user;
     }
 }

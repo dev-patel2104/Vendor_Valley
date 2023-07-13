@@ -1,10 +1,6 @@
 package com.group10.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 import com.group10.Constants.IntegerConstants;
@@ -13,7 +9,7 @@ import com.group10.Util.SqlQueries.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import static com.group10.Enums.UserResetPasswordTableColumnOrder.*;
+
 
 @Repository
 public class ResetPasswordRepository {
@@ -24,9 +20,9 @@ public class ResetPasswordRepository {
     public boolean storeVerificationCode(int id, int code) throws SQLException {
         try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQuery.insertUserResetPasswordEntry)) {
-            statement.setInt(USER_ID.queryIndex, id);
-            statement.setInt(VERIFICATION_CODE.queryIndex, code);
-            statement.setTimestamp(CREATED_AT.queryIndex, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setInt(1, id);
+            statement.setInt(2, code);
+            statement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             int rows = statement.executeUpdate();
             // Row Inserted
             if (rows>0) {
