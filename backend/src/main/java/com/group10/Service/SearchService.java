@@ -27,6 +27,7 @@ public class SearchService implements ISearchService{
         }
     }
 
+    @Override
     public List<Service> sortSearchResults(List<Service> services, String sortParam, String sortOrder) {
         // Sort the services based on the sort params one by one
         if (sortOrder == null || sortOrder.equals("")){
@@ -150,7 +151,8 @@ public class SearchService implements ISearchService{
         }
         return services;
     }
-    
+
+    @Override
     public List<Service> filterSearchResults(List<Service> services, Map<String, String> Sortvalues){
         // Filter the services based on the filter params one by one
         if (Sortvalues == null || Sortvalues.size() == 0){
