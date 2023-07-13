@@ -16,6 +16,7 @@ com\group10\Controller\HomeController.class
 com\group10\Service\ResetPasswordService.class
 com\group10\Model\EmailDetails.class
 com\group10\Repository\ResetPasswordRepository.class
+com\group10\Controller\SearchController$1.class
 com\group10\Repository\VendorRepository.class
 com\group10\Service\HomeService.class
 com\group10\Util\EmailUtil.class
