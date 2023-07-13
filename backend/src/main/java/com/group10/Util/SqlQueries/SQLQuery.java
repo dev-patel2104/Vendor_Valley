@@ -10,10 +10,10 @@ public class SQLQuery {
                 "from service_category_association natural join service_categories " +
                 "group by category_id " +
                 "order by totalServices desc, category_id;";
-        public static final String trendingServiceQuery = "select b.service_id,count(booking_id) as totalBookingsForService, service_name, service_description, service_price " +
-                "from bookings as b join services as s on b.service_id = s.service_id " +
-                "where datediff(curdate(), booking_date) <= 30 " +
-                "group by service_id " +
+        public static final String trendingServiceQuery = "select b.service_id,count(booking_id) as totalBookingsForService, service_name, service_description, service_price, image \n" +
+                "from bookings as b join services as s on b.service_id = s.service_id join service_images as si on s.service_id = si.service_id \n" +
+                "where datediff(curdate(), booking_date) <= 30 \n" +
+                "group by service_id \n" +
                 "order by totalBookingsForService desc;";
         public static final String trendingServiceQueryDefault = "select * from services order by service_id desc;";
         public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";

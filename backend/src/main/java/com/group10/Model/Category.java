@@ -6,6 +6,7 @@ public class Category
     private String categoryName;
     private String categoryDescription;
     private int totalServices;
+    private String base64Image;
 
     // also add the images to the database and the correpsonding field here
 
@@ -26,6 +27,10 @@ public class Category
         return totalServices;
     }
 
+    public String getBase64Image() {
+        return base64Image;
+    }
+
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
@@ -40,5 +45,9 @@ public class Category
 
     public void setTotalServices(int totalServices) {
         this.totalServices = totalServices;
+    }
+
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
     }
 }

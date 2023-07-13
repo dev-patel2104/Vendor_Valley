@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Base64;
 
 @Repository
 public class CategoryRepository
@@ -20,7 +21,6 @@ public class CategoryRepository
     private int numberOfTrendingServices = 5;
     private List<Category> categoryList;
     private List<Service> serviceList;
-    
     public List<Category> getFeaturedCategories() throws SQLException
     {
         int cnt =0;
@@ -38,6 +38,8 @@ public class CategoryRepository
                 cat.setCategoryId(rs1.getInt(2));
                 cat.setCategoryName(rs1.getString(3));
                 cat.setCategoryDescription(rs1.getString(4));
+                byte[] imageData = rs1.getBytes(5);
+                cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
                 categoryList.add(cat);
                 cnt++;
             }
@@ -66,6 +68,8 @@ public class CategoryRepository
                 ser.setServiceName(rs.getString(3));
                 ser.setServiceDescription(rs.getString(4));
                 ser.setServicePrice(rs.getString(5));
+                byte[] imageData = rs.getBytes(6);
+                ser.setBase64Image(Base64.getEncoder().encodeToString(imageData));
                 serviceList.add(ser);
                 cnt++;
             }
