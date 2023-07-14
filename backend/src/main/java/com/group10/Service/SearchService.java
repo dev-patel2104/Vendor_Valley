@@ -209,7 +209,7 @@ public class SearchService implements ISearchService{
             // Filter by category
             for (int i = 0; i < services.size(); i++)
             {
-                if (!services.get(i).getCategoryName().equalsIgnoreCase(value))
+                if (!services.get(i).getCategoryNames().contains(value))
                 {
                     services.remove(i);
                     i--;
