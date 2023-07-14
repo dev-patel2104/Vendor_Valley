@@ -39,6 +39,7 @@ public class SearchRepository {
                 service.setServiceName(result.getString("service_name"));
                 service.setServiceDescription(result.getString("service_description"));
                 service.setServicePrice(result.getString("service_price"));
+                service.setCategoryName(result.getString("category_name"));
                 service.setCompanyStreet(result.getString("company_street"));
                 service.setCompanyCity(result.getString("company_city"));
                 service.setCompanyProvince(result.getString("company_province"));

@@ -10,6 +10,7 @@ public class Service
     private String serviceName;
     private String serviceDescription;
     private String servicePrice;
+    private String categoryName;
     private String companyStreet;
     private String companyProvince;
     private String companyCity;
@@ -57,6 +58,15 @@ public class Service
     public void setServicePrice(String servicePrice) {
         this.servicePrice = servicePrice;
     }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
     public void setTotalBookingsForService(int totalBookingsForService)
     {
     }
