@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.User;
 import com.group10.Service.LoginService;
+import com.group10.Util.JWTTokenHandler;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -26,6 +24,9 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private JWTTokenHandler tokenHandler;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
@@ -41,16 +42,13 @@ public class LoginController {
         }
         String email = credentials.get("email");
         String password = credentials.get("password");
-        String token = "";
         try{
+            // Login
             User user = loginService.login(email, password);
-            Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            token = JWT.create()
-                .withClaim("email", user.getEmail())
-                .withClaim("id", user.getUserId())
-                .withClaim("role", user.getVendor())
-                .sign(algorithm);
-            loginService.login(email, password);
+            // Encode details in JWT token
+            String token = tokenHandler.generateJWTToken(user);
+            // Return
+            return ResponseEntity.ok(token);
         }
         catch(UserDoesntExistException | InvalidPasswordException e){
             // Login failed
@@ -59,7 +57,6 @@ public class LoginController {
         catch(SQLException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-        return ResponseEntity.ok(token);
     }
 
 }

@@ -16,14 +16,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Model.Service;
-import com.group10.Repository.SearchRepository;
+import com.group10.Repository.ServiceRepository;
 import com.group10.Service.SearchService;
 
 @SpringBootTest
 public class SearchServiceTest {
     
     @MockBean 
-    private SearchRepository searchRepository;
+    private ServiceRepository serviceRepository;
 
     @MockBean
     private Service service;
@@ -36,7 +36,7 @@ public class SearchServiceTest {
     public void testNullReturn_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doReturn(null).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(null).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertNull(searchService.getSearchResults(searchParam));
     }
 
@@ -45,7 +45,7 @@ public class SearchServiceTest {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertEquals(expected, searchService.getSearchResults(searchParam));
     }
 
@@ -55,7 +55,7 @@ public class SearchServiceTest {
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
         expected.add(service);
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertEquals(expected.size(), searchService.getSearchResults(searchParam).size());
     }
     
@@ -63,7 +63,7 @@ public class SearchServiceTest {
     public void testSQLException_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertThrows(SQLException.class, () -> searchService.getSearchResults(searchParam).size());
     }
 

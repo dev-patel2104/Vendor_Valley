@@ -2,7 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQuery;
-import com.group10.Util.UserUtil;
+import com.group10.Util.MapResultSetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.group10.Model.User;
@@ -19,7 +19,7 @@ public class UserRepository {
     @Autowired
     private User user;
 
-    private UserUtil UserUtilObj = new UserUtil();
+    private MapResultSetUtil UserUtilObj = new MapResultSetUtil();
 
 
     public User findByEmail(String email) throws SQLException {

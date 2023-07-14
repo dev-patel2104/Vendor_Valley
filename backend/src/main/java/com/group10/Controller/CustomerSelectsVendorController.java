@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group10.Model.Review;
@@ -51,4 +52,27 @@ public class CustomerSelectsVendorController {
 
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/writeReviews")
+    public ResponseEntity<String> writeReviews(@RequestBody Review review, @RequestParam String JWTToken) 
+    {   
+
+        if (review == null || JWTToken == null || JWTToken.equals(""))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        try
+        {
+            boolean result = customerSelectsVendorService.writeReviews(review, JWTToken);
+            if (result){
+                return ResponseEntity.ok("Review added successfully!");
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review could not be added!");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }
