@@ -75,3 +75,4 @@ deploy-frontend:
     - dalfcs_docker_autoscale
   only:
     - Release
+

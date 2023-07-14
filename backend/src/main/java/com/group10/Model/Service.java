@@ -1,5 +1,7 @@
 package com.group10.Model;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,6 +12,8 @@ public class Service
     private String serviceName;
     private String serviceDescription;
     private String servicePrice;
+    private List<String> images;
+    private List<String> categoryNames;
     private String companyStreet;
     private String companyProvince;
     private String companyCity;
@@ -57,6 +61,21 @@ public class Service
     public void setServicePrice(String servicePrice) {
         this.servicePrice = servicePrice;
     }
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+    public List<String> getCategoryNames() {
+        return categoryNames;
+    }
+
+    public void setCategoryNames(List<String> categoryNames) {
+        this.categoryNames = categoryNames;
+    }
+
     public void setTotalBookingsForService(int totalBookingsForService)
     {
     }

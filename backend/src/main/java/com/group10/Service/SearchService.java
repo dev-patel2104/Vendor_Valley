@@ -1,6 +1,7 @@
 package com.group10.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -151,12 +152,12 @@ public class SearchService implements ISearchService{
         return services;
     }
     
-    public List<Service> filterSearchResults(List<Service> services, Map<String, String> Sortvalues){
+    public List<Service> filterSearchResults(List<Service> services, Map<String, String> filterValues){
         // Filter the services based on the filter params one by one
-        if (Sortvalues == null || Sortvalues.size() == 0){
+        if (filterValues == null || filterValues.size() == 0){
             return services;
         }
-        for (Map.Entry<String, String> entry : Sortvalues.entrySet()) {
+        for (Map.Entry<String, String> entry : filterValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
             services = filterSearchResults(services, key, value);
@@ -170,6 +171,7 @@ public class SearchService implements ISearchService{
         {
             return services;
         }
+        // Filter process
         if (key.equalsIgnoreCase("price")){
             // Filter by price
             for (int i = 0; i < services.size(); i++)
@@ -197,6 +199,17 @@ public class SearchService implements ISearchService{
             for (int i = 0; i < services.size(); i++)
             {
                 if (Integer.parseInt(services.get(i).getTotalBookings()) < Integer.parseInt(value))
+                {
+                    services.remove(i);
+                    i--;
+                }
+            }
+        }
+        else if (key.equalsIgnoreCase("category")){
+            // Filter by category
+            for (int i = 0; i < services.size(); i++)
+            {
+                if (!services.get(i).getCategoryNames().contains(value))
                 {
                     services.remove(i);
                     i--;
