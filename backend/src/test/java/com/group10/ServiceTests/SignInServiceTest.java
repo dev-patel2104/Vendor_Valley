@@ -1,5 +1,6 @@
 package com.group10.ServiceTests;
 
+import com.group10.Constants.IntegerConstants;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
@@ -7,6 +8,9 @@ import com.group10.Model.Vendor;
 import com.group10.Repository.VendorRepository;
 import com.group10.Repository.UserRepository;
 import com.group10.Service.SignInService;
+
+import net.bytebuddy.implementation.bytecode.constant.IntegerConstant;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -229,7 +233,7 @@ public class SignInServiceTest
     @Test(expected = UserAlreadyPresentException.class)
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(0);
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(IntegerConstants.userAlreadyExists);
         signInService.SignIn(signUpModel);
     }
 

@@ -1,5 +1,6 @@
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\UserDoesntExistException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\ResetPasswordService.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\GetServiceDetailsQueryColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\VendorRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\LoginService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\InvalidPasswordException.java
@@ -15,11 +16,11 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\ResetPasswordRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\HomeService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\MapResultSetUtil.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\GetUserByEmailQueryColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\UserRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\SignInService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\Review.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\LoginController.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\SqlQueries\SQLQuery.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\VerificationCodeExpiredException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\ServiceRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\StringUtil.java
@@ -27,9 +28,12 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\SearchController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\SignUpModel.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\CustomerSelectsVendorService.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\SqlQueries\SQLQueries.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\VendorValleyApplication.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\ResetPasswordController.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\SearchServiceQueryColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\Interfaces\ICustomerSelectsVendorService.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\GetReviewsByServiceQueryColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\CustomerSelectsVendorController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\UserAlreadyPresentException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\SearchService.java
