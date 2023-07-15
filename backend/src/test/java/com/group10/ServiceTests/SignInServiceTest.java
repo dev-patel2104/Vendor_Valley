@@ -8,9 +8,6 @@ import com.group10.Model.Vendor;
 import com.group10.Repository.VendorRepository;
 import com.group10.Repository.UserRepository;
 import com.group10.Service.SignInService;
-
-import net.bytebuddy.implementation.bytecode.constant.IntegerConstant;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
