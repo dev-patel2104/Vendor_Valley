@@ -30,7 +30,10 @@ public class ResetPasswordController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> credentials) {
-        boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
+        if (credentials == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        boolean credentialsMapCheck = credentials.size() == 0;
         if (credentialsMapCheck){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         } 
@@ -66,7 +69,10 @@ public class ResetPasswordController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/verifyConfirmationCode")
     public ResponseEntity<String> verifyConfirmationCode(@RequestBody Map<String, String> credentials) {
-        boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
+        if (credentials == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        boolean credentialsMapCheck = credentials.size() == 0;
         if (credentialsMapCheck){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
@@ -95,7 +101,10 @@ public class ResetPasswordController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/updatePassword")
     public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> credentials) {
-        boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
+        if (credentials == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        boolean credentialsMapCheck = credentials.size() == 0;
         if (credentialsMapCheck){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }

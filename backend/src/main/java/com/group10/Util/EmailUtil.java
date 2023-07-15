@@ -17,12 +17,12 @@ public class EmailUtil {
 
     @Autowired 
     private JavaMailSender javaMailSender;
-    
+
     @Value("${spring.mail.username}")
     private String sender;
 
     // To send a simple email
-    public void sendSimpleMail(EmailDetails email) throws MailSendException, MailAuthenticationException, MailParseException
+    public boolean sendSimpleMail(EmailDetails email) throws MailSendException, MailAuthenticationException, MailParseException
     {
         
         // Try block to check for exceptions
@@ -38,6 +38,7 @@ public class EmailUtil {
  
             // Sending the mail
             javaMailSender.send(mailMessage);
+            return true;
         }
  
         // Catch block to handle the exceptions

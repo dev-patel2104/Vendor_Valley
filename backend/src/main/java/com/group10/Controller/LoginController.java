@@ -31,7 +31,10 @@ public class LoginController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
-        boolean credentialsMapCheck = credentials == null || credentials.size() == 0;
+        if (credentials == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        boolean credentialsMapCheck =  credentials.size() == 0;
         if (credentialsMapCheck){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }

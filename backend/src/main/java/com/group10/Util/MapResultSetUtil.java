@@ -67,4 +67,15 @@ public class MapResultSetUtil {
         service.setTotalBookings(resultSet.getString("totalBookings"));
         return service;
     }
+
+    public Service mapResultSetToPrivateService(ResultSet resultSet) throws SQLException{
+        Service service = new Service();
+        service.setServiceId(resultSet.getInt("service_id"));
+        service.setUserId(resultSet.getInt("user_id"));
+        service.setServiceName(resultSet.getString("service_name"));
+        service.setServiceDescription(resultSet.getString("service_description"));
+        service.setServicePrice(resultSet.getString("service_price"));
+        service.setCompanyEmail(resultSet.getString("company_email"));
+        return service;
+    }
 }

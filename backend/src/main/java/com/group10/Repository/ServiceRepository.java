@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.sql.ResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,4 +127,25 @@ public class ServiceRepository {
         }
     }
     
+    public Service getServiceDetails(int serviceId) throws SQLException{
+        try(Connection connection = databaseService.connect();
+            PreparedStatement statement = connection.prepareStatement(SQLQuery.getServiceDetailsQuery);)
+        {
+            statement.setInt(1, serviceId);
+            ResultSet result = statement.executeQuery();
+            if (result.next()){
+                Service service = UserUtilObj.mapResultSetToPrivateService(result);
+                // Set company email separately to avoid exposing it on frontend. 
+                // (The reason being mapResultSetToService method is also being 
+                // used by othermethods which send Service objects to the frontend)
+                service.setCompanyEmail(result.getString("company_email"));
+                return service;
+            }
+            return null;
+        }
+        catch(SQLException e){
+            throw new SQLException("Database Connection Lost");
+        }
+    }
+
 }

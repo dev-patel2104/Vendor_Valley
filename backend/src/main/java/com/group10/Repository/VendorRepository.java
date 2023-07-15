@@ -16,9 +16,6 @@ public class VendorRepository {
     @Autowired
     DatabaseService databaseService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     public boolean saveVendor(User user, Vendor vendorModel) throws SQLException{
 
         try(Connection connection = databaseService.connect();)

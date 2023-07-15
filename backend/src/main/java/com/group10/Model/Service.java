@@ -20,7 +20,16 @@ public class Service
     private String companyCountry;
     private String averageRating;
     private String totalBookings;
+    private String companyEmail;
 
+
+    public String getCompanyEmail() {
+        return companyEmail;
+    }
+
+    public void setCompanyEmail(String companyEmail) {
+        this.companyEmail = companyEmail;
+    }
 
     public int getServiceId() {
         return serviceId;

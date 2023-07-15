@@ -28,7 +28,6 @@ public class LoginControllerTest {
     
     @Test
     public void successPath_login() throws UserDoesntExistException, InvalidPasswordException, SQLException{
-        String successMessage = "Login successful!";
         User user = new User();
         Mockito.doReturn(user).when(loginService).login(anyString(),anyString());
         

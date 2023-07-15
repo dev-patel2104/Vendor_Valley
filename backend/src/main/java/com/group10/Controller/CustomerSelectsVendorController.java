@@ -75,4 +75,30 @@ public class CustomerSelectsVendorController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/sendEmail")
+    public ResponseEntity<String> sendEmail(@RequestBody Map<String, String> body) 
+    {   
+        String serviceId = body.get("serviceId");
+        String emailText = body.get("emailText");
+        String JWTToken = body.get("JWTToken");
+        if (serviceId == null || serviceId.equals("") || emailText == null || emailText.equals(""))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+        }
+        try
+        {
+            boolean result = customerSelectsVendorService.sendEmail(serviceId, emailText,JWTToken);
+            if (result){
+                return ResponseEntity.ok("Email sent successfully!");
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Email could not be sent!");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 }
