@@ -142,7 +142,7 @@ public class UserRepository{
     public SignUpModel getUser(int user_id) throws SQLException {
         SignUpModel customer = null;
         try(Connection connection = databaseService.connect();
-        PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQuery.getUserByID))
+        PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQueries.getUserByID))
         {
             getCustomerPreparedStatement.setInt(1,user_id);
             ResultSet rs = getCustomerPreparedStatement.executeQuery();
