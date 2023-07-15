@@ -34,6 +34,7 @@ com\group10\Model\Category.class
 com\group10\Exceptions\PasswordsCantBeSameException.class
 com\group10\Util\StringUtil.class
 com\group10\Controller\SignInController.class
+com\group10\Enums\UserTableColumns.class
 com\group10\Controller\SearchController$1.class
 com\group10\Repository\VendorRepository.class
 com\group10\Util\EmailUtil.class
@@ -42,9 +43,9 @@ com\group10\Service\SearchService.class
 com\group10\Model\Vendor$VendorBuilder.class
 com\group10\Service\DatabaseService.class
 com\group10\Service\SignInService.class
+com\group10\Controller\VendorDashboardController.class
 com\group10\Util\MapResultSetUtil.class
 com\group10\Exceptions\VendorDetailsAbsentForUserException.class
-com\group10\Enums\GetUserByEmailQueryColumns.class
 com\group10\Enums\GetServiceDetailsQueryColumns.class
 com\group10\Model\SignUpModel$SignUpModelBuilder.class
 com\group10\Exceptions\NoInformationFoundException.class

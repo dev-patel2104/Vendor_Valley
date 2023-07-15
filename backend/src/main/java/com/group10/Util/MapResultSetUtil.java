@@ -7,9 +7,10 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
+import com.group10.Constants.IntegerConstants;
 import com.group10.Enums.GetReviewsByServiceQueryColumns;
 import com.group10.Enums.GetServiceDetailsQueryColumns;
-import com.group10.Enums.GetUserByEmailQueryColumns;
+import com.group10.Enums.UserTableColumns;
 import com.group10.Enums.SearchServiceQueryColumns;
 import com.group10.Model.Review;
 import com.group10.Model.Service;
@@ -27,19 +28,21 @@ public class MapResultSetUtil {
      * @return The User object with the mapped data.
      * @throws SQLException If there is an error accessing the ResultSet.
      */
-    public User mapResultSetToUser(ResultSet resultSet) throws SQLException {
+    public User mapResultSetToUser_findByEmail(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setUserId(resultSet.getInt(GetUserByEmailQueryColumns.USER_ID.getColumnName()));
-        user.setLastName(resultSet.getString(GetUserByEmailQueryColumns.LAST_NAME.getColumnName()));
-        user.setFirstName(resultSet.getString(GetUserByEmailQueryColumns.FIRST_NAME.getColumnName()));
-        user.setMobile(resultSet.getString(GetUserByEmailQueryColumns.MOBILE.getColumnName()));
-        user.setVendor(resultSet.getInt(GetUserByEmailQueryColumns.IS_VENDOR.getColumnName()));
-        user.setEmail(resultSet.getString(GetUserByEmailQueryColumns.EMAIL.getColumnName()));
-        user.setStreet(resultSet.getString(GetUserByEmailQueryColumns.STREET.getColumnName()));
-        user.setCity(resultSet.getString(GetUserByEmailQueryColumns.CITY.getColumnName()));
-        user.setProvince(resultSet.getString(GetUserByEmailQueryColumns.PROVINCE.getColumnName()));
-        user.setCountry(resultSet.getString(GetUserByEmailQueryColumns.COUNTRY.getColumnName()));
-        user.setPassword(resultSet.getString(GetUserByEmailQueryColumns.PASSWORD.getColumnName()));
+        int columnIndex = resultSet.findColumn(UserTableColumns.USER_ID.getColumnName());
+        Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : IntegerConstants.userDoesntExist;
+        user.setUserId(value instanceof Integer ? (Integer) value : Integer.parseInt((String) value));
+        user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
+        user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
+        user.setMobile(resultSet.getString(UserTableColumns.MOBILE.getColumnName()));
+        user.setVendor(resultSet.getInt(UserTableColumns.IS_VENDOR.getColumnName()));
+        user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
+        user.setStreet(resultSet.getString(UserTableColumns.STREET.getColumnName()));
+        user.setCity(resultSet.getString(UserTableColumns.CITY.getColumnName()));
+        user.setProvince(resultSet.getString(UserTableColumns.PROVINCE.getColumnName()));
+        user.setCountry(resultSet.getString(UserTableColumns.COUNTRY.getColumnName()));
+        user.setPassword(resultSet.getString(UserTableColumns.PASSWORD.getColumnName()));
         // Set other properties as needed
         return user;
     }

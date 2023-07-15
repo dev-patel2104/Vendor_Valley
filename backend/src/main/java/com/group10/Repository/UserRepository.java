@@ -45,7 +45,7 @@ public class UserRepository {
                 // User found
                 if (resultSet.next()) {
                     // Set other properties as needed
-                    user = mapResultSetUtilObj.mapResultSetToUser(resultSet);
+                    user = mapResultSetUtilObj.mapResultSetToUser_findByEmail(resultSet);
                     return user;
                 } else {
                     // User not found
@@ -70,6 +70,10 @@ public class UserRepository {
 
         try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQueries.updateUserQuery);) {
+            
+            if (user.getUserId() == IntegerConstants.userDoesntExist){
+                return false;
+            }
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
             statement.setString(3, user.getStreet());

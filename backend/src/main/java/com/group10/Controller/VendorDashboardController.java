@@ -18,6 +18,7 @@ public class VendorDashboardController {
     @PostMapping("/getStatistics")
     public ResponseEntity<List<Review>> getStatistics(@RequestBody Map<String, String> body) 
     {
+        // Get statistics from bookings, reviews, and users
         
         return null;
     }
