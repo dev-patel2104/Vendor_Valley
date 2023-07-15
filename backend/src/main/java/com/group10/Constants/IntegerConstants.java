@@ -7,4 +7,5 @@ public class IntegerConstants {
     public static final int rowNotInserted = -1;
     public static final int userAlreadyExists = -2;
     public static final int userNotInserted = -3;
+    public static final int userDoesntExist = -4;
 }

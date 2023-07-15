@@ -8,6 +8,7 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\HomeController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Constants\IntegerConstants.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\EmailUtil.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\VendorDashboardController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\PasswordsCantBeSameException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\Interfaces\ISearchService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\NoInformationFoundException.java
@@ -16,7 +17,6 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\ResetPasswordRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\HomeService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\MapResultSetUtil.java
-c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\GetUserByEmailQueryColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\UserRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\SignInService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\Review.java
@@ -43,4 +43,5 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\PasswordUtil.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\VendorDetailsAbsentForUserException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\CategoryRepository.java
+c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\UserTableColumns.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\DatabaseService.java

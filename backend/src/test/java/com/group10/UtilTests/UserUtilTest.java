@@ -29,7 +29,8 @@ public class UserUtilTest {
         ResultSet resultSet = mock(ResultSet.class);
 
         // Specify the behavior of the mock ResultSet
-        when(resultSet.getInt("user_id")).thenReturn(1);
+        when(resultSet.findColumn("user_id")).thenReturn(1);
+        when(resultSet.getObject(1)).thenReturn(1);
         when(resultSet.getString("last_name")).thenReturn("Doe");
         when(resultSet.getString("first_name")).thenReturn("John");
         when(resultSet.getString("mobile")).thenReturn("1234567890");
@@ -42,7 +43,7 @@ public class UserUtilTest {
         when(resultSet.getString("password")).thenReturn("password");
 
         // Call the method under test
-        user = userUtil.mapResultSetToUser(resultSet);
+        user = userUtil.mapResultSetToUser_findByEmail(resultSet);
 
         // Verify the results
         assertEquals(1, user.getUserId());

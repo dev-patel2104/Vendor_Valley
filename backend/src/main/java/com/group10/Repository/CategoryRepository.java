@@ -16,8 +16,8 @@ public class CategoryRepository
 {
     @Autowired
     DatabaseService databaseService;
-    private int numberOfFeaturedCategories = 3;
-    private int numberOfTrendingServices = 5;
+    private final int numberOfFeaturedCategories = 3;
+    private final int numberOfTrendingServices = 5;
     private List<Category> categoryList;
     private List<Service> serviceList;
     
