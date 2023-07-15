@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents a user with various properties such as userId, lastName, firstName, and mobile.
+ */
 @Component
 @Builder
 @NoArgsConstructor
@@ -112,5 +115,8 @@ public class User {
     public void setCountry(String country) {
         this.country = country;
     }
-
+    
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 }

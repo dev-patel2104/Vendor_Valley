@@ -1,7 +1,12 @@
 package com.group10.Model;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents a service entity.
+ */
 @Component
 public class Service
 {
@@ -10,13 +15,24 @@ public class Service
     private String serviceName;
     private String serviceDescription;
     private String servicePrice;
+    private List<String> images;
+    private List<String> categoryNames;
     private String companyStreet;
     private String companyProvince;
     private String companyCity;
     private String companyCountry;
     private String averageRating;
     private String totalBookings;
+    private String companyEmail;
 
+
+    public String getCompanyEmail() {
+        return companyEmail;
+    }
+
+    public void setCompanyEmail(String companyEmail) {
+        this.companyEmail = companyEmail;
+    }
 
     public int getServiceId() {
         return serviceId;
@@ -57,6 +73,21 @@ public class Service
     public void setServicePrice(String servicePrice) {
         this.servicePrice = servicePrice;
     }
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+    public List<String> getCategoryNames() {
+        return categoryNames;
+    }
+
+    public void setCategoryNames(List<String> categoryNames) {
+        this.categoryNames = categoryNames;
+    }
+
     public void setTotalBookingsForService(int totalBookingsForService)
     {
     }

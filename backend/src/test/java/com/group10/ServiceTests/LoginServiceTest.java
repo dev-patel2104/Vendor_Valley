@@ -1,6 +1,6 @@
 package com.group10.ServiceTests;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -31,7 +31,7 @@ public class LoginServiceTest {
         String password = "password";
         user.setPassword(password);
         Mockito.doReturn(user).when(userRepository).findByEmail(email);
-        assertTrue(loginService.login(email,password));
+        assertEquals(user, loginService.login(email,password));
     }
 
     @Test

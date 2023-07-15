@@ -3,7 +3,7 @@ package com.group10.Repository;
 import com.group10.Model.Category;
 import com.group10.Model.Service;
 import com.group10.Service.DatabaseService;
-import com.group10.Util.SqlQueries.SQLQuery;
+import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +28,7 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             Statement statement1 = connection.createStatement();)
         {
-            rs1 = statement1.executeQuery(SQLQuery.getFeaturedCategoriesQuery);
+            rs1 = statement1.executeQuery(SQLQueries.getFeaturedCategoriesQuery);
             categoryList = new ArrayList<>();
             Category cat = null;
             while(rs1.next() && cnt < numberOfFeaturedCategories)
@@ -53,7 +53,7 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             Statement statement1 = connection.createStatement();)
         {
-            rs = statement1.executeQuery(SQLQuery.trendingServiceQuery);
+            rs = statement1.executeQuery(SQLQueries.trendingServiceQuery);
             serviceList = new ArrayList<>();
             Service ser;
 
@@ -71,7 +71,7 @@ public class CategoryRepository
             }
             if(serviceList.size() < 3)
             {
-                rs = statement1.executeQuery(SQLQuery.trendingServiceQueryDefault);
+                rs = statement1.executeQuery(SQLQueries.trendingServiceQueryDefault);
                 {
                     while(rs.next() && cnt < numberOfTrendingServices)
                     {

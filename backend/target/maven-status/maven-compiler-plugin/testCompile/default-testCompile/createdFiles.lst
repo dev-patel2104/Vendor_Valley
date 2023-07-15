@@ -5,6 +5,7 @@ com\group10\UtilTests\PasswordUtilTest.class
 com\group10\ControllerTests\LoginControllerTest.class
 com\group10\ServiceTests\ResetPasswordServiceTest.class
 com\group10\ControllerTests\CheckHTTPResponse.class
+com\group10\ServiceTests\CustomerSelectsVendorServiceTest.class
 com\group10\ServiceTests\LoginServiceTest.class
 com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.class
 com\group10\UtilTests\StringUtilTest.class
