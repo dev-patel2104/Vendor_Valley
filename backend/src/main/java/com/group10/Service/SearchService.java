@@ -50,6 +50,7 @@ public class SearchService implements ISearchService{
         }
     }
 
+    @Override
     /**
      * Sorts the list of services based on the given sort parameter and sort order.
      *

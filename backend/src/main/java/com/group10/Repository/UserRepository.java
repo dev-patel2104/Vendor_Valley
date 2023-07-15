@@ -16,7 +16,7 @@ import java.sql.*;
  * Repository class for managing user data.
  */
 @Repository
-public class UserRepository {
+public class UserRepository{
 
     @Autowired
     DatabaseService databaseService;
@@ -142,7 +142,7 @@ public class UserRepository {
     public SignUpModel getUser(int user_id) throws SQLException {
         SignUpModel customer = null;
         try(Connection connection = databaseService.connect();
-            PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQueries.getUserByID))
+        PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQueries.getUserByID))
         {
             getCustomerPreparedStatement.setInt(1,user_id);
             ResultSet rs = getCustomerPreparedStatement.executeQuery();
@@ -170,15 +170,13 @@ public class UserRepository {
                         companyProvince(rs.getString(20)).
                         companyCountry(rs.getString(21)).
                         build();
-
+                
             }
         }
         catch (SQLException e)
         {
             throw new SQLException(e.getMessage());
         }
-        return customer;
+       return customer;
     }
-
-
 }
