@@ -10,12 +10,21 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.User;
 
+/**
+ * Handles the generation and verification of JWT tokens.
+ */
 @Component
 public class JWTTokenHandler {
     
     @Value("${secret.key}")
     private String secretKey;
 
+    /**
+     * Generates a JWT (JSON Web Token) for the given user.
+     *
+     * @param user The user for whom the token is being generated.
+     * @return The generated JWT token.
+     */
     public String generateJWTToken(User user){
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         String token = JWT.create()
@@ -26,6 +35,13 @@ public class JWTTokenHandler {
         return token;
     }
 
+    /**
+     * Decodes a JWT token and verifies its authenticity using the provided secret key.
+     *
+     * @param token The JWT token to decode and verify.
+     * @return The decoded JWT object.
+     * @throws JWTVerificationException If the token is invalid or cannot be verified.
+     */
     public DecodedJWT decodeJWTToken(String token){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);

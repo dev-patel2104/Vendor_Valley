@@ -1,14 +1,19 @@
 package com.group10.Repository;
 
 import com.group10.Service.DatabaseService;
-import com.group10.Util.SqlQueries.SQLQuery;
+import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Util.MapResultSetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.group10.Constants.IntegerConstants;
 import com.group10.Model.User;
 
 import java.sql.*;
 
+/**
+ * Repository class for managing user data.
+ */
 @Repository
 public class UserRepository {
 
@@ -19,13 +24,20 @@ public class UserRepository {
     @Autowired
     private User user;
 
-    private MapResultSetUtil UserUtilObj = new MapResultSetUtil();
+    @Autowired
+    private MapResultSetUtil mapResultSetUtilObj;
 
-
+    /**
+     * Finds a user by their email in the database.
+     *
+     * @param email The email of the user to find.
+     * @return The user object if found, or null if not found.
+     * @throws SQLException If there is an error with the database connection.
+     */
     public User findByEmail(String email) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQuery.getUserByEmailID);)
+             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQueries.getUserByEmailID);)
         {
             getUsersPreparedStatement.setString(1, email);
             try(ResultSet resultSet = getUsersPreparedStatement.executeQuery();)
@@ -33,7 +45,7 @@ public class UserRepository {
                 // User found
                 if (resultSet.next()) {
                     // Set other properties as needed
-                    user = UserUtilObj.mapResultSetToUser(resultSet);
+                    user = mapResultSetUtilObj.mapResultSetToUser(resultSet);
                     return user;
                 } else {
                     // User not found
@@ -47,10 +59,17 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Updates a user's information in the database.
+     *
+     * @param user The User object containing the updated information.
+     * @return true if the user was successfully updated, false otherwise.
+     * @throws SQLException if there is an error with the database connection.
+     */
     public boolean updateUser(User user) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement statement = connection.prepareStatement(SQLQuery.updateUserQuery);) {
+             PreparedStatement statement = connection.prepareStatement(SQLQueries.updateUserQuery);) {
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
             statement.setString(3, user.getStreet());
@@ -78,16 +97,21 @@ public class UserRepository {
         }
     }
 
+    /**
+     * Adds a new user to the database and returns the generated user ID.
+     *
+     * @param user The user object to be added.
+     * @return The generated user ID, or 0 if the user already exists.
+     * @throws SQLException If there is an error executing the SQL query.
+     */
     public int addUser(User user) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
+             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
         {
 
-            int userId = 0;
-
             if(findByEmail(user.getEmail()) != null) {
-                return userId;
+                return IntegerConstants.userAlreadyExists;
             }
             addUserPreparedStatement.setString(1, user.getFirstName());
             addUserPreparedStatement.setString(2, user.getLastName());
@@ -104,9 +128,10 @@ public class UserRepository {
             ResultSet rs = addUserPreparedStatement.getGeneratedKeys();
 
             if (rs.next()) {
-                userId = rs.getInt(1);
+                int userId = rs.getInt(1);
+                return userId;
             }
-            return userId;
+            return IntegerConstants.userNotInserted;
         }
         catch(SQLException e) {
             throw new SQLException("data not being added");

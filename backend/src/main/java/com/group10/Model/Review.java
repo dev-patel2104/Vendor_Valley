@@ -1,5 +1,8 @@
 package com.group10.Model;
 
+/**
+ * Represents a review entity with various properties.
+ */
 public class Review {
     private int reviewerId;
     private int serviceId;

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents a user with various properties such as userId, lastName, firstName, and mobile.
+ */
 @Component
 @Builder
 @NoArgsConstructor

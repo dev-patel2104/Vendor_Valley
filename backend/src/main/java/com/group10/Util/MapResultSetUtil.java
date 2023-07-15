@@ -7,75 +7,110 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
+import com.group10.Enums.GetReviewsByServiceQueryColumns;
+import com.group10.Enums.GetServiceDetailsQueryColumns;
+import com.group10.Enums.GetUserByEmailQueryColumns;
+import com.group10.Enums.SearchServiceQueryColumns;
 import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
 
+/**
+ * Utility class for mapping a ResultSet to a User object.
+ */
 @Component
 public class MapResultSetUtil {
+    /**
+     * Maps a ResultSet object to a User object.
+     *
+     * @param resultSet The ResultSet object containing the user data.
+     * @return The User object with the mapped data.
+     * @throws SQLException If there is an error accessing the ResultSet.
+     */
     public User mapResultSetToUser(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setUserId(resultSet.getInt("user_id"));
-        user.setLastName(resultSet.getString("last_name"));
-        user.setFirstName(resultSet.getString("first_name"));
-        user.setMobile(resultSet.getString("mobile"));
-        user.setVendor(resultSet.getInt("is_vendor"));
-        user.setEmail(resultSet.getString("email"));
-        user.setStreet(resultSet.getString("street"));
-        user.setCity(resultSet.getString("city"));
-        user.setProvince(resultSet.getString("province"));
-        user.setCountry(resultSet.getString("country"));
-        user.setPassword(resultSet.getString("password"));
+        user.setUserId(resultSet.getInt(GetUserByEmailQueryColumns.USER_ID.getColumnName()));
+        user.setLastName(resultSet.getString(GetUserByEmailQueryColumns.LAST_NAME.getColumnName()));
+        user.setFirstName(resultSet.getString(GetUserByEmailQueryColumns.FIRST_NAME.getColumnName()));
+        user.setMobile(resultSet.getString(GetUserByEmailQueryColumns.MOBILE.getColumnName()));
+        user.setVendor(resultSet.getInt(GetUserByEmailQueryColumns.IS_VENDOR.getColumnName()));
+        user.setEmail(resultSet.getString(GetUserByEmailQueryColumns.EMAIL.getColumnName()));
+        user.setStreet(resultSet.getString(GetUserByEmailQueryColumns.STREET.getColumnName()));
+        user.setCity(resultSet.getString(GetUserByEmailQueryColumns.CITY.getColumnName()));
+        user.setProvince(resultSet.getString(GetUserByEmailQueryColumns.PROVINCE.getColumnName()));
+        user.setCountry(resultSet.getString(GetUserByEmailQueryColumns.COUNTRY.getColumnName()));
+        user.setPassword(resultSet.getString(GetUserByEmailQueryColumns.PASSWORD.getColumnName()));
         // Set other properties as needed
         return user;
     }
 
+    /**
+     * Maps a ResultSet object to a Review object.
+     *
+     * @param resultSet The ResultSet object containing the data to be mapped
+     * @return The Review object with the mapped data
+     * @throws SQLException If there is an error accessing the data from the ResultSet
+     */
     public Review mapResultSetToReview(ResultSet resultSet) throws SQLException{
         Review review = new Review();
-        review.setServiceId(resultSet.getInt("service_id"));
-        review.setReviewerId(resultSet.getInt("user_id"));
-        review.setReviewTitle(resultSet.getString("title"));
-        review.setReviewComment(resultSet.getString("comment_text"));
-        review.setReviewDate(resultSet.getString("review_date"));
-        review.setReviewRating(resultSet.getInt("rating"));
-        review.setReviewerName(resultSet.getString("name"));
-        review.setReviewerCity(resultSet.getString("city"));
-        review.setReviewerCountry(resultSet.getString("country"));
+        review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.SERVICE_ID.getColumnName()));
+        review.setReviewerId(resultSet.getInt(GetReviewsByServiceQueryColumns.USER_ID.getColumnName()));
+        review.setReviewTitle(resultSet.getString(GetReviewsByServiceQueryColumns.TITLE.getColumnName()));
+        review.setReviewComment(resultSet.getString(GetReviewsByServiceQueryColumns.COMMENT_TEXT.getColumnName()));
+        review.setReviewDate(resultSet.getString(GetReviewsByServiceQueryColumns.REVIEW_DATE.getColumnName()));
+        review.setReviewRating(resultSet.getInt(GetReviewsByServiceQueryColumns.RATING.getColumnName()));
+        review.setReviewerName(resultSet.getString(GetReviewsByServiceQueryColumns.NAME.getColumnName()));
+        review.setReviewerCity(resultSet.getString(GetReviewsByServiceQueryColumns.CITY.getColumnName()));
+        review.setReviewerCountry(resultSet.getString(GetReviewsByServiceQueryColumns.COUNTRY.getColumnName()));
         return review;
     }
 
+    /**
+     * Maps a ResultSet object to a Service object.
+     *
+     * @param resultSet The ResultSet object containing the data to be mapped
+     * @return The mapped Service object
+     * @throws SQLException If there is an error accessing the ResultSet data
+     */
     public Service mapResultSetToService(ResultSet resultSet) throws SQLException {
         Service service = new Service();
-        service.setServiceId(resultSet.getInt("service_id"));
-        service.setUserId(resultSet.getInt("user_id"));
-        service.setServiceName(resultSet.getString("service_name"));
-        service.setServiceDescription(resultSet.getString("service_description"));
-        service.setServicePrice(resultSet.getString("service_price"));
+    service.setServiceId(resultSet.getInt(SearchServiceQueryColumns.SERVICE_ID.getColumnName()));
+        service.setUserId(resultSet.getInt(SearchServiceQueryColumns.USER_ID.getColumnName()));
+        service.setServiceName(resultSet.getString(SearchServiceQueryColumns.SERVICE_NAME.getColumnName()));
+        service.setServiceDescription(resultSet.getString(SearchServiceQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
+        service.setServicePrice(resultSet.getString(SearchServiceQueryColumns.SERVICE_PRICE.getColumnName()));
         service.setImages(new ArrayList<>());
-        String categories = resultSet.getString("categories");
+        String categories = resultSet.getString(SearchServiceQueryColumns.CATEGORIES.getColumnName());
         if (categories != null){
             service.setCategoryNames(Arrays.asList(categories.split(",")));
         }
         else{
             service.setCategoryNames(new ArrayList<>());
         }
-        service.setCompanyStreet(resultSet.getString("company_street"));
-        service.setCompanyCity(resultSet.getString("company_city"));
-        service.setCompanyProvince(resultSet.getString("company_province"));
-        service.setCompanyCountry(resultSet.getString("company_country"));
-        service.setAverageRating(resultSet.getString("avgRating"));
-        service.setTotalBookings(resultSet.getString("totalBookings"));
+        service.setCompanyStreet(resultSet.getString(SearchServiceQueryColumns.COMPANY_STREET.getColumnName()));
+        service.setCompanyCity(resultSet.getString(SearchServiceQueryColumns.COMPANY_CITY.getColumnName()));
+        service.setCompanyProvince(resultSet.getString(SearchServiceQueryColumns.COMPANY_PROVINCE.getColumnName()));
+        service.setCompanyCountry(resultSet.getString(SearchServiceQueryColumns.COMPANY_COUNTRY.getColumnName()));
+        service.setAverageRating(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+        service.setTotalBookings(resultSet.getString(SearchServiceQueryColumns.TOTAL_BOOKINGS.getColumnName()));
         return service;
     }
 
+    /**
+     * Maps a ResultSet object to a private Service object.
+     *
+     * @param resultSet The ResultSet object containing the data to be mapped.
+     * @return A Service object with the mapped data.
+     * @throws SQLException If there is an error accessing the data from the ResultSet.
+     */
     public Service mapResultSetToPrivateService(ResultSet resultSet) throws SQLException{
         Service service = new Service();
-        service.setServiceId(resultSet.getInt("service_id"));
-        service.setUserId(resultSet.getInt("user_id"));
-        service.setServiceName(resultSet.getString("service_name"));
-        service.setServiceDescription(resultSet.getString("service_description"));
-        service.setServicePrice(resultSet.getString("service_price"));
-        service.setCompanyEmail(resultSet.getString("company_email"));
+        service.setServiceId(resultSet.getInt(GetServiceDetailsQueryColumns.SERVICE_ID.getColumnName()));
+        service.setUserId(resultSet.getInt(GetServiceDetailsQueryColumns.USER_ID.getColumnName()));
+        service.setServiceName(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+        service.setServiceDescription(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
+        service.setServicePrice(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_PRICE.getColumnName()));
+        service.setCompanyEmail(resultSet.getString(GetServiceDetailsQueryColumns.COMPANY_EMAIL.getColumnName()));
         return service;
     }
 }

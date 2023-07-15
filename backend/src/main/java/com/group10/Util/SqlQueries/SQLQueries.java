@@ -1,6 +1,6 @@
 package com.group10.Util.SqlQueries;
 
-public class SQLQuery {
+public class SQLQueries {
 
         public static final String insertVendorQuery = "INSERT INTO vendors (user_id, user_role, company_city, company_country, company_email, company_mobile, company_name, company_province, company_registration_number, company_street) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?);";
         public static final String addUserQuery = "INSERT INTO users (first_name, last_name, street, city, province, country, email, mobile, is_vendor, Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";

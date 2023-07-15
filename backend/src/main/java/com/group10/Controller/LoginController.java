@@ -16,6 +16,9 @@ import com.group10.Util.JWTTokenHandler;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * Controller class for handling login requests.
+ */
 @RestController
 public class LoginController {
 
@@ -28,9 +31,16 @@ public class LoginController {
     @Autowired
     private JWTTokenHandler tokenHandler;
 
+    /**
+     * Handles the login request and returns a response entity with the appropriate status and body.
+     *
+     * @param credentials A map containing the login credentials
+     * @return A response entity with the appropriate status and body
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+
         if (credentials == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
@@ -46,9 +56,21 @@ public class LoginController {
         String email = credentials.get("email");
         String password = credentials.get("password");
         try{
-            // Login
+            /**
+             * Logs in a user with the provided email and password.
+             *
+             * @param email The email of the user
+             * @param password The password of the user
+             * @return The logged in user object
+             */
             User user = loginService.login(email, password);
-            // Encode details in JWT token
+
+            /**
+             * Generates a JWT token for the given user using the token handler.
+             *
+             * @param user The user for whom the token is being generated
+             * @return The generated JWT token
+             */
             String token = tokenHandler.generateJWTToken(user);
             // Return
             return ResponseEntity.ok(token);

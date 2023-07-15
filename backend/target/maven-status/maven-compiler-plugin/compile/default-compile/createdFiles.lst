@@ -21,12 +21,10 @@ com\group10\Repository\VendorRepository.class
 com\group10\Service\HomeService.class
 com\group10\Util\EmailUtil.class
 com\group10\Service\Interfaces\ISearchService.class
-com\group10\Util\UserUtil.class
 com\group10\Model\SignUpModel.class
 com\group10\Service\SearchService.class
 com\group10\Model\Vendor$VendorBuilder.class
 com\group10\Util\PasswordUtil.class
-com\group10\Repository\SearchRepository.class
 com\group10\Controller\SearchController.class
 com\group10\Service\DatabaseService.class
 com\group10\Service\SignInService.class

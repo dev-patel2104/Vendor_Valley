@@ -27,9 +27,17 @@ public class ResetPasswordController {
     @Autowired
     private ResetPasswordService resetPasswordService;
 
+
+    /**
+     * Handles the forgot password request and sends a verification code to the user's email.
+     *
+     * @param credentials A map containing the user's credentials (email, username, etc.)
+     * @return A ResponseEntity object with the appropriate HTTP status code and response body
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> credentials) {
+
         if (credentials == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
@@ -44,10 +52,16 @@ public class ResetPasswordController {
         String email = credentials.get("email");
         try{
             User user = resetPasswordService.checkIfUserExists(email);       
-            // call method to generate random code and send email
+
             if(user == null){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Doesn't Exists!");            
             }
+            /**
+             * Generates a verification code for resetting the password of a user.
+             *
+             * @param user The user for whom the verification code is being generated.
+             * @return true if the verification code was successfully generated, false otherwise.
+             */
             boolean success = resetPasswordService.generateVerificationCode(user);
             if(!success){
                 return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Email couldn't be sent! Try again later!");
@@ -66,9 +80,16 @@ public class ResetPasswordController {
         return ResponseEntity.ok("Verification Code will be sent to your email shortly!");
     }
 
+    /**
+     * Verifies the confirmation code provided by the user.
+     *
+     * @param credentials A map containing the user's credentials, including the confirmation code
+     * @return A ResponseEntity object with a status code and a message indicating the result of the verification
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/verifyConfirmationCode")
     public ResponseEntity<String> verifyConfirmationCode(@RequestBody Map<String, String> credentials) {
+
         if (credentials == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
@@ -84,6 +105,12 @@ public class ResetPasswordController {
         String email = credentials.get("email");
         String code = credentials.get("code");
         try{
+            /**
+             * Verifies the provided verification code for the given email address.
+             *
+             * @param email The email address associated with the verification code
+             * @param code The verification code to be verified
+             */
             resetPasswordService.verifyCode(email, code);
         }
         catch(SQLException e){
@@ -98,9 +125,19 @@ public class ResetPasswordController {
         return ResponseEntity.ok("Success! You can now change update your password!");
     }
 
+    /**
+     * Updates the password for a user.
+     *
+     * @param credentials A map containing the user's credentials, including the old and new passwords.
+     * @return A ResponseEntity with a status code and a message indicating the result of the password update.
+     *         If the update is successful, the status code will be OK and the message will indicate success.
+     *         If there is an error, the status code will indicate the type of error and the message will provide
+     *         additional details about the error.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/updatePassword")
     public ResponseEntity<String> updatePassword(@RequestBody Map<String, String> credentials) {
+
         if (credentials == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
@@ -116,6 +153,12 @@ public class ResetPasswordController {
         String email = credentials.get("email");
         String newPassword = credentials.get("password");
         try{
+            /**
+             * Updates the password for a user with the given email.
+             *
+             * @param email The email of the user whose password needs to be updated.
+             * @param newPassword The new password to set for the user.
+             */
             resetPasswordService.updatePassword(email, newPassword);
         }
         catch(SQLException e){

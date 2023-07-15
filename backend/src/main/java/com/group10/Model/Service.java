@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents a service entity.
+ */
 @Component
 public class Service
 {
