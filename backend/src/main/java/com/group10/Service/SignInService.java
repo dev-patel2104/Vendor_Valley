@@ -1,5 +1,6 @@
 package com.group10.Service;
 
+import com.group10.Constants.IntegerConstants;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Exceptions.VendorDetailsAbsentForUserException;
 import com.group10.Model.SignUpModel;
@@ -24,6 +25,8 @@ public class SignInService
     @Autowired
     private VendorRepository vendorRepository;
 
+    private final int IS_VENDOR = 1;
+    private final int IS_NOT_VENDOR = 0;
 
     public boolean SignIn(SignUpModel signUpModel) throws UserAlreadyPresentException, SQLException, VendorDetailsAbsentForUserException {
         if (signUpModel == null) {
@@ -38,7 +41,7 @@ public class SignInService
         if (!StringUtil.isNotNullAndNotEmpty(signUpModel.getMobile())) {
             return false;
         }
-        if(signUpModel.getIsVendor() != 0 && signUpModel.getIsVendor() != 1) {
+        if(signUpModel.getIsVendor() != IS_NOT_VENDOR && signUpModel.getIsVendor() != IS_VENDOR) {
             return false;
         }
         if (!StringUtil.isNotNullAndNotEmpty(signUpModel.getStreet())) {
@@ -67,7 +70,7 @@ public class SignInService
         User userModel = signUpModel.buildUserModel();
         Vendor vendorModel = signUpModel.buildVendorModel();
 
-        if(signUpModel.getIsVendor() == 1)
+        if(signUpModel.getIsVendor() == IS_VENDOR)
         {
             if(vendorRepository.saveVendor(userModel, vendorModel))
             {
@@ -81,13 +84,15 @@ public class SignInService
         else
         {
             userId = userRepository.addUser(userModel);
-            if(userId > 0)
+            if(userId==IntegerConstants.userAlreadyExists)
             {
-                return true;
-            }
-            else {
                 throw new UserAlreadyPresentException("The user is already present");
             }
+            else if(userId==IntegerConstants.userNotInserted)
+            {
+                return false;
+            }
+            return true;
         }
 
     }

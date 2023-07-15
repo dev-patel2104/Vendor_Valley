@@ -2,9 +2,12 @@ package com.group10.Model;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents the details of an email, including the recipient, message body, and subject.
+ */
 @Component
 public class EmailDetails {
- 
+    
     private String recipient;
     private String msgBody;
     private String subject;

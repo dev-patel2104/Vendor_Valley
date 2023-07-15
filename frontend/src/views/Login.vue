@@ -37,7 +37,7 @@
   
   <script>
   import axios from 'axios'
-  
+  import router from '@/router';
   
   export default{
       name: 'LoginPage',
@@ -53,12 +53,13 @@
       methods: {
         login(){   
           axios.post('https://vendor-valley.onrender.com/login', this.form)
-            .then(() => {
-      
+            .then((response) => {
               localStorage.setItem('userID', this.form.email);
               localStorage.setItem('password', this.form.password);
+              localStorage.setItem('token',response.data);
               this.msg = ""
               this.$toast.success(`Login sucessful`, {position:"top", duration: 1000, });
+              router.push('/homepage');
             })
             .catch((error) => {
               this.msg = error.response.data

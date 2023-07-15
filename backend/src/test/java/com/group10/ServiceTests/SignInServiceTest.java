@@ -1,5 +1,6 @@
 package com.group10.ServiceTests;
 
+import com.group10.Constants.IntegerConstants;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
@@ -231,7 +232,7 @@ public class SignInServiceTest
     @Test(expected = UserAlreadyPresentException.class)
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(0);
+        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(IntegerConstants.userAlreadyExists);
         signInService.SignIn(signUpModel);
     }
 

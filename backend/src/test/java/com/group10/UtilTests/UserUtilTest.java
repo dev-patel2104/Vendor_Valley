@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group10.Model.User;
-import com.group10.Util.UserUtil;
+import com.group10.Util.MapResultSetUtil;
 
 @SpringBootTest
 public class UserUtilTest {
 
     @Autowired
-    private UserUtil userUtil;
+    private MapResultSetUtil userUtil;
     
     @Autowired
     private User user;

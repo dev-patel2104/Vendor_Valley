@@ -1,6 +1,6 @@
 package com.group10.RepositoryTests;
 
-import com.group10.Util.SqlQueries.SQLQuery;
+import com.group10.Util.SqlQueries.SQLQueries;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,8 +24,8 @@ public class VendorRepositoryTest {
         Connection connection = mock(Connection.class);
         PreparedStatement preparedStatementMock = mock(PreparedStatement.class);
 
-        given(connection.prepareStatement(SQLQuery.insertVendorQuery)).willReturn(preparedStatementMock);
-        connection.prepareStatement(SQLQuery.insertVendorQuery).setString(3, "CityName");
+        given(connection.prepareStatement(SQLQueries.insertVendorQuery)).willReturn(preparedStatementMock);
+        connection.prepareStatement(SQLQueries.insertVendorQuery).setString(3, "CityName");
 
         verify(preparedStatementMock).setString(3, "CityName");
 

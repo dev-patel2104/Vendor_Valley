@@ -9,6 +9,9 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.User;
 import com.group10.Repository.UserRepository;
 
+/**
+ * Service class for handling user login functionality.
+ */
 @Service
 public class LoginService {
 
@@ -18,8 +21,24 @@ public class LoginService {
     @Autowired
     private User user;
 
-    public boolean login(String email, String password) throws UserDoesntExistException, InvalidPasswordException, SQLException {
+    /**
+     * Logs in a user with the given email and password.
+     *
+     * @param email The email of the user.
+     * @param password The password of the user.
+     * @return The logged in user.
+     * @throws UserDoesntExistException If the user with the given email doesn't exist.
+     * @throws InvalidPasswordException If the password entered is incorrect.
+     * @throws SQLException If there is an error while accessing the database.
+     */
+    public User login(String email, String password) throws UserDoesntExistException, InvalidPasswordException, SQLException {
         try{
+            /**
+             * Retrieves a user from the user repository based on their email.
+             *
+             * @param email The email of the user to retrieve.
+             * @return The user entity associated with the given email, or null if no user is found.
+             */
             user = userRepository.findByEmail(email);
         }
         catch (SQLException e){
@@ -31,6 +50,6 @@ public class LoginService {
         if (!user.getPassword().equalsIgnoreCase(password)){
             throw new InvalidPasswordException("Wrong Password Entered!");
         }
-        return true;
+        return user;
     }
 }

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.LoginControllerTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.882 s - in com.group10.ControllerTests.LoginControllerTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.331 s - in com.group10.ControllerTests.LoginControllerTest

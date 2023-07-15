@@ -4,7 +4,7 @@ import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
 import com.group10.Service.DatabaseService;
-import com.group10.Util.SqlQueries.SQLQuery;
+import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,15 +17,12 @@ public class VendorRepository{
     @Autowired
     DatabaseService databaseService;
 
-    @Autowired
-    private UserRepository userRepository;
-
     public boolean saveVendor(User user, Vendor vendorModel) throws SQLException{
 
         try(Connection connection = databaseService.connect();)
         {
-            try (PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQuery.insertVendorQuery);
-                 PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQuery.addUserQuery, Statement.RETURN_GENERATED_KEYS);) {
+            try (PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQueries.insertVendorQuery);
+                 PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);) {
                 int userId = 0;
                 connection.setAutoCommit(false);
                 addUserPreparedStatement.setString(1, user.getFirstName());

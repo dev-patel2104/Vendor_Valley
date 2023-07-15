@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import com.group10.Controller.LoginController;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserDoesntExistException;
+import com.group10.Model.User;
 import com.group10.Service.LoginService;
 
 @SpringBootTest
@@ -27,15 +28,14 @@ public class LoginControllerTest {
     
     @Test
     public void successPath_login() throws UserDoesntExistException, InvalidPasswordException, SQLException{
-        String successMessage = "Login successful!";
-        Mockito.doReturn(true).when(loginService).login(anyString(),anyString());
+        User user = new User();
+        Mockito.doReturn(user).when(loginService).login(anyString(),anyString());
         
         Map<String, String> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
         credentials.put("password", "password");
         ResponseEntity<String> response = loginController.login(credentials);
 
-        assertEquals(successMessage,response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

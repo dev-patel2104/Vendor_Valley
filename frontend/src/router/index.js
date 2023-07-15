@@ -5,6 +5,7 @@ import Signup from '@/views/Signup.vue'
 import Forgotpassword from '@/views/Forgotpassword.vue'
 import Enterverificationcode from '@/views/Enterverificationcode.vue'
 import Changepassword from '@/views/Changepassword.vue'
+import Homepage from '@/views/Components/Homepage.vue'
 
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
   {path: '/forgotpassword', component: Forgotpassword},
   {path: '/Enterverificationcode', component: Enterverificationcode},
   {path: '/Changepassword', component: Changepassword},
+  {path: '/homepage', component: Homepage},
 ]
 
 const router = createRouter({
@@ -21,4 +23,16 @@ const router = createRouter({
   routes
 })
 
+
+// function guardMyroute(to, from, next) {
+//   var isAuthenticated = false;
+
+//   if (JSON.parse(localStorage.getItem("userID")).token) isAuthenticated = true;
+//   else isAuthenticated = false;
+//   if (isAuthenticated) {
+//     next(); // allow to enter route
+//   } else {
+//     next("/login"); // go to '/login';
+//   }
+// }
 export default router
