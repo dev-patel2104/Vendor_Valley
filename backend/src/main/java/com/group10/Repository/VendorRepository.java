@@ -10,18 +10,29 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 
 
+/**
+ * Repository class for managing vendor data in the database.
+ */
 @Repository
 public class VendorRepository {
 
     @Autowired
     DatabaseService databaseService;
 
+    /**
+     * Saves a vendor and associated user information to the database.
+     *
+     * @param user The user object containing the vendor's information.
+     * @param vendorModel The vendor object to be saved.
+     * @return true if the vendor and user information were successfully saved, false otherwise.
+     * @throws SQLException if there is an error with the database connection or query execution.
+     */
     public boolean saveVendor(User user, Vendor vendorModel) throws SQLException{
 
         try(Connection connection = databaseService.connect();)
         {
             try (PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQueries.insertVendorQuery);
-                 PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);) {
+                PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);) {
                 int userId = 0;
                 connection.setAutoCommit(false);
                 addUserPreparedStatement.setString(1, user.getFirstName());
