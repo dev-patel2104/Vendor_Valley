@@ -17,4 +17,5 @@ public class SQLQueries {
         public static final String getReviewsForServiceQuery = "select r.*, concat(u.first_name, u.last_name) as name, u.city, u.country from reviews as r join users as u on r.user_id = u.user_id where service_id = ? order by review_id desc;";
         public static final String insertReviewQuery = "insert into reviews (service_id, user_id, title, comment_text, review_date, rating) values(?, ?, ?, ?, ?, ?);";
         public static final String getServiceDetailsQuery = "select s.*, v.company_email from services as s join vendors as v on v.user_id = s.user_id where service_id = ?;";
+        public static final String getUserByID = "select * from users Left join vendors on users.user_id = vendors.user_id where users.user_id = ?;";
 }
