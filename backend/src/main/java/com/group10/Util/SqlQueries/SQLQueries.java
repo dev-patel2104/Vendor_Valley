@@ -11,6 +11,7 @@ public class SQLQueries {
                 "group by service_id \n" +
                 "order by totalBookingsForService desc;";
         public static final String trendingServiceQueryDefault = "select * from services order by service_id desc;";
+        public static final String checkIfBookingExistsQuery = "select * from bookings where booking_id = ?;";
         public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";
         public static final String updateUserQuery = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";
         public static final String getPasswordRestInfoByUserId = "select verification_code, created_at from user_password_reset where user_id = (select user_id from users where email = ?) order by created_at DESC limit 1";

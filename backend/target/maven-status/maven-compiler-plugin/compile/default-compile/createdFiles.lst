@@ -3,6 +3,8 @@ com\group10\Controller\ResetPasswordController.class
 com\group10\Repository\CategoryRepository.class
 com\group10\Repository\UserRepository.class
 com\group10\Service\LoginService.class
+com\group10\Service\ProfileService.class
+com\group10\Service\VendorProfileService.class
 com\group10\Repository\ServiceRepository.class
 com\group10\Enums\SearchServiceQueryColumns.class
 com\group10\Util\BookingsFilterImpl.class
@@ -39,6 +41,7 @@ com\group10\Exceptions\PasswordsCantBeSameException.class
 com\group10\Util\StringUtil.class
 com\group10\Controller\SignInController.class
 com\group10\Util\Interfaces\IFilter.class
+com\group10\Service\CustomerProfileService.class
 com\group10\Enums\UserTableColumns.class
 com\group10\Controller\SearchController$1.class
 com\group10\Repository\VendorRepository.class
@@ -47,6 +50,7 @@ com\group10\Util\EmailUtil.class
 com\group10\Util\JWTTokenHandler.class
 com\group10\Service\SearchService.class
 com\group10\Model\Vendor$VendorBuilder.class
+com\group10\Controller\ProfileController.class
 com\group10\Service\DatabaseService.class
 com\group10\Service\SignInService.class
 com\group10\Controller\VendorDashboardController.class

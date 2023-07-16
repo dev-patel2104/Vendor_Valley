@@ -248,4 +248,22 @@ public class ServiceRepository {
         }
     }
 
+    /**
+
+     Checks if a booking with the given booking ID exists in the database.*
+     @param bookingId The ID of the booking to check
+     @return true if the booking exists, false otherwise
+     @throws SQLException if there is an error with the database connection
+     */
+    public boolean checkIfBookingExists(int bookingId) throws SQLException{
+        try(Connection connection = databaseService.connect();
+            PreparedStatement statement = connection.prepareStatement(SQLQueries.checkIfBookingExistsQuery);){
+            statement.setInt(1, bookingId);
+            ResultSet result = statement.executeQuery();
+            if (result.next()){
+                return true;}
+            return false;}
+        catch (SQLException e){
+            throw new SQLException("Database Connection Lost");}}
+
 }
