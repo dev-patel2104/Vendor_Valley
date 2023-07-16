@@ -230,17 +230,21 @@ public class ServiceRepository {
             {
                 statement2.setInt(1, temp.getServiceId());
                 resultSet2 = statement2.executeQuery();
-                byte[] imageData = resultSet2.getBytes("image");
-                if(imageData != null)
+                while(resultSet2.next())
                 {
-                    temp.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                    byte[] imageData = resultSet2.getBytes("image");
+                    if(imageData != null)
+                    {
+                        temp.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                    }
                 }
+
             }
             return serviceList;
         }
         catch (SQLException e)
         {
-            throw new SQLException("Database Connection Lost");
+            throw new SQLException(e.getMessage());
         }
     }
 

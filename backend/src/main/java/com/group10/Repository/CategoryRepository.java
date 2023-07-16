@@ -44,6 +44,10 @@ public class CategoryRepository
                 {
                     cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
                 }
+                else
+                {
+                    cat.setBase64Image("");
+                }
                 categoryList.add(cat);
                 cnt++;
             }

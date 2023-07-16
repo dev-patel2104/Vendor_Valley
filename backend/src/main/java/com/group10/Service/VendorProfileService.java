@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -12,13 +13,15 @@ import java.util.List;
 public class VendorProfileService extends ProfileService
 {
 
+    @Autowired
+    private ServiceRepository serviceRepository;
     @Override
     public void getBookings() {
 
     }
 
-    public List<Service> getServices()
+    public List<com.group10.Model.Service> getServices(int user_id) throws SQLException
     {
-        return null;
+        return serviceRepository.getServicesForVendor(user_id);
     }
 }
