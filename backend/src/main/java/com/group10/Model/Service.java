@@ -25,7 +25,6 @@ public class Service
     private String totalBookings;
     private String companyEmail;
 
-
     public String getCompanyEmail() {
         return companyEmail;
     }

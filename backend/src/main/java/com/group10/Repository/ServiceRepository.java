@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.sql.ResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +97,7 @@ public class ServiceRepository {
             ResultSet result = statement.executeQuery();
             // Loop through the result set and create Service objects
             while (result.next()){
-                Service service = mapResultSetUtilObj.mapResultSetToService(result);
+                Service service = mapResultSetUtilObj.mapResultSetToService(result, true);
                 servicesList.add(service);
             }
             /**
@@ -134,7 +135,11 @@ public class ServiceRepository {
             while (result.next()){
                 for (Service service : servicesList){
                     if (service.getServiceId() == result.getInt("service_id")){
-                        service.getImages().add(result.getString("image"));
+                        byte[] imageData = result.getBytes("image");
+                        if(imageData != null)
+                        {
+                            service.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                        }
                     }
                 }
             }
@@ -199,6 +204,42 @@ public class ServiceRepository {
             return null;
         }
         catch(SQLException e){
+            throw new SQLException("Database Connection Lost");
+        }
+    }
+
+    public List<Service> getServicesForVendor(int userID) throws SQLException
+    {
+
+        try(Connection connection = databaseService.connect();
+            PreparedStatement statement1 = connection.prepareStatement(SQLQueries.getServiceDetailsByUser);
+            PreparedStatement statement2 = connection.prepareStatement(SQLQueries.getImagesForServiceID);)
+        {
+            ResultSet resultSet1, resultSet2;
+            List<Service> serviceList = new ArrayList<>();
+            Service service = null;
+            statement1.setInt(1, userID);
+            resultSet1 = statement1.executeQuery();
+            while(resultSet1.next())
+            {
+                service = mapResultSetUtilObj.mapResultSetToService(resultSet1, false);
+                serviceList.add(service);
+            }
+
+            for(Service temp: serviceList)
+            {
+                statement2.setInt(1, temp.getServiceId());
+                resultSet2 = statement2.executeQuery();
+                byte[] imageData = resultSet2.getBytes("image");
+                if(imageData != null)
+                {
+                    temp.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                }
+            }
+            return serviceList;
+        }
+        catch (SQLException e)
+        {
             throw new SQLException("Database Connection Lost");
         }
     }

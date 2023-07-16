@@ -1,5 +1,6 @@
 package com.group10.Repository;
 
+import com.group10.Enums.UserTableColumns;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
@@ -46,7 +47,7 @@ public class UserRepository{
                 // User found
                 if (resultSet.next()) {
                     // Set other properties as needed
-                    user = mapResultSetUtilObj.mapResultSetToUser_findByEmail(resultSet);
+                    user = mapResultSetUtilObj.mapResultSetToUser(resultSet);
                     return user;
                 } else {
                     // User not found

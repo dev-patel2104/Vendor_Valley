@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Repository
@@ -38,6 +39,11 @@ public class CategoryRepository
                 cat.setCategoryId(rs1.getInt(2));
                 cat.setCategoryName(rs1.getString(3));
                 cat.setCategoryDescription(rs1.getString(4));
+                byte[] imageData = rs1.getBytes(5);
+                if(imageData != null)
+                {
+                    cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
+                }
                 categoryList.add(cat);
                 cnt++;
             }
@@ -66,6 +72,12 @@ public class CategoryRepository
                 ser.setServiceName(rs.getString(3));
                 ser.setServiceDescription(rs.getString(4));
                 ser.setServicePrice(rs.getString(5));
+                byte[] imageData = rs.getBytes(6);
+                if(imageData != null)
+                {
+                    ser.setImages(new ArrayList<>());
+                    ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                }
                 serviceList.add(ser);
                 cnt++;
             }

@@ -28,7 +28,7 @@ public class MapResultSetUtil {
      * @return The User object with the mapped data.
      * @throws SQLException If there is an error accessing the ResultSet.
      */
-    public User mapResultSetToUser_findByEmail(ResultSet resultSet) throws SQLException {
+    public User mapResultSetToUser(ResultSet resultSet) throws SQLException {
         User user = new User();
         int columnIndex = resultSet.findColumn(UserTableColumns.USER_ID.getColumnName());
         Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : IntegerConstants.userDoesntExist;
@@ -75,9 +75,9 @@ public class MapResultSetUtil {
      * @return The mapped Service object
      * @throws SQLException If there is an error accessing the ResultSet data
      */
-    public Service mapResultSetToService(ResultSet resultSet) throws SQLException {
+    public Service mapResultSetToService(ResultSet resultSet, boolean getCompanyInfo) throws SQLException {
         Service service = new Service();
-    service.setServiceId(resultSet.getInt(SearchServiceQueryColumns.SERVICE_ID.getColumnName()));
+        service.setServiceId(resultSet.getInt(SearchServiceQueryColumns.SERVICE_ID.getColumnName()));
         service.setUserId(resultSet.getInt(SearchServiceQueryColumns.USER_ID.getColumnName()));
         service.setServiceName(resultSet.getString(SearchServiceQueryColumns.SERVICE_NAME.getColumnName()));
         service.setServiceDescription(resultSet.getString(SearchServiceQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
@@ -89,6 +89,10 @@ public class MapResultSetUtil {
         }
         else{
             service.setCategoryNames(new ArrayList<>());
+        }
+        if(getCompanyInfo == false)
+        {
+            return service;
         }
         service.setCompanyStreet(resultSet.getString(SearchServiceQueryColumns.COMPANY_STREET.getColumnName()));
         service.setCompanyCity(resultSet.getString(SearchServiceQueryColumns.COMPANY_CITY.getColumnName()));
