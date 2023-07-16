@@ -43,6 +43,7 @@ com\group10\Enums\UserTableColumns.class
 com\group10\Controller\SearchController$1.class
 com\group10\Repository\VendorRepository.class
 com\group10\Util\ComparatorUtil.class
+com\group10\Model\VendorDashboard.class
 com\group10\Util\EmailUtil.class
 com\group10\Util\JWTTokenHandler.class
 com\group10\Service\SearchService.class
