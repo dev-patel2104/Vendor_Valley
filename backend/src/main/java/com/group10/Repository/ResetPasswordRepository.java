@@ -3,7 +3,7 @@ package com.group10.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
 
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import com.group10.Service.DatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +66,15 @@ public class ResetPasswordRepository {
             if (resultSet.next()) {
                 int code = resultSet.getInt("verification_code");
                 Timestamp created_at =  resultSet.getTimestamp("created_at");
-                Timestamp sixHoursAgo = new Timestamp(System.currentTimeMillis() - IntegerConstants.sixHoursInMilliSeconds);
+                Timestamp sixHoursAgo = new Timestamp(System.currentTimeMillis() - Constants.SIXHOURSINMILLISECONDS);
                 if (created_at.before(sixHoursAgo)) {
                     // created_at is older than 6 hours
-                    return IntegerConstants.verificationCodeExpired;
+                    return Constants.VERIFICATIONCODEEXPIRED;
                 }
                 return code;
             } else {
                 // row not inserted
-                return IntegerConstants.rowNotInserted;
+                return Constants.ROWNOTINSERTED;
             }
         } 
         catch (SQLException e) {

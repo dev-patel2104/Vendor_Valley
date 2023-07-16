@@ -8,7 +8,7 @@ import com.group10.Util.MapResultSetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import com.group10.Model.User;
 
 import java.sql.*;
@@ -73,7 +73,7 @@ public class UserRepository{
         try (Connection connection = databaseService.connect();
              PreparedStatement statement = connection.prepareStatement(SQLQueries.updateUserQuery);) {
             
-            if (user.getUserId() == IntegerConstants.userDoesntExist){
+            if (user.getUserId() == Constants.USERDOESNTEXIST){
                 return false;
             }
             statement.setString(1, user.getFirstName());
@@ -117,7 +117,7 @@ public class UserRepository{
         {
 
             if(findByEmail(user.getEmail()) != null) {
-                return IntegerConstants.userAlreadyExists;
+                return Constants.USERALREADYEXISTS;
             }
             addUserPreparedStatement.setString(1, user.getFirstName());
             addUserPreparedStatement.setString(2, user.getLastName());
@@ -137,7 +137,7 @@ public class UserRepository{
                 int userId = rs.getInt(1);
                 return userId;
             }
-            return IntegerConstants.userNotInserted;
+            return Constants.USERNOTINSERTED;
         }
         catch(SQLException e) {
             throw new SQLException("data not being added");

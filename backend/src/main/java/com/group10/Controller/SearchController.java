@@ -72,7 +72,7 @@ public class SearchController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/sort")
-    public ResponseEntity<List<Service>> getSortedResults(@RequestBody List<Service> services, @RequestParam String sortParam, @RequestParam String sortOrder)
+    public ResponseEntity<List<Service>> getSortedResults(@RequestBody List<Service> services, @RequestParam String sortParam, @RequestParam Boolean sortOrder)
     {   
         if (services == null)
         {

@@ -3,6 +3,7 @@ package com.group10.Enums;
 public enum GetReviewsByServiceQueryColumns {
     SERVICE_ID("service_id"),
     USER_ID("user_id"),
+    BOOKING_ID("booking_id"),
     TITLE("title"),
     COMMENT_TEXT("comment_text"),
     REVIEW_DATE("review_date"),
