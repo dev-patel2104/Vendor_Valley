@@ -1,40 +1,34 @@
 package com.group10.ServiceTests;
 
-import com.group10.Exceptions.UserDoesntExistException;
-import com.group10.Model.SignUpModel;
-import com.group10.Repository.UserRepository;
-import com.group10.Repository.VendorRepository;
-import com.group10.Service.CustomerProfileService;
-import com.group10.Service.VendorProfileService;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.group10.Exceptions.UserDoesntExistException;
+import com.group10.Model.SignUpModel;
+import com.group10.Repository.UserRepository;
+import com.group10.Service.VendorProfileService;
 
 @SpringBootTest
 public class VendorProfileServiceTest
 {
-    @InjectMocks
+    @Autowired
     private VendorProfileService vendorProfileService;
-    @Mock
+    
+    @MockBean
     private UserRepository userRepository;
 
     private SignUpModel user;
     private int user_id;
 
-    @Before
-    public void setUp()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     private void initializeUser() {
         user = SignUpModel.builder().
@@ -70,30 +64,30 @@ public class VendorProfileServiceTest
         assertEquals(user, vendorProfileService.getProfile(user_id));
     }
 
-    @Test(expected = UserDoesntExistException.class)
+    @Test
     public void getProfile_NegativeUserID() throws SQLException, UserDoesntExistException
     {
         user_id = -1;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        vendorProfileService.getProfile(user_id);
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
     }
 
-    @Test(expected = UserDoesntExistException.class)
+    @Test
     public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
     {
         user_id = 5;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(null);
-        vendorProfileService.getProfile(user_id);
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
     }
 
-    @Test(expected = SQLException.class)
+    @Test
     public void getProfile_SQLException() throws SQLException, UserDoesntExistException
     {
         user_id = 5;
         initializeUser();;
         when(userRepository.getUser(Mockito.any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
-        vendorProfileService.getProfile(user_id);
+        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(user_id));
     }
 }

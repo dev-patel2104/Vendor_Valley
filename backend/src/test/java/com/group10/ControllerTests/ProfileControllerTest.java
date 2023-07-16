@@ -1,5 +1,20 @@
 package com.group10.ControllerTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Controller.ProfileController;
@@ -7,47 +22,24 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Service;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.CustomerProfileService;
-import com.group10.Service.ProfileService;
 import com.group10.Service.VendorProfileService;
 import com.group10.Util.JWTTokenHandler;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class ProfileControllerTest
 {
-    @InjectMocks
+    @Autowired
     private ProfileController profileController;
-    @Mock
+    @MockBean
     private CustomerProfileService customerProfileService;
-    @Mock
+    @MockBean
     private VendorProfileService vendorProfileService;
-    @Mock
+    @MockBean
     private JWTTokenHandler jwtTokenHandler;
 
     private SignUpModel user;
     private int user_id;
 
-    @Before
-    public void setUp()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
 
     private void initializeUser() {
         user = SignUpModel.builder().

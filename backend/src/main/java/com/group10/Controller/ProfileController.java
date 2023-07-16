@@ -1,6 +1,5 @@
 package com.group10.Controller;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Service;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.lang.model.util.Elements;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

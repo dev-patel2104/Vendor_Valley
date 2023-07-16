@@ -1,6 +1,5 @@
 package com.group10.Repository;
 
-import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
 import com.group10.Model.VendorDashboard;
