@@ -2,12 +2,16 @@ package com.group10.Repository;
 
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
+import com.group10.Model.VendorDashboard;
 import com.group10.Service.DatabaseService;
+import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -18,6 +22,9 @@ public class VendorRepository {
 
     @Autowired
     DatabaseService databaseService;
+
+    @Autowired
+    private MapResultSetUtil mapResultSetUtilObj;
 
     /**
      * Saves a vendor and associated user information to the database.
@@ -81,5 +88,54 @@ public class VendorRepository {
         }
 
         return true;
+    }
+
+    public VendorDashboard getStatistics(int vendorId) throws SQLException{
+        VendorDashboard vendorDashboard = null;
+        try(Connection connect = databaseService.connect();
+        PreparedStatement preparedStatement = connect.prepareStatement(SQLQueries.vendorDashboardInfoQuery);
+        ){
+            preparedStatement.setInt(1, vendorId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+               vendorDashboard = mapResultSetUtilObj.mapResultSetToVendorDashboard(resultSet);
+            }
+        }
+        return vendorDashboard;
+    }
+
+    public List<User> getCustomerInfo(List<Integer> userIds) throws SQLException{
+        List<User> users = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder("SELECT user_id, first_name, last_name, email, city, country FROM users WHERE user_id IN (");
+        for (int i = 0; i < userIds.size(); i++) {
+            queryBuilder.append("?");
+            if (i < userIds.size() - 1) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(");");
+        String query = queryBuilder.toString();
+        try (Connection connection = databaseService.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);) {
+                for (int i = 0; i < userIds.size(); i++) {
+                    preparedStatement.setInt(i + 1, userIds.get(i));
+                }
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setUserId(rs.getInt("user_id"));
+                        user.setFirstName(rs.getString("first_name"));
+                        user.setLastName(rs.getString("last_name"));
+                        user.setEmail(rs.getString("email"));
+                        user.setCity(rs.getString("city"));
+                        user.setCountry(rs.getString("country"));
+                        users.add(user);
+                    }
+                    return users;
+                }
+        } 
+        catch (SQLException e) {
+            throw new SQLException("Datebase connection lost!");
+        }
     }
 }

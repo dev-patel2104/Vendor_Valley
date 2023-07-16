@@ -45,7 +45,7 @@ public class UserRepository {
                 // User found
                 if (resultSet.next()) {
                     // Set other properties as needed
-                    user = mapResultSetUtilObj.mapResultSetToUser_findByEmail(resultSet);
+                    user = mapResultSetUtilObj.mapResultSetToUser(resultSet);
                     return user;
                 } else {
                     // User not found

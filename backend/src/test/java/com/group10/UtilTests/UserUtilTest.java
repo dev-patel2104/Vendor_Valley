@@ -43,7 +43,7 @@ public class UserUtilTest {
         when(resultSet.getString("password")).thenReturn("password");
 
         // Call the method under test
-        user = userUtil.mapResultSetToUser_findByEmail(resultSet);
+        user = userUtil.mapResultSetToUser(resultSet);
 
         // Verify the results
         assertEquals(1, user.getUserId());
