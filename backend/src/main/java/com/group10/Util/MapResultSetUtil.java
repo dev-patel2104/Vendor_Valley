@@ -1,9 +1,15 @@
 package com.group10.Util;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -15,6 +21,7 @@ import com.group10.Enums.SearchServiceQueryColumns;
 import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
+import com.group10.Model.VendorDashboard;
 
 /**
  * Utility class for mapping a ResultSet to a User object.
@@ -121,4 +128,72 @@ public class MapResultSetUtil {
         service.setCompanyEmail(resultSet.getString(GetServiceDetailsQueryColumns.COMPANY_EMAIL.getColumnName()));
         return service;
     }
+
+    public VendorDashboard mapResultSetToVendorDashboard(ResultSet resultSet) throws SQLException{
+        VendorDashboard vendorDashboard = new VendorDashboard();
+        int totalBookings = 0;
+        int cancelledBookings = 0;
+        int acceptedBookings = 0;
+        int completedBookings = 0;
+        int awaitingBookings = 0;
+        int thisMonthBookings = 0;
+        Set<Integer> userIds = new HashSet<>();
+        List<Date> bookingDates = new ArrayList<>();
+        // Create a dictionary with keys 1-12 (months) and values 0 (number of bookings in that month)
+        Map<Integer, Integer> yearActivity = new HashMap<>();
+        // Add keys 1-12 to the dictionary with values 0
+        for (int i = 1; i <= 12; i++){
+            yearActivity.put(i, 0);
+        }
+        while (resultSet.next()){
+            // Get the row count for total bookings
+            int customerId = resultSet.getInt("user_id");
+            String bookingStatus = resultSet.getString("booking_status");
+            Date startDate = resultSet.getDate("start_date");
+            Date endDate = resultSet.getDate("end_date");
+            Date bookingDate = resultSet.getDate("booking_date");
+
+            if (bookingStatus.equals("cancelled")){
+                cancelledBookings++;
+            }
+            else if (bookingStatus.equals("accepted")){
+                // if endDate is before today, increment completedBookings
+                if (endDate != null && endDate.before(new Date(System.currentTimeMillis()))){
+                    completedBookings++;
+                }
+                acceptedBookings++;
+            }
+            else if (bookingStatus.equals("awaiting")){
+                awaitingBookings++;
+            }
+            // if startDate is in this month, increment thisMonthBookings
+            if (startDate != null){
+                if (startDate.toLocalDate().getMonthValue() == java.time.LocalDate.now().getMonthValue()){
+                    thisMonthBookings++;
+                }
+            }
+            // Add bookingDate to a list for later user
+            bookingDates.add(bookingDate);
+            userIds.add(customerId);
+            totalBookings++;
+        }
+        // For each date in bookingDates get the month, and increment the value of that month (a key in a yearActivity dictionary).
+        for (Date date : bookingDates){
+            if (date != null){
+                int month = date.toLocalDate().getMonthValue();
+                yearActivity.put(month, yearActivity.get(month) + 1);
+            }
+        } 
+        vendorDashboard.setTotalCustomers(userIds.size());
+        vendorDashboard.setTotalBookings(totalBookings);
+        vendorDashboard.setCancelledBookings(cancelledBookings);
+        vendorDashboard.setAwaitingBookings(awaitingBookings);
+        vendorDashboard.setThisMonthBookings(thisMonthBookings);
+        vendorDashboard.setAcceptedBookings(acceptedBookings);
+        vendorDashboard.setCompletedBookings(completedBookings);
+        vendorDashboard.setUserIds(userIds);
+        vendorDashboard.setYearActivity(yearActivity);
+        return vendorDashboard;
+    }
+
 }

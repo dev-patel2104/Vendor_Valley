@@ -1,7 +1,14 @@
 package com.group10.Service;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.Category;
+import com.group10.Model.User;
+import com.group10.Model.VendorDashboard;
 import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.VendorRepository;
+import com.group10.Util.JWTTokenHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +21,13 @@ public class HomeService
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private VendorRepository vendorRepository;
+
+    @Autowired
+    private JWTTokenHandler jwtTokenHandler;
+
     public List<Category> featuredCategories() throws SQLException
     {
         return categoryRepository.getFeaturedCategories();
@@ -26,5 +40,21 @@ public class HomeService
     public List<com.group10.Model.Service> TrendingServices() throws SQLException
     {
         return categoryRepository.getTrendingServices();
+    }
+
+    public VendorDashboard getVendorDashboardInfo(String JWTToken) throws SQLException, JWTVerificationException, NullPointerException
+    {
+        // Get user id from JWT token
+        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(JWTToken);
+        int userId = decodedJWT.getClaim("userId").asInt();
+        if (userId == 0) {
+            return null;
+        }
+        return vendorRepository.getStatistics(userId);
+    }
+
+    public List<User> getCustomerInfo(List<Integer> userIds) throws SQLException{
+        
+        return vendorRepository.getCustomerInfo(userIds);
     }
 }

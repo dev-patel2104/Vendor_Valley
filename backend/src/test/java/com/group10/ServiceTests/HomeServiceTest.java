@@ -1,39 +1,51 @@
 package com.group10.ServiceTests;
 
-import com.group10.Model.Category;
-import com.group10.Model.Service;
-import com.group10.Repository.CategoryRepository;
-import com.group10.Service.HomeService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.group10.Model.Category;
+import com.group10.Model.Service;
+import com.group10.Model.User;
+import com.group10.Model.VendorDashboard;
+import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.VendorRepository;
+import com.group10.Service.HomeService;
+import com.group10.Util.JWTTokenHandler;
 
 @SpringBootTest
 public class HomeServiceTest
 {
-    @InjectMocks
+    @Autowired
     private HomeService homeService;
-    @Mock
+    
+    @MockBean
     private CategoryRepository categoryRepository;
+    
     private List<Category> expectedCategories;
     private List<Service> expectedServices;
-    @Before
-    public void setUp()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
+
+    @MockBean
+    private VendorRepository vendorRepository;
+
+    @MockBean
+    private JWTTokenHandler jwtTokenHandler;
+
+
     private void initializeCategoryList()
     {
         Category cat = new Category();
@@ -83,12 +95,12 @@ public class HomeServiceTest
         when(categoryRepository.getFeaturedCategories()).thenReturn(expectedCategories);
         assertEquals(homeService.featuredCategories().size(), expectedCategories.size());
     }
-    @Test(expected = SQLException.class)
+    @Test
     public void featuredCategoriesTest_SQLException() throws SQLException
     {
         initializeCategoryList();
         when(categoryRepository.getFeaturedCategories()).thenThrow(new SQLException("Some issue while retrieving data"));
-        homeService.featuredCategories();
+        assertThrows(SQLException.class, () -> homeService.featuredCategories());
     }
     @Test
     public void trendingServicesTest() throws SQLException
@@ -105,11 +117,117 @@ public class HomeServiceTest
         when(categoryRepository.getTrendingServices()).thenReturn(expectedServices);
         assertEquals(homeService.TrendingServices().size(), expectedServices.size());
     }
-    @Test(expected = SQLException.class)
+    @Test
     public void trendingServicesTest_SQLException() throws SQLException
     {
         initializeServiceList();
         when(categoryRepository.getTrendingServices()).thenThrow(new SQLException("Some issue while retrieving data"));
-        homeService.TrendingServices();
+        assertThrows(SQLException.class, () -> homeService.TrendingServices());
     }
+
+    @Test
+    public void testSuccessPath_getVendorDashboardInfo() throws SQLException, JWTVerificationException{
+        String token = "jwtToken";
+        DecodedJWT decodedJwtToken = Mockito.mock(DecodedJWT.class);
+        Claim mockClaim = Mockito.mock(Claim.class);
+        Mockito.when(mockClaim.asInt()).thenReturn(1);
+        Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
+        Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doReturn(new VendorDashboard()).when(vendorRepository).getStatistics(Mockito.anyInt());
+        VendorDashboard vendorDashboard = homeService.getVendorDashboardInfo(token);
+        assertEquals(vendorDashboard.getClass(), VendorDashboard.class);
+    }
+
+    @Test
+    public void testFailurePath_getVendorDashboardInfo() throws SQLException, JWTVerificationException{
+        String token = "jwtToken";
+        DecodedJWT decodedJwtToken = Mockito.mock(DecodedJWT.class);
+        Claim mockClaim = Mockito.mock(Claim.class);
+        Mockito.when(mockClaim.asInt()).thenReturn(1);
+        Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
+        Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doReturn(null).when(vendorRepository).getStatistics(Mockito.anyInt());
+        VendorDashboard vendorDashboard = homeService.getVendorDashboardInfo(token);
+        assertNull(vendorDashboard);
+    }
+
+    @Test
+    public void testSQLException_getVendorDashboardInfo() throws SQLException, JWTVerificationException{
+        String token = "jwtToken";
+        DecodedJWT decodedJwtToken = Mockito.mock(DecodedJWT.class);
+        Claim mockClaim = Mockito.mock(Claim.class);
+        Mockito.when(mockClaim.asInt()).thenReturn(1);
+        Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
+        Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(vendorRepository).getStatistics(Mockito.anyInt());
+        assertThrows(SQLException.class, () -> homeService.getVendorDashboardInfo(token));
+    }
+
+    @Test
+    public void testJWTVerificationException_getVendorDashboardInfo() throws SQLException, JWTVerificationException{
+        String token = "jwtToken";
+        DecodedJWT decodedJwtToken = Mockito.mock(DecodedJWT.class);
+        Claim mockClaim = Mockito.mock(Claim.class);
+        Mockito.when(mockClaim.asInt()).thenReturn(1);
+        Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
+        Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doThrow(new JWTVerificationException("JWT Verification Failed!")).when(vendorRepository).getStatistics(Mockito.anyInt());
+        assertThrows(JWTVerificationException.class, () -> homeService.getVendorDashboardInfo(token));
+    }
+
+    @Test
+    public void testNullPointerException_getVendorDashboardInfo() throws SQLException, JWTVerificationException{
+        String token = "jwtToken";
+        DecodedJWT decodedJwtToken = Mockito.mock(DecodedJWT.class);
+        Claim mockClaim = Mockito.mock(Claim.class);
+        Mockito.when(mockClaim.asInt()).thenReturn(1);
+        Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
+        // Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doReturn(new VendorDashboard()).when(vendorRepository).getStatistics(Mockito.anyInt());
+        assertThrows(NullPointerException.class, () -> homeService.getVendorDashboardInfo(token));
+    }
+
+    @Test
+    public void testSuccessPath_getCustomerInfo() throws SQLException{
+        List<Integer> userIds = new ArrayList<>();
+        userIds.add(1);
+        userIds.add(2);
+        userIds.add(3);
+        List<User> expectedUsers = new ArrayList<>();
+        User user = new User();
+        user.setUserId(1);
+        expectedUsers.add(user);
+        user = new User();
+        user.setUserId(2);
+        expectedUsers.add(user);
+        user = new User();
+        user.setUserId(3);
+        expectedUsers.add(user);
+        Mockito.doReturn(expectedUsers).when(vendorRepository).getCustomerInfo(userIds);
+        List<User> users = homeService.getCustomerInfo(userIds);
+        assertEquals(users.size(), expectedUsers.size());
+    }
+
+    @Test
+    public void testSQLException_getCustomerInfo() throws SQLException{
+        List<Integer> userIds = new ArrayList<>();
+        userIds.add(1);
+        userIds.add(2);
+        userIds.add(3);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(vendorRepository).getCustomerInfo(userIds);
+        assertThrows(SQLException.class, () -> homeService.getCustomerInfo(userIds));
+    }
+
+    @Test
+    public void testFailurePath_getCustomerInfo() throws SQLException{
+        List<Integer> userIds = new ArrayList<>();
+        userIds.add(1);
+        userIds.add(2);
+        userIds.add(3);
+        List<User> expectedUsers = new ArrayList<>();
+        Mockito.doReturn(expectedUsers).when(vendorRepository).getCustomerInfo(userIds);
+        List<User> users = homeService.getCustomerInfo(userIds);
+        assertEquals(users.size(), expectedUsers.size());
+    }
+
 }

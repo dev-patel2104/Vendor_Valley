@@ -1,40 +1,36 @@
 package com.group10.ControllerTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.sql.SQLException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.group10.Controller.SignInController;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.SignInService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.SQLException;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class SignInControllerTest
 {
-    @InjectMocks
+    @Autowired
     private SignInController signInController;
 
-    @Mock
+    @MockBean
     private SignInService signInService;
 
     private SignUpModel signUpModel;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         initializeUser();
     }
 

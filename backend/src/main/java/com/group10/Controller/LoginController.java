@@ -14,6 +14,7 @@ import com.group10.Service.LoginService;
 import com.group10.Util.JWTTokenHandler;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,19 +40,23 @@ public class LoginController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
 
+        Map<String, String> response = new HashMap<>();
         if (credentials == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+            response.put("error", "Invalid Arguments!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         boolean credentialsMapCheck =  credentials.size() == 0;
         if (credentialsMapCheck){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+            response.put("error", "Invalid Arguments!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         boolean emailCheck = !credentials.containsKey("email") ||  credentials.get("email").equals("");
         boolean passwordCheck = !credentials.containsKey("password") || credentials.get("password").equals("");
         if (emailCheck || passwordCheck){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
+            response.put("error", "Invalid Arguments!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         String email = credentials.get("email");
         String password = credentials.get("password");
@@ -73,14 +78,19 @@ public class LoginController {
              */
             String token = tokenHandler.generateJWTToken(user);
             // Return
-            return ResponseEntity.ok(token);
+            response.put("token", token);
+            response.put("role", String.valueOf(user.getVendor()));
+            return ResponseEntity.ok(response);
         }
         catch(UserDoesntExistException | InvalidPasswordException e){
             // Login failed
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         catch(SQLException e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            // Database error
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

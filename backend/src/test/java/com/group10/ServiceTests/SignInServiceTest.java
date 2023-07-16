@@ -1,48 +1,43 @@
 package com.group10.ServiceTests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.sql.SQLException;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 import com.group10.Constants.Constants;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
-import com.group10.Repository.VendorRepository;
 import com.group10.Repository.UserRepository;
+import com.group10.Repository.VendorRepository;
 import com.group10.Service.SignInService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.sql.SQLException;
-
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class SignInServiceTest
 {
-    @InjectMocks
+    @Autowired
     private SignInService signInService;
 
-    @Mock
+    @MockBean
     private UserRepository userRepository;
 
-    @Mock
+    @MockBean
     private VendorRepository vendorRepository;
 
     private SignUpModel signUpModel;
-    private User user;
-    private Vendor vendorModel;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     private void intializeUser()
     {
@@ -68,9 +63,6 @@ public class SignInServiceTest
                 companyProvince("Nova Scotia").
                 companyCountry("Canada").
                 build();
-
-        user = signUpModel.buildUserModel();
-        vendorModel = signUpModel.buildVendorModel();
     }
 
 
@@ -229,18 +221,18 @@ public class SignInServiceTest
         assertTrue(signInService.SignIn(signUpModel));
     }
 
-    @Test(expected = UserAlreadyPresentException.class)
+    @Test
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
         when(userRepository.addUser(Mockito.any(User.class))).thenReturn(Constants.USERALREADYEXISTS);
-        signInService.SignIn(signUpModel);
+        assertThrows(UserAlreadyPresentException.class, () -> signInService.SignIn(signUpModel));
     }
 
-    @Test(expected = SQLException.class)
+    @Test
     public void SignInTest_SQLException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
         when(userRepository.addUser(Mockito.any(User.class))).thenThrow(new SQLException());
-        signInService.SignIn(signUpModel);
+        assertThrows(SQLException.class, () -> signInService.SignIn(signUpModel));
     }
 
 

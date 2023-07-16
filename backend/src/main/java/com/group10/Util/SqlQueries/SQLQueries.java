@@ -26,4 +26,5 @@ public class SQLQueries {
         public static final String getServiceDetailsQuery = "select s.*, v.company_email from services as s join vendors as v on v.user_id = s.user_id where service_id = ?;";
         public static final String getServiceDetailsByUser = "select s.* , group_concat(sc.category_name) as categories from services as s natural join service_category_association as sca natural join service_categories as sc  where s.user_id = ? group by s.service_id;";
         public static final String getUserByID = "select * from users Left join vendors on users.user_id = vendors.user_id where users.user_id = ?;";
+        public static final String  vendorDashboardInfoQuery = "select s.service_id, u.user_id, b.booking_id, b.booking_status, b.booking_date, b.start_date, b.end_date from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id where s.user_id = ? group by s.service_id, b.booking_id, u.user_id order by u.user_id, b.booking_date;";
 }
