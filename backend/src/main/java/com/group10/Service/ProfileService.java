@@ -1,12 +1,14 @@
 package com.group10.Service;
 
 import com.group10.Exceptions.UserDoesntExistException;
+import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.UserRepository;
 import com.group10.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class ProfileService
 {
@@ -29,5 +31,5 @@ public abstract class ProfileService
         return user;
     }
 
-    public abstract void getBookings();
+    public abstract List<Booking> getBookings(int userId) throws UserDoesntExistException, SQLException;
 }

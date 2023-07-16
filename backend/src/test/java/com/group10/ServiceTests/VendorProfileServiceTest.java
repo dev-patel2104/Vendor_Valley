@@ -5,8 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.group10.Model.Booking;
+import com.group10.Model.Service;
+import com.group10.Model.User;
+import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.VendorRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,9 +33,13 @@ public class VendorProfileServiceTest
     
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private VendorRepository vendorRepository;
+    @MockBean
+    private ServiceRepository serviceRepository;
 
     private SignUpModel user;
-    private int user_id;
+    private int userId;
 
 
     private void initializeUser() {
@@ -58,36 +70,82 @@ public class VendorProfileServiceTest
     @Test
     public void getProfile_Successful() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertEquals(user, vendorProfileService.getProfile(user_id));
+        assertEquals(user, vendorProfileService.getProfile(userId));
     }
 
     @Test
     public void getProfile_NegativeUserID() throws SQLException, UserDoesntExistException
     {
-        user_id = -1;
+        userId = -1;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
     }
-
     @Test
     public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(null);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
     }
-
     @Test
     public void getProfile_SQLException() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();;
         when(userRepository.getUser(Mockito.any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
-        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(userId));
+    }
+    @Test
+    public void getServices_Successful() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        List<Service> expectedServiceList = new ArrayList<>();
+        when(serviceRepository.getServicesForVendor(userId)).thenReturn(expectedServiceList);
+        assertEquals(expectedServiceList, vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getServices_SQLException() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        when(serviceRepository.getServicesForVendor(userId)).thenThrow(new SQLException("Database issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getService_UserDoesntException() throws SQLException, UserDoesntExistException
+    {
+        userId = -2;
+        initializeUser();
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getBookings_Successful() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        List<Booking> expectedBookingList = new ArrayList<>();
+        when(vendorRepository.getBookingsInfo(userId)).thenReturn(expectedBookingList);
+        assertEquals(expectedBookingList, vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_SQLException() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        when(vendorRepository.getBookingsInfo(userId)).thenThrow(new SQLException("Database issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_UserDoesntExistException() throws SQLException, UserDoesntExistException
+    {
+        userId = -2;
+        initializeUser();
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getBookings(userId));
     }
 }

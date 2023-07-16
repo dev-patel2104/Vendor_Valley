@@ -140,7 +140,7 @@ public class VendorRepository{
         }
     }
 
-    public List<Booking> getBookingsInfo(int userId)
+    public List<Booking> getBookingsInfo(int userId) throws SQLException
     {
         List<Booking> bookingList = new ArrayList<>();
         try(Connection connection = databaseService.connect();
@@ -163,7 +163,7 @@ public class VendorRepository{
         }
         catch (SQLException e)
         {
-            System.out.print("Database connection not working!");
+            throw new SQLException(e.getMessage());
         }
         return null;
     }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -114,52 +115,65 @@ public class ProfileControllerTest
     }
 
     @Test
-    public void getServices_Successful() throws SQLException {
+    public void getServices_Successful() throws SQLException, UserDoesntExistException {
         // Arrange
-        String jwtToken = "validToken";
+        user_id = 5;
+        String encodedToken = "validToken";
         DecodedJWT token = Mockito.mock(DecodedJWT.class);
-        when(jwtTokenHandler.decodeJWTToken(jwtToken)).thenReturn(token);
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
         when(token.getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
-        when(token.getClaim("userId").asInt()).thenReturn(5);
-        List<Service> expectedServiceList = Arrays.asList(new Service(), new Service());
-        when(vendorProfileService.getServices(5)).thenReturn(expectedServiceList);
+        when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        List<Service> expectedServiceList = new ArrayList<>();
+        when(vendorProfileService.getServices(user_id)).thenReturn(expectedServiceList);
 
         // Act
-        ResponseEntity<List<Service>> response = profileController.getServices(jwtToken);
+        ResponseEntity<List<Service>> response = ResponseEntity.ok(expectedServiceList);
 
         // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(expectedServiceList, response.getBody());
+        assertEquals(response,profileController.getServices(encodedToken));
+
     }
     @Test
-    public void getServices_SQLException() throws SQLException {
+    public void getServices_SQLException() throws SQLException, UserDoesntExistException {
         // Arrange
-        String jwtToken = "validToken";
-        when(jwtTokenHandler.decodeJWTToken(jwtToken)).thenReturn(Mockito.mock(DecodedJWT.class));
-        when(jwtTokenHandler.decodeJWTToken(jwtToken).getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
-        when(jwtTokenHandler.decodeJWTToken(jwtToken).getClaim("userId").asInt()).thenReturn(5);
-        when(vendorProfileService.getServices(5)).thenThrow(new SQLException("Problem while fetching data from database"));
+        user_id = 5;
+        String encodedToken = "validToken";
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(Mockito.mock(DecodedJWT.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId").asInt()).thenReturn(user_id);
+        when(vendorProfileService.getServices(user_id)).thenThrow(new SQLException("Problem while fetching data from database"));
 
         // Act
-        ResponseEntity<List<Service>> response = profileController.getServices(jwtToken);
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
         // Assert
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(res,profileController.getServices(encodedToken));
     }
 
     @Test
-    public void getServices_GeneralException() throws SQLException {
+    public void getService_UserDoesntExistException() throws SQLException, UserDoesntExistException
+    {
+        user_id = -1;
+        String encodedToken = "validToken";
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(Mockito.mock(DecodedJWT.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId").asInt()).thenReturn(user_id);
+        when(vendorProfileService.getServices(user_id)).thenThrow(new UserDoesntExistException("No Such user is present"));
+
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        assertEquals(res,profileController.getServices(encodedToken));
+    }
+    @Test
+    public void getServices_GeneralException() throws SQLException, UserDoesntExistException {
         // Arrange
-        String jwtToken = "validToken";
-        when(jwtTokenHandler.decodeJWTToken(jwtToken)).thenReturn(Mockito.mock(DecodedJWT.class));
-        when(jwtTokenHandler.decodeJWTToken(jwtToken).getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
-        when(jwtTokenHandler.decodeJWTToken(jwtToken).getClaim("userId").asInt()).thenReturn(5);
-        when(vendorProfileService.getServices(5)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
+        user_id = 5;
+        String encodedToken = "validToken";
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(Mockito.mock(DecodedJWT.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId").asInt()).thenReturn(user_id);
+        when(vendorProfileService.getServices(user_id)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
 
-        // Act
-        ResponseEntity<List<Service>> response = profileController.getServices(jwtToken);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        assertEquals(res,profileController.getServices(encodedToken));
     }
 }
