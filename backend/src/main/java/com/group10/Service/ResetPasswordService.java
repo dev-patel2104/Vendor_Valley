@@ -8,7 +8,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VerificationCodeExpiredException;
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Model.EmailDetails;
@@ -77,7 +77,7 @@ public class ResetPasswordService {
         SecureRandom rand = new SecureRandom();
         int code = rand.nextInt(900000) + 100000;
         int userId = user.getUserId();
-        if (userId == IntegerConstants.userDoesntExist){
+        if (userId == Constants.USERDOESNTEXIST){
             return false;
         }
         String email = user.getEmail();

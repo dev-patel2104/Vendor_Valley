@@ -6,6 +6,7 @@ package com.group10.Model;
 public class Review {
     private int reviewerId;
     private int serviceId;
+    private int bookingId;
     private String reviewerName;
     private String reviewerCity;
     private String reviewerCountry;
@@ -14,6 +15,12 @@ public class Review {
     private String reviewComment;
     private int reviewRating;
     
+    public int getBookingId() {
+        return bookingId;
+    }
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
     public int getReviewerId() {
         return reviewerId;
     }

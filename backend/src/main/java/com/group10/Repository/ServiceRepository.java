@@ -156,11 +156,12 @@ public class ServiceRepository {
             PreparedStatement statement = connection.prepareStatement(SQLQueries.insertReviewQuery, Statement.RETURN_GENERATED_KEYS);)
         {
             statement.setInt(1, review.getServiceId());
-            statement.setInt(2, review.getReviewerId());
-            statement.setString(3, review.getReviewTitle());
-            statement.setString(4, review.getReviewComment());
-            statement.setString(5, review.getReviewDate());
-            statement.setInt(6, review.getReviewRating());
+            statement.setInt(2, review.getBookingId());
+            statement.setInt(3, review.getReviewerId());
+            statement.setString(4, review.getReviewTitle());
+            statement.setString(5, review.getReviewComment());
+            statement.setString(6, review.getReviewDate());
+            statement.setInt(7, review.getReviewRating());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()){
@@ -199,6 +200,29 @@ public class ServiceRepository {
             return null;
         }
         catch(SQLException e){
+            throw new SQLException("Database Connection Lost");
+        }
+    }
+
+    /**
+     * Checks if a booking with the given booking ID exists in the database.
+     *
+     * @param bookingId The ID of the booking to check
+     * @return true if the booking exists, false otherwise
+     * @throws SQLException if there is an error with the database connection
+     */
+    public boolean checkIfBookingExists(int bookingId) throws SQLException{
+        try(Connection connection = databaseService.connect();
+            PreparedStatement statement = connection.prepareStatement(SQLQueries.checkIfBookingExistsQuery);)
+        {
+            statement.setInt(1, bookingId);
+            ResultSet result = statement.executeQuery();
+            if (result.next()){
+                return true;
+            }
+            return false;
+        }
+        catch (SQLException e){
             throw new SQLException("Database Connection Lost");
         }
     }

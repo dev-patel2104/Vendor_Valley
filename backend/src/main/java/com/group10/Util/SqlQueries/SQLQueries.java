@@ -15,6 +15,7 @@ public class SQLQueries {
         public static final String getImagesForService = "select s.service_id, si.image from services as s left join service_images as si on s.service_id = si.service_id left join service_category_association as sca on s.service_id = sca.service_id left join service_categories as c on sca.category_id = c.category_id where service_name like concat('%', ?, '%') or service_description like concat('%', ?, '%') or service_price like concat('%', ?, '%') or c.category_name like concat('%', ?, '%') or c.category_description like concat('%', ?, '%');";
         public static final String checkIfServiceExistsQuery = "select * from services where service_id = ?";
         public static final String getReviewsForServiceQuery = "select r.*, concat(u.first_name,' ',u.last_name) as name, u.city, u.country from reviews as r join users as u on r.user_id = u.user_id where service_id = ? order by review_id desc;";
-        public static final String insertReviewQuery = "insert into reviews (service_id, user_id, title, comment_text, review_date, rating) values(?, ?, ?, ?, ?, ?);";
+        public static final String insertReviewQuery = "insert into reviews (service_id, booking_id, user_id, title, comment_text, review_date, rating) values(?, ?, ?, ?, ?, ?, ?);";
         public static final String getServiceDetailsQuery = "select s.*, v.company_email from services as s join vendors as v on v.user_id = s.user_id where service_id = ?;";
+        public static final String checkIfBookingExistsQuery = "select * from bookings where booking_id = ?;";
 }

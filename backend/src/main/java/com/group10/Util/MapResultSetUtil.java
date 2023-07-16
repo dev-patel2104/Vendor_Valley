@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import com.group10.Enums.GetReviewsByServiceQueryColumns;
 import com.group10.Enums.GetServiceDetailsQueryColumns;
 import com.group10.Enums.UserTableColumns;
@@ -31,7 +31,7 @@ public class MapResultSetUtil {
     public User mapResultSetToUser_findByEmail(ResultSet resultSet) throws SQLException {
         User user = new User();
         int columnIndex = resultSet.findColumn(UserTableColumns.USER_ID.getColumnName());
-        Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : IntegerConstants.userDoesntExist;
+        Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : Constants.USERDOESNTEXIST;
         user.setUserId(value instanceof Integer ? (Integer) value : Integer.parseInt((String) value));
         user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
         user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
@@ -57,6 +57,7 @@ public class MapResultSetUtil {
     public Review mapResultSetToReview(ResultSet resultSet) throws SQLException{
         Review review = new Review();
         review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.SERVICE_ID.getColumnName()));
+        review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.BOOKING_ID.getColumnName()));
         review.setReviewerId(resultSet.getInt(GetReviewsByServiceQueryColumns.USER_ID.getColumnName()));
         review.setReviewTitle(resultSet.getString(GetReviewsByServiceQueryColumns.TITLE.getColumnName()));
         review.setReviewComment(resultSet.getString(GetReviewsByServiceQueryColumns.COMMENT_TEXT.getColumnName()));

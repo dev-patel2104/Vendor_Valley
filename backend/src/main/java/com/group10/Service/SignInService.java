@@ -1,6 +1,6 @@
 package com.group10.Service;
 
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Exceptions.VendorDetailsAbsentForUserException;
 import com.group10.Model.SignUpModel;
@@ -84,11 +84,11 @@ public class SignInService
         else
         {
             userId = userRepository.addUser(userModel);
-            if(userId==IntegerConstants.userAlreadyExists)
+            if(userId==Constants.USERALREADYEXISTS)
             {
                 throw new UserAlreadyPresentException("The user is already present");
             }
-            else if(userId==IntegerConstants.userNotInserted)
+            else if(userId==Constants.USERNOTINSERTED)
             {
                 return false;
             }

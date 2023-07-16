@@ -121,6 +121,15 @@ public class CustomerSelectsVendorService implements ICustomerSelectsVendorServi
          * @param JWTToken The JWT token to decode
          * @return The decoded JWT object
          */
+        // Check if booking exists
+        int bookingId = review.getBookingId();
+        if (bookingId == 0){
+            return false;
+        }
+        boolean bookingExists = serviceRepository.checkIfBookingExists(bookingId);
+        if (!bookingExists){
+            return false;
+        }
         DecodedJWT jwt = jwtTokenHandler.decodeJWTToken(JWTToken);
         // Get user id from JWT Token
         int userId = jwt.getClaim("userId").asInt();
