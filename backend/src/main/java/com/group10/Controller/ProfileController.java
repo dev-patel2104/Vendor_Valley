@@ -2,6 +2,7 @@ package com.group10.Controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.UserDoesntExistException;
+import com.group10.Model.Booking;
 import com.group10.Model.Service;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.CustomerProfileService;
@@ -63,6 +64,13 @@ public class ProfileController
             System.out.println(e.getMessage());
         }
         return ResponseEntity.ok().body(serviceList);
+    }
+
+    public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
+    {
+//        DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
+//        List<Booking >
+        return null;
     }
 
 }

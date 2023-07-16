@@ -1,5 +1,6 @@
 package com.group10.Repository;
 
+import com.group10.Model.Booking;
 import com.group10.Model.User;
 import com.group10.Model.Vendor;
 import com.group10.Model.VendorDashboard;
@@ -137,5 +138,33 @@ public class VendorRepository{
         catch (SQLException e) {
             throw new SQLException("Datebase connection lost!");
         }
+    }
+
+    public List<Booking> getBookingsInfo(int userId)
+    {
+        List<Booking> bookingList = new ArrayList<>();
+        try(Connection connection = databaseService.connect();
+        PreparedStatement statement = connection.prepareStatement(SQLQueries.getVendorBookings);)
+        {
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+            Booking booking = null;
+            User user = null;
+            while(rs.next())
+            {
+                booking = mapResultSetUtilObj.mapResultSetToBooking(rs);
+                if(booking == null)
+                {
+                    System.out.println("There is a booking in the database with no customer associated with it");
+                    continue;
+                }
+                bookingList.add(booking);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.print("Database connection not working!");
+        }
+        return null;
     }
 }
