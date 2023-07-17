@@ -31,4 +31,5 @@ public class SQLQueries {
                 "from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id " +
                 "where s.user_id = ? \n" +
                 "group by s.service_id, b.booking_id, u.user_id order by u.user_id, b.booking_date;";
+        public static final String getCategoryNames = "select category_name from service_categories;";
 }
