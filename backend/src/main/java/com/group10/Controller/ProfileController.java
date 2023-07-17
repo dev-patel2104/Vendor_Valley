@@ -70,11 +70,44 @@ public class ProfileController
         return ResponseEntity.ok().body(serviceList);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
     {
-//        DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
-//        List<Booking >
-        return null;
+        DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
+        List<Booking> bookingList = new ArrayList<>();
+        try
+        {
+            bookingList = vendorProfileService.getBookings(token.getClaim("userId").asInt());
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        catch (UserDoesntExistException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        }
+        return ResponseEntity.ok(bookingList);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategoryNames()
+    {
+        List<String> categories = new ArrayList<>();
+        try
+        {
+            categories = vendorProfileService.getCategoryNames();
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(categories);
+    }
 }

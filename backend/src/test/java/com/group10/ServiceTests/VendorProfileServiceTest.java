@@ -11,6 +11,7 @@ import java.util.List;
 import com.group10.Model.Booking;
 import com.group10.Model.Service;
 import com.group10.Model.User;
+import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepository;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,8 @@ public class VendorProfileServiceTest
     private VendorRepository vendorRepository;
     @MockBean
     private ServiceRepository serviceRepository;
+    @MockBean
+    private CategoryRepository categoryRepository;
 
     private SignUpModel user;
     private int userId;
@@ -147,5 +150,20 @@ public class VendorProfileServiceTest
         userId = -2;
         initializeUser();
         assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getCategoryNames_Successful() throws SQLException
+    {
+        initializeUser();
+        List<String>  expectedCategoryNames = new ArrayList<>();
+        when(categoryRepository.getCategoryName()).thenReturn(expectedCategoryNames);
+        assertEquals(expectedCategoryNames, vendorProfileService.getCategoryNames());
+    }
+    @Test
+    public void getCategoryNames_SQLException() throws  SQLException
+    {
+        initializeUser();
+        when(categoryRepository.getCategoryName()).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getCategoryNames());
     }
 }

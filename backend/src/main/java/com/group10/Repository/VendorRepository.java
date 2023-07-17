@@ -162,6 +162,6 @@ public class VendorRepository{
         {
             throw new SQLException(e.getMessage());
         }
-        return null;
+        return bookingList;
     }
 }

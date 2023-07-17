@@ -2,6 +2,7 @@ package com.group10.Service;
 
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
+import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class VendorProfileService extends ProfileService
     private ServiceRepository serviceRepository;
     @Autowired
     private VendorRepository vendorRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
     @Override
     public List<Booking> getBookings(int userId) throws UserDoesntExistException, SQLException
     {
@@ -36,5 +39,10 @@ public class VendorProfileService extends ProfileService
             throw new UserDoesntExistException("No such user is present");
         }
         return serviceRepository.getServicesForVendor(userId);
+    }
+
+    public List<String> getCategoryNames() throws SQLException
+    {
+        return categoryRepository.getCategoryName();
     }
 }
