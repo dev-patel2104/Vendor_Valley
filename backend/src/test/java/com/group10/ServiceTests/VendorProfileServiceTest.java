@@ -271,4 +271,13 @@ public class VendorProfileServiceTest
         service.setImages(new ArrayList<>());
         assertEquals(false, vendorProfileService.addService(service, categoryList));
     }
+    @Test
+    public void addService_SQLException() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        when(serviceRepository.insertService(service,categoryList)).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.addService(service,categoryList));
+    }
 }

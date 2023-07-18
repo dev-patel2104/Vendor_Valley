@@ -1,6 +1,8 @@
 package com.group10.ControllerTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ import java.util.List;
 
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
+import com.group10.Repository.ServiceRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +41,16 @@ public class ProfileControllerTest
     @MockBean
     private VendorProfileService vendorProfileService;
     @MockBean
+    private ServiceRepository serviceRepository;
+    @MockBean
     private JWTTokenHandler jwtTokenHandler;
 
     private SignUpModel user;
     private int user_id;
+    private Service service;
+    private List<String> imageList;
+    private List<String> categoryNames;
+    private List<Category> categoryList;
 
 
     private void initializeUser() {
@@ -67,6 +76,30 @@ public class ProfileControllerTest
                 companyProvince("Nova Scotia").
                 companyCountry("Canada").
                 build();
+    }
+
+    private void initializeService()
+    {
+        service = new Service();
+        imageList = new ArrayList<>();
+        categoryNames = new ArrayList<>();
+
+        imageList.add("Str1");
+        imageList.add("Str2");
+
+        categoryNames.add("Name1");
+        categoryNames.add("Name2");
+
+        service.setServiceName("RandomService");
+        service.setServiceDescription("RandomDescription");
+        service.setServicePrice("RandomPrice");
+        service.setImages(imageList);
+        service.setCategoryNames(categoryNames);
+    }
+    private void initializeCategoryList()
+    {
+        categoryList = new ArrayList<>();
+        categoryList.add(new Category());
     }
 
     @Test
@@ -253,5 +286,47 @@ public class ProfileControllerTest
         when(vendorProfileService.getCategories()).thenThrow(new SQLException("Database issue"));
         ResponseEntity<List<String>> response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         assertEquals(response, profileController.getCategories());
+    }
+    @Test
+    public void addService_Successful() throws SQLException
+    {
+        Service service = new Service();
+        List<Category> categoryList = new ArrayList<>();
+        when(vendorProfileService.addService(service, categoryList)).thenReturn(true);
+        ResponseEntity<String> res = ResponseEntity.ok("Service successfully added");
+        assertEquals(res, profileController.addService(service));
+    }
+    @Test
+    public void addService_UnSuccessful() throws SQLException
+    {
+        Service service = new Service();
+        List<Category> categoryList = new ArrayList<>();
+        when(vendorProfileService.addService(service, categoryList)).thenReturn(false);
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");;
+        assertEquals(res, profileController.addService(service));
+    }
+    @Test
+    public void addService_ServiceNotMapped() throws SQLException
+    {
+        Service service = null;
+        List<Category> categoryList = new ArrayList<>();
+
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
+        assertEquals(res, profileController.addService(service));
+    }
+    @Test
+    public void addService_SQLException() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        doThrow(SQLException.class).when(vendorProfileService).addService(any(), any());
+
+        // Call the method under test
+        ResponseEntity<String> response = profileController.addService(service);
+
+        // Verify the expected response
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Database issue present", response.getBody());
     }
 }

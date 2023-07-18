@@ -114,6 +114,25 @@ public class ProfileController
     @PostMapping("/addService")
     public ResponseEntity<String> addService(@RequestBody Service service)
     {
+        // ToDo : Make the SQLException test case pass some how
+        try
+        {
+            if(service == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
+            }
+
+            if(!vendorProfileService.addService(service,categories))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database issue present");
+
+        }
         return ResponseEntity.ok("Service successfully added");
     }
 
