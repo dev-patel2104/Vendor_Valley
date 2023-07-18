@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.group10.Model.Booking;
+import com.group10.Model.Category;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,21 +238,20 @@ public class ProfileControllerTest
         assertEquals(response,profileController.getBookings(encodedToken));
     }
     @Test
-    public void getCategoryNames_Successful() throws SQLException
+    public void getCategories_Successful() throws SQLException
     {
-        List<String> expectedCategories = new ArrayList<>();
-        when(vendorProfileService.getCategoryNames()).thenReturn(expectedCategories);
+        List<Category> expectedCategories = new ArrayList<>();
+        when(vendorProfileService.getCategories()).thenReturn(expectedCategories);
 
-        ResponseEntity<List<String>> response = ResponseEntity.ok(expectedCategories);
+        ResponseEntity<List<Category>> response = ResponseEntity.ok(expectedCategories);
 
-        assertEquals(response,profileController.getCategoryNames());
+        assertEquals(response,profileController.getCategories());
     }
     @Test
-    public void getCategoryNames_SQLException() throws SQLException
+    public void getCategories_SQLException() throws SQLException
     {
-        List<String> expectedCategories = new ArrayList<>();
-        when(vendorProfileService.getCategoryNames()).thenThrow(new SQLException("Database issue"));
+        when(vendorProfileService.getCategories()).thenThrow(new SQLException("Database issue"));
         ResponseEntity<List<String>> response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        assertEquals(response, profileController.getCategoryNames());
+        assertEquals(response, profileController.getCategories());
     }
 }

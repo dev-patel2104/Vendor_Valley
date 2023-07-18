@@ -2,6 +2,7 @@ package com.group10.Service;
 
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
+import com.group10.Model.Category;
 import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepository;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -41,8 +44,38 @@ public class VendorProfileService extends ProfileService
         return serviceRepository.getServicesForVendor(userId);
     }
 
-    public List<String> getCategoryNames() throws SQLException
+    public List<Category> getCategories() throws SQLException
     {
-        return categoryRepository.getCategoryName();
+        return categoryRepository.getCategories();
+    }
+
+    public boolean addService(com.group10.Model.Service service, List<Category> categoryList) throws SQLException
+    {
+        if(service.getServiceName() == null || service.getServiceName().isEmpty())
+        {
+            return false;
+        }
+        else if(service.getServiceDescription() == null || service.getServiceDescription().isEmpty())
+        {
+            return false;
+        }
+        else if(service.getServicePrice() == null || service.getServicePrice().isEmpty())
+        {
+            return false;
+        }
+        else if(service.getCategoryNames() == null || service.getCategoryNames().isEmpty())
+        {
+            return false;
+        }
+        else if(service.getImages() == null || service.getImages().isEmpty())
+        {
+            return false;
+        }
+        if(categoryList == null || categoryList.isEmpty())
+        {
+            return false;
+        }
+
+        return serviceRepository.insertService(service, categoryList);
     }
 }

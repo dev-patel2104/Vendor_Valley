@@ -106,29 +106,29 @@ public class CategoryRepository
         return serviceList;
     }
 
-    public List<String> getCategoryName() throws SQLException
+    public List<Category> getCategories() throws SQLException
     {
         try(Connection connection = databaseService.connect();
-        PreparedStatement statement = connection.prepareStatement(SQLQueries.getCategoryNames);)
+            PreparedStatement statement = connection.prepareStatement(SQLQueries.getCategories);)
         {
             String name = null;
-            List<String> categoryNameList = new ArrayList<>();
+            List<Category> categoryList = new ArrayList<>();
+            Category cat = null;
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
-                name = resultSet.getString(1);
-                if(name == null || name.isEmpty())
-                {
-                    continue;
-                }
-                categoryNameList.add(name);
+                cat = new Category();
+                cat.setCategoryId(resultSet.getInt(1));
+                cat.setCategoryName(resultSet.getString(2));
+                cat.setCategoryDescription(resultSet.getString(3));
+
+                categoryList.add(cat);
             }
-            return categoryNameList;
+            return categoryList;
         }
         catch (SQLException e)
         {
             throw new SQLException("Database connection issue!");
         }
     }
-
 }

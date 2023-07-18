@@ -3,6 +3,7 @@ package com.group10.Controller;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
+import com.group10.Model.Category;
 import com.group10.Model.Service;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.CustomerProfileService;
@@ -28,7 +29,7 @@ public class ProfileController
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;
-
+    private List<Category> categories;
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/profile")
     public ResponseEntity<SignUpModel> getProfile(@RequestParam String jwtToken)
@@ -97,17 +98,23 @@ public class ProfileController
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/categories")
-    public ResponseEntity<List<String>> getCategoryNames()
+    public ResponseEntity<List<Category>> getCategories()
     {
-        List<String> categories = new ArrayList<>();
         try
         {
-            categories = vendorProfileService.getCategoryNames();
+            categories = vendorProfileService.getCategories();
         }
-        catch (SQLException e)
+        catch (SQLException e )
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(categories);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/addService")
+    public ResponseEntity<String> addService(@RequestBody Service service)
+    {
+        return ResponseEntity.ok("Service successfully added");
+    }
+
 }
