@@ -11,17 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.group10.Enums.*;
+import com.group10.Model.*;
 import org.springframework.stereotype.Component;
 
 import com.group10.Constants.Constants;
-import com.group10.Enums.GetReviewsByServiceQueryColumns;
-import com.group10.Enums.GetServiceDetailsQueryColumns;
-import com.group10.Enums.UserTableColumns;
-import com.group10.Enums.SearchServiceQueryColumns;
-import com.group10.Model.Review;
-import com.group10.Model.Service;
-import com.group10.Model.User;
-import com.group10.Model.VendorDashboard;
 
 /**
  * Utility class for mapping a ResultSet to a User object.
@@ -129,6 +123,43 @@ public class MapResultSetUtil {
         return service;
     }
 
+    /**
+     * Maps a ResultSet to a Booking object.
+     *
+     * @param resultSet the ResultSet containing the booking details
+     * @return the mapped Booking object
+     * @throws SQLException if a database access error occurs or if the ResultSet is not valid
+     */
+    public Booking mapResultSetToBooking(ResultSet resultSet) throws SQLException
+    {
+        Booking booking = new Booking();
+        User user;
+        booking = new Booking();
+        booking.setServiceName(resultSet.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+        booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+        booking.setBookingDate(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
+        booking.setStartDate(resultSet.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
+        booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+        booking.setBookingStatus(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+
+        user = mapResultSetToUser(resultSet);
+        if(user.getUserId() == Constants.USERDOESNTEXIST)
+        {
+            return null;
+        }
+
+        booking.setUser(user);
+
+        return booking;
+    }
+
+    /**
+     * Maps a ResultSet to a VendorDashboard object.
+     *
+     * @param resultSet the ResultSet containing the vendor dashboard details
+     * @return the mapped VendorDashboard object
+     * @throws SQLException if a database access error occurs or if the ResultSet is not valid
+     */
     public VendorDashboard mapResultSetToVendorDashboard(ResultSet resultSet) throws SQLException{
         VendorDashboard vendorDashboard = new VendorDashboard();
         int totalBookings = 0;

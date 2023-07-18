@@ -5,15 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.group10.Model.*;
+import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.VendorRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Exceptions.UserDoesntExistException;
-import com.group10.Model.SignUpModel;
 import com.group10.Repository.UserRepository;
 import com.group10.Service.VendorProfileService;
 
@@ -25,9 +31,19 @@ public class VendorProfileServiceTest
     
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private VendorRepository vendorRepository;
+    @MockBean
+    private ServiceRepository serviceRepository;
+    @MockBean
+    private CategoryRepository categoryRepository;
 
     private SignUpModel user;
-    private int user_id;
+    private int userId;
+    private Service service;
+    private List<String> imageList;
+    private List<String> categoryNames;
+    private List<Category> categoryList;
 
 
     private void initializeUser() {
@@ -55,39 +71,213 @@ public class VendorProfileServiceTest
                 build();
     }
 
+    private void initializeService()
+    {
+        service = new Service();
+        imageList = new ArrayList<>();
+        categoryNames = new ArrayList<>();
+
+        imageList.add("Str1");
+        imageList.add("Str2");
+
+        categoryNames.add("Name1");
+        categoryNames.add("Name2");
+
+        service.setServiceName("RandomService");
+        service.setServiceDescription("RandomDescription");
+        service.setServicePrice("RandomPrice");
+        service.setImages(imageList);
+        service.setCategoryNames(categoryNames);
+    }
+    private void initializeCategoryList()
+    {
+        categoryList = new ArrayList<>();
+        categoryList.add(new Category());
+    }
     @Test
     public void getProfile_Successful() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertEquals(user, vendorProfileService.getProfile(user_id));
+        assertEquals(user, vendorProfileService.getProfile(userId));
     }
 
     @Test
     public void getProfile_NegativeUserID() throws SQLException, UserDoesntExistException
     {
-        user_id = -1;
+        userId = -1;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
     }
-
     @Test
     public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();
         when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(null);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
     }
-
     @Test
     public void getProfile_SQLException() throws SQLException, UserDoesntExistException
     {
-        user_id = 5;
+        userId = 5;
         initializeUser();;
         when(userRepository.getUser(Mockito.any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
-        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(user_id));
+        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(userId));
+    }
+    @Test
+    public void getServices_Successful() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        List<Service> expectedServiceList = new ArrayList<>();
+        when(serviceRepository.getServicesForVendor(userId)).thenReturn(expectedServiceList);
+        assertEquals(expectedServiceList, vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getServices_SQLException() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        when(serviceRepository.getServicesForVendor(userId)).thenThrow(new SQLException("Database issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getService_UserDoesntException() throws SQLException, UserDoesntExistException
+    {
+        userId = -2;
+        initializeUser();
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getServices(userId));
+    }
+    @Test
+    public void getBookings_Successful() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        List<Booking> expectedBookingList = new ArrayList<>();
+        when(vendorRepository.getBookingsInfo(userId)).thenReturn(expectedBookingList);
+        assertEquals(expectedBookingList, vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_SQLException() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        when(vendorRepository.getBookingsInfo(userId)).thenThrow(new SQLException("Database issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_UserDoesntExistException() throws SQLException, UserDoesntExistException
+    {
+        userId = -2;
+        initializeUser();
+        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getBookings(userId));
+    }
+    @Test
+    public void getCategories_Successful() throws SQLException
+    {
+        initializeUser();
+        List<Category>  expectedCategories = new ArrayList<>();
+        when(categoryRepository.getCategories()).thenReturn(expectedCategories);
+        assertEquals(expectedCategories, vendorProfileService.getCategories());
+    }
+    @Test
+    public void getCategories_SQLException() throws  SQLException
+    {
+        initializeUser();
+        when(categoryRepository.getCategories()).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.getCategories());
+    }
+
+    @Test
+    public void addService_Successful() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+        when(serviceRepository.insertService(service, categoryList)).thenReturn(true);
+        assertEquals(true, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingName() throws  SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setServiceName(null);
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        service.setServiceName("");
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingDescription() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setServiceDescription(null);
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        service.setServiceDescription("");
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingPrice() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setServicePrice(null);
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        service.setServicePrice("");
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingCategoryName() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setCategoryNames(null);
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        service.setCategoryNames(new ArrayList<>());
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingCategoryInfo() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        categoryList = null;
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        categoryList = new ArrayList<>();
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_MissingImages() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setImages(null);
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+
+        service.setImages(new ArrayList<>());
+        assertEquals(false, vendorProfileService.addService(service, categoryList));
+    }
+    @Test
+    public void addService_SQLException() throws SQLException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        when(serviceRepository.insertService(service,categoryList)).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.addService(service,categoryList));
     }
 }
