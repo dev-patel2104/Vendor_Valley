@@ -110,6 +110,7 @@ public class ProfileController
         }
         return ResponseEntity.ok(categories);
     }
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addService")
     public ResponseEntity<String> addService(@RequestBody Service service)
