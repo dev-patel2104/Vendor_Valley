@@ -18,11 +18,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.group10.Model.Service;
 import com.group10.Service.SearchService;
 
+/**
+ * Controller class for handling search requests.
+ */
 @RestController
 public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    /**
+     * Retrieves search results based on the provided search parameter.
+     *
+     * @param body A map containing the search parameter.
+     * @return A ResponseEntity object containing a list of Service objects if the search is successful,
+     *         or an error response if there is an issue with the request or the server.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/search")
     public ResponseEntity<List<Service>> getSearchResults(@RequestBody Map<String, String> body)
@@ -34,7 +44,13 @@ public class SearchController {
         }
         try
         {
-            // Todo: Call search service
+            
+            /**
+             * Retrieves a list of services based on the provided search parameter.
+             *
+             * @param searchParam The search parameter used to filter the services.
+             * @return A list of services that match the search parameter.
+             */
             List<Service> services = searchService.getSearchResults(searchParam);
             
             return ResponseEntity.ok(services);
@@ -46,9 +62,17 @@ public class SearchController {
 
     }
 
+    /**
+     * Endpoint for sorting a list of services based on the provided sort parameter and sort order.
+     *
+     * @param services The list of services to be sorted
+     * @param sortParam The parameter to sort the services by
+     * @param sortOrder The order in which to sort the services (ascending or descending)
+     * @return A ResponseEntity containing the sorted list of services or an appropriate error response
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/sort")
-    public ResponseEntity<List<Service>> getSortedResults(@RequestBody List<Service> services, @RequestParam String sortParam, @RequestParam String sortOrder)
+    public ResponseEntity<List<Service>> getSortedResults(@RequestBody List<Service> services, @RequestParam String sortParam, @RequestParam Boolean sortOrder)
     {   
         if (services == null)
         {
@@ -60,7 +84,15 @@ public class SearchController {
         }
         try
         {
-            // Todo: Call search service
+            
+            /**
+             * Sorts the list of services based on the specified sort parameter and sort order.
+             *
+             * @param services The list of services to be sorted
+             * @param sortParam The parameter to sort the services by
+             * @param sortOrder The order in which to sort the services (ascending or descending)
+             * @return The sorted list of services
+             */
             services = searchService.sortSearchResults(services, sortParam, sortOrder);
             
             return ResponseEntity.ok(services);
@@ -72,6 +104,13 @@ public class SearchController {
 
     }
 
+    /**
+     * Retrieves filtered results based on the provided filter parameter.
+     *
+     * @param services The list of services to filter
+     * @param filterParam The filter parameter to apply
+     * @return A ResponseEntity containing the filtered list of services, or an appropriate error response
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/filter")
     public ResponseEntity<List<Service>> getFilteredResults(@RequestBody List<Service> services, @RequestParam String filterParam)
@@ -87,8 +126,22 @@ public class SearchController {
                 return ResponseEntity.ok(services);
             }
             
+            /**
+             * Converts a JSON string into a Map<String, String> object using the Jackson ObjectMapper.
+             *
+             * @param filterParam The JSON string to be converted.
+             * @return A Map<String, String> object representing the JSON data.
+             * @throws IOException If there is an error reading the JSON string.
+             */
             Map<String, String> filterParamMap = new ObjectMapper().readValue(filterParam, new TypeReference<Map<String, String>>(){});
 
+            /**
+             * Filters the search results based on the given filter parameters.
+             *
+             * @param services The list of services to be filtered
+             * @param filterParamMap The map of filter parameters
+             * @return The filtered list of services
+             */
             services = searchService.filterSearchResults(services, filterParamMap);
         }
         catch (JsonProcessingException e) {

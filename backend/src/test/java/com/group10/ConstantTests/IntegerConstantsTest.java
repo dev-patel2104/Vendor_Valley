@@ -1,6 +1,6 @@
 package com.group10.ConstantTests;
 
-import com.group10.Constants.IntegerConstants;
+import com.group10.Constants.Constants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +15,6 @@ public class IntegerConstantsTest
     public void sixHoursInMilliSecondTest()
     {
         Integer seconds = 21600000;
-        assertEquals(seconds,IntegerConstants.sixHoursInMilliSeconds);
+        assertEquals(seconds,Constants.SIXHOURSINMILLISECONDS);
     }
 }

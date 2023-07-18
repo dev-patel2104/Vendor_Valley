@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.group10.Model.User;
-import com.group10.Util.UserUtil;
+import com.group10.Util.MapResultSetUtil;
 
 @SpringBootTest
 public class UserUtilTest {
 
     @Autowired
-    private UserUtil userUtil;
+    private MapResultSetUtil userUtil;
     
     @Autowired
     private User user;
@@ -29,7 +29,8 @@ public class UserUtilTest {
         ResultSet resultSet = mock(ResultSet.class);
 
         // Specify the behavior of the mock ResultSet
-        when(resultSet.getInt("user_id")).thenReturn(1);
+        when(resultSet.findColumn("user_id")).thenReturn(1);
+        when(resultSet.getObject(1)).thenReturn(1);
         when(resultSet.getString("last_name")).thenReturn("Doe");
         when(resultSet.getString("first_name")).thenReturn("John");
         when(resultSet.getString("mobile")).thenReturn("1234567890");

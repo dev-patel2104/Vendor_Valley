@@ -3,12 +3,13 @@ package com.group10.Repository;
 import com.group10.Model.Category;
 import com.group10.Model.Service;
 import com.group10.Service.DatabaseService;
-import com.group10.Util.SqlQueries.SQLQuery;
+import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Repository
@@ -16,8 +17,8 @@ public class CategoryRepository
 {
     @Autowired
     DatabaseService databaseService;
-    private int numberOfFeaturedCategories = 3;
-    private int numberOfTrendingServices = 5;
+    private final int numberOfFeaturedCategories = 3;
+    private final int numberOfTrendingServices = 5;
     private List<Category> categoryList;
     private List<Service> serviceList;
     
@@ -28,7 +29,7 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             Statement statement1 = connection.createStatement();)
         {
-            rs1 = statement1.executeQuery(SQLQuery.getFeaturedCategoriesQuery);
+            rs1 = statement1.executeQuery(SQLQueries.getFeaturedCategoriesQuery);
             categoryList = new ArrayList<>();
             Category cat = null;
             while(rs1.next() && cnt < numberOfFeaturedCategories)
@@ -38,6 +39,15 @@ public class CategoryRepository
                 cat.setCategoryId(rs1.getInt(2));
                 cat.setCategoryName(rs1.getString(3));
                 cat.setCategoryDescription(rs1.getString(4));
+                byte[] imageData = rs1.getBytes(5);
+                if(imageData != null)
+                {
+                    cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
+                }
+                else
+                {
+                    cat.setBase64Image("");
+                }
                 categoryList.add(cat);
                 cnt++;
             }
@@ -53,7 +63,7 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             Statement statement1 = connection.createStatement();)
         {
-            rs = statement1.executeQuery(SQLQuery.trendingServiceQuery);
+            rs = statement1.executeQuery(SQLQueries.trendingServiceQuery);
             serviceList = new ArrayList<>();
             Service ser;
 
@@ -66,12 +76,18 @@ public class CategoryRepository
                 ser.setServiceName(rs.getString(3));
                 ser.setServiceDescription(rs.getString(4));
                 ser.setServicePrice(rs.getString(5));
+                byte[] imageData = rs.getBytes(6);
+                if(imageData != null)
+                {
+                    ser.setImages(new ArrayList<>());
+                    ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
+                }
                 serviceList.add(ser);
                 cnt++;
             }
             if(serviceList.size() < 3)
             {
-                rs = statement1.executeQuery(SQLQuery.trendingServiceQueryDefault);
+                rs = statement1.executeQuery(SQLQueries.trendingServiceQueryDefault);
                 {
                     while(rs.next() && cnt < numberOfTrendingServices)
                     {

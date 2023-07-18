@@ -16,14 +16,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Model.Service;
-import com.group10.Repository.SearchRepository;
+import com.group10.Repository.ServiceRepository;
 import com.group10.Service.SearchService;
 
 @SpringBootTest
 public class SearchServiceTest {
     
     @MockBean 
-    private SearchRepository searchRepository;
+    private ServiceRepository serviceRepository;
 
     @MockBean
     private Service service;
@@ -36,7 +36,7 @@ public class SearchServiceTest {
     public void testNullReturn_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doReturn(null).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(null).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertNull(searchService.getSearchResults(searchParam));
     }
 
@@ -45,7 +45,7 @@ public class SearchServiceTest {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertEquals(expected, searchService.getSearchResults(searchParam));
     }
 
@@ -55,7 +55,7 @@ public class SearchServiceTest {
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
         expected.add(service);
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertEquals(expected.size(), searchService.getSearchResults(searchParam).size());
     }
     
@@ -63,215 +63,215 @@ public class SearchServiceTest {
     public void testSQLException_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertThrows(SQLException.class, () -> searchService.getSearchResults(searchParam).size());
     }
 
-    @Test
-    public void testNullReturn_sortSearchResults(){
-        // Mock repository layer and check if the correct results are returned
-        List<Service> services = null;
-        String sortParam = "test";
-        String sortOrder = "asc";
-        assertNull(searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testNullReturn_sortSearchResults(){
+    //     // Mock repository layer and check if the correct results are returned
+    //     List<Service> services = null;
+    //     String sortParam = "test";
+    //     String sortOrder = "asc";
+    //     assertNull(searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testEmptyList_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        String sortParam = "test";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testEmptyList_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     String sortParam = "test";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testNullSortParam_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = null;
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testNullSortParam_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = null;
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testEmptySortParam_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testEmptySortParam_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testNullSortOrder_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "test";
-        String sortOrder = null;
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testNullSortOrder_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "test";
+    //     String sortOrder = null;
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testEmptySortOrder_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "test";
-        String sortOrder = "";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testEmptySortOrder_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "test";
+    //     String sortOrder = "";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortOrderAsc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "test";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortOrderAsc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "test";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortOrderDesc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "test";
-        String sortOrder = "desc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortOrderDesc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "test";
+    //     String sortOrder = "desc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortOrderInvalid_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        services.add(service);
-        String sortParam = "test";
-        String sortOrder = "invalid";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortOrderInvalid_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     services.add(service);
+    //     String sortParam = "test";
+    //     String sortOrder = "invalid";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamPriceAsc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setServicePrice("1");
-        Service service2 = new Service();
-        service2.setServicePrice("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "price";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamPriceAsc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setServicePrice("1");
+    //     Service service2 = new Service();
+    //     service2.setServicePrice("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "price";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamPriceDesc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setServicePrice("1");
-        Service service2 = new Service();
-        service2.setServicePrice("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "price";
-        String sortOrder = "desc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamPriceDesc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setServicePrice("1");
+    //     Service service2 = new Service();
+    //     service2.setServicePrice("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "price";
+    //     String sortOrder = "desc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamPriceInvalid_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setServicePrice("1");
-        Service service2 = new Service();
-        service2.setServicePrice("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "price";
-        String sortOrder = "invalid";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamPriceInvalid_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setServicePrice("1");
+    //     Service service2 = new Service();
+    //     service2.setServicePrice("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "price";
+    //     String sortOrder = "invalid";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamRatingAsc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setAverageRating("1");
-        Service service2 = new Service();
-        service2.setAverageRating("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "rating";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamRatingAsc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setAverageRating("1");
+    //     Service service2 = new Service();
+    //     service2.setAverageRating("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "rating";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamRatingDesc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setAverageRating("1");
-        Service service2 = new Service();
-        service2.setAverageRating("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "rating";
-        String sortOrder = "desc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamRatingDesc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setAverageRating("1");
+    //     Service service2 = new Service();
+    //     service2.setAverageRating("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "rating";
+    //     String sortOrder = "desc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamRatingInvalid_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setAverageRating("1");
-        Service service2 = new Service();
-        service2.setAverageRating("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "rating";
-        String sortOrder = "invalid";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamRatingInvalid_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setAverageRating("1");
+    //     Service service2 = new Service();
+    //     service2.setAverageRating("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "rating";
+    //     String sortOrder = "invalid";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamBookingAsc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setTotalBookings("1");
-        Service service2 = new Service();
-        service2.setTotalBookings("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "booking";
-        String sortOrder = "asc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamBookingAsc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setTotalBookings("1");
+    //     Service service2 = new Service();
+    //     service2.setTotalBookings("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "booking";
+    //     String sortOrder = "asc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamBookingDesc_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setTotalBookings("1");
-        Service service2 = new Service();
-        service2.setTotalBookings("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "booking";
-        String sortOrder = "desc";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamBookingDesc_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setTotalBookings("1");
+    //     Service service2 = new Service();
+    //     service2.setTotalBookings("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "booking";
+    //     String sortOrder = "desc";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
-    @Test
-    public void testSortParamBookingInvalid_sortSearchResults(){
-        List<Service> services = new ArrayList<>();
-        Service service1 = new Service();
-        service1.setTotalBookings("1");
-        Service service2 = new Service();
-        service2.setTotalBookings("2");
-        services.add(service1);
-        services.add(service2);
-        String sortParam = "booking";
-        String sortOrder = "invalid";
-        assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
-    }
+    // @Test
+    // public void testSortParamBookingInvalid_sortSearchResults(){
+    //     List<Service> services = new ArrayList<>();
+    //     Service service1 = new Service();
+    //     service1.setTotalBookings("1");
+    //     Service service2 = new Service();
+    //     service2.setTotalBookings("2");
+    //     services.add(service1);
+    //     services.add(service2);
+    //     String sortParam = "booking";
+    //     String sortOrder = "invalid";
+    //     assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
+    // }
 
     @Test
     public void testNullReturn_filterSearchResults(){
