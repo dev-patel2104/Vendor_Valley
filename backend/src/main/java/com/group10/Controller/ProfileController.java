@@ -115,7 +115,6 @@ public class ProfileController
     @PostMapping("/addService")
     public ResponseEntity<String> addService(@RequestBody Service service)
     {
-        // ToDo : Make the SQLException test case pass some how
         try
         {
             if(service == null)
