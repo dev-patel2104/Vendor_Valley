@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.sql.ResultSet;
+
+import com.group10.Enums.GetServiceDetailsQueryColumns;
+import com.group10.Model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -264,6 +267,69 @@ public class ServiceRepository {
                 return true;}
             return false;}
         catch (SQLException e){
-            throw new SQLException("Database Connection Lost");}}
+            throw new SQLException("Database Connection Lost");}
+    }
+    public boolean insertService(Service service, List<Category> categoryList) throws SQLException
+    {
+        try(Connection connection = databaseService.connect();
+        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.insertService,Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.insertServiceCategoryAssociation);
+        PreparedStatement statement3 = connection.prepareStatement(SQLQueries.insertServiceImages);)
+        {
+            int serviceId = -1;
+            List<Integer> categoryIDList = new ArrayList<>();
+            List<String> categoryNames = List.copyOf(service.getCategoryNames());
+            List<String> images = service.getImages();
 
+            connection.setAutoCommit(false);
+
+            statement1.setInt(1,service.getUserId());
+            statement1.setString(2, service.getServiceName());
+            statement1.setString(3, service.getServiceDescription());
+            statement1.setString(4, service.getServicePrice());
+            statement1.executeUpdate();
+
+            ResultSet rs = statement1.getGeneratedKeys();
+
+            if (rs.next()) {
+                serviceId = rs.getInt(1);
+            }
+
+            if(serviceId < 0)
+            {
+                return false;
+            }
+
+            for(Category temp: categoryList)
+            {
+                if(categoryNames.contains(temp.getCategoryName()))
+                {
+                    categoryIDList.add(temp.getCategoryId());
+                }
+            }
+
+            for(int categoryId : categoryIDList)
+            {
+                statement2.setInt(1, serviceId);
+                statement2.setInt(2, categoryId);
+                statement2.executeUpdate();
+            }
+
+            for(String encodedImage : images)
+            {
+                statement3.setInt(1,serviceId);
+                statement3.setString(2,encodedImage);
+                statement3.executeUpdate();
+            }
+
+            connection.commit();
+            connection.setAutoCommit(true);
+
+           return true;
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException("Database Issue");
+        }
+    }
 }

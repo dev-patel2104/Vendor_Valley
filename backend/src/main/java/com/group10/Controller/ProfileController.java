@@ -2,6 +2,8 @@ package com.group10.Controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.UserDoesntExistException;
+import com.group10.Model.Booking;
+import com.group10.Model.Category;
 import com.group10.Model.Service;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.CustomerProfileService;
@@ -27,7 +29,7 @@ public class ProfileController
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;
-
+    private List<Category> categories;
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/profile")
     public ResponseEntity<SignUpModel> getProfile(@RequestParam String jwtToken)
@@ -58,11 +60,81 @@ public class ProfileController
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+        catch (UserDoesntExistException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
         }
         return ResponseEntity.ok().body(serviceList);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/bookings")
+    public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
+    {
+        DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
+        List<Booking> bookingList = new ArrayList<>();
+        try
+        {
+            bookingList = vendorProfileService.getBookings(token.getClaim("userId").asInt());
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        catch (UserDoesntExistException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        }
+        return ResponseEntity.ok(bookingList);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getCategories()
+    {
+        try
+        {
+            categories = vendorProfileService.getCategories();
+        }
+        catch (SQLException e )
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/addService")
+    public ResponseEntity<String> addService(@RequestBody Service service)
+    {
+        // ToDo : Make the SQLException test case pass some how
+        try
+        {
+            if(service == null)
+            {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
+            }
+
+            if(!vendorProfileService.addService(service,categories))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database issue present");
+
+        }
+        return ResponseEntity.ok("Service successfully added");
     }
 
 }

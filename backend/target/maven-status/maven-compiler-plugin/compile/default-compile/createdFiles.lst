@@ -60,6 +60,7 @@ com\group10\Util\CategoryFilterImpl.class
 com\group10\Util\RatingsFilterImpl.class
 com\group10\Util\BookingsComparator.class
 com\group10\Exceptions\VendorDetailsAbsentForUserException.class
+com\group10\Enums\GetBookingDetailsQueryColumns.class
 com\group10\Util\PriceComparator.class
 com\group10\Enums\GetServiceDetailsQueryColumns.class
 com\group10\Model\SignUpModel$SignUpModelBuilder.class
