@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 
 import com.group10.Enums.GetServiceDetailsQueryColumns;
 import com.group10.Model.Category;
+import com.group10.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

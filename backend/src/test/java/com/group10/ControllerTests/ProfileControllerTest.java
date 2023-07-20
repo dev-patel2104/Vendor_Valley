@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
 import com.group10.Repository.ServiceRepository;
@@ -203,7 +204,7 @@ public class ProfileControllerTest
         when(jwtTokenHandler.decodeJWTToken(encodedToken).getClaim("userId").asInt()).thenReturn(user_id);
         when(vendorProfileService.getServices(user_id)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
 
-        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         assertEquals(res,profileController.getServices(encodedToken));
     }
     @Test
@@ -266,7 +267,7 @@ public class ProfileControllerTest
 
         when(vendorProfileService.getBookings(user_id)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
 
-        ResponseEntity<List<Booking>> response = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+        ResponseEntity<List<Booking>> response = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
 
         assertEquals(response,profileController.getBookings(encodedToken));
     }
@@ -311,7 +312,7 @@ public class ProfileControllerTest
         Service service = null;
         List<Category> categoryList = new ArrayList<>();
 
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
         assertEquals(res, profileController.addService(service));
     }
     @Test
@@ -329,4 +330,50 @@ public class ProfileControllerTest
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("Database issue present", response.getBody());
     }
+    @Test
+    public void editCompanyDetails_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorProfileService.editCompanyDetails(user)).thenReturn(true);
+        ResponseEntity<String> res = ResponseEntity.ok("Company details successfully edited");
+
+        assertEquals(res, profileController.editCompanyDetails(user));
+    }
+    @Test
+    public void editCompanyDetails_UnSuccessful() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorProfileService.editCompanyDetails(user)).thenReturn(false);
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No changes where made");
+
+        assertEquals(res, profileController.editCompanyDetails(user));
+    }
+    @Test
+    public void editCompanyDetails_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        user = null;
+
+        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException("Requested input is missing"));
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+        assertEquals(res, profileController.editCompanyDetails(user));
+
+        initializeUser();
+        user.setUserId(-1);
+
+        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException("The userId for the user to be updated is not available"));
+        res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("The userId for the user to be updated is not available");
+        assertEquals(res, profileController.editCompanyDetails(user));
+    }
+    @Test
+    public void editCompanyDetails_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new SQLException("Database Issue"));
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database Issue");
+        assertEquals(res, profileController.editCompanyDetails(user));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.group10.Controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
@@ -66,7 +67,7 @@ public class ProfileController
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         }
         return ResponseEntity.ok().body(serviceList);
     }
@@ -91,7 +92,7 @@ public class ProfileController
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         }
         return ResponseEntity.ok(bookingList);
     }
@@ -119,7 +120,7 @@ public class ProfileController
         {
             if(service == null)
             {
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
             }
 
             if(!vendorProfileService.addService(service,categories))
@@ -134,6 +135,34 @@ public class ProfileController
 
         }
         return ResponseEntity.ok("Service successfully added");
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/company")
+    public ResponseEntity<String> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
+    {
+        try
+        {
+            if(updatedDetails == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+            }
+
+            if(!vendorProfileService.editCompanyDetails(updatedDetails))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No changes where made");
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        }
+        return ResponseEntity.ok("Company details successfully edited");
     }
 
 }

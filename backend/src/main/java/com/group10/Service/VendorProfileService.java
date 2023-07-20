@@ -1,8 +1,10 @@
 package com.group10.Service;
 
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
+import com.group10.Model.SignUpModel;
 import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepository;
@@ -77,5 +79,23 @@ public class VendorProfileService extends ProfileService
         }
 
         return serviceRepository.insertService(service, categoryList);
+    }
+
+    @Override
+    public boolean editProfile(int userId) throws SQLException {
+        return false;
+    }
+
+    public boolean editCompanyDetails(SignUpModel updatedDetails) throws SQLException, NoInformationFoundException
+    {
+        if(updatedDetails == null)
+        {
+            throw new NoInformationFoundException("Requested input is missing");
+        }
+        if(updatedDetails.getUserId() < 0)
+        {
+            throw new NoInformationFoundException("The userId for the user to be updated is not available");
+        }
+        return vendorRepository.editCompanyDetails(updatedDetails);
     }
 }

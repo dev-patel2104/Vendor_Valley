@@ -32,4 +32,6 @@ public abstract class ProfileService
     }
 
     public abstract List<Booking> getBookings(int userId) throws UserDoesntExistException, SQLException;
+
+    public abstract boolean editProfile(int userId) throws SQLException;
 }

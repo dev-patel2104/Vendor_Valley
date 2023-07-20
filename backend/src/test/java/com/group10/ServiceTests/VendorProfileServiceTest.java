@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.*;
 import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.ServiceRepository;
@@ -279,5 +280,43 @@ public class VendorProfileServiceTest
 
         when(serviceRepository.insertService(service,categoryList)).thenThrow(new SQLException("Database Issue"));
         assertThrows(SQLException.class, () -> vendorProfileService.addService(service,categoryList));
+    }
+
+    @Test
+    public void editCompanyDetails_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorRepository.editCompanyDetails(user)).thenReturn(true);
+        assertEquals(true, vendorProfileService.editCompanyDetails(user));
+    }
+
+    @Test
+    public void editCompanyDetails_UnSuccessful() throws  SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorRepository.editCompanyDetails(user)).thenReturn(false);
+        assertEquals(false, vendorProfileService.editCompanyDetails(user));
+    }
+    @Test
+    public void editCompanyDetails_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        user = null;
+
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editCompanyDetails(user));
+
+        initializeUser();
+        user.setUserId(-1);
+
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editCompanyDetails(user));
+    }
+    @Test
+    public void editCompanyDetails_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(vendorRepository.editCompanyDetails(user)).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.editCompanyDetails(user));
     }
 }
