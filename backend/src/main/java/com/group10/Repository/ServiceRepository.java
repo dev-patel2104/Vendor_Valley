@@ -270,7 +270,7 @@ public class ServiceRepository {
         catch (SQLException e){
             throw new SQLException("Database Connection Lost");}
     }
-    public boolean insertService(Service service, List<Category> categoryList) throws SQLException
+    public Service insertService(Service service, List<Category> categoryList) throws SQLException
     {
         try(Connection connection = databaseService.connect();
         PreparedStatement statement1 = connection.prepareStatement(SQLQueries.insertService,Statement.RETURN_GENERATED_KEYS);
@@ -298,7 +298,7 @@ public class ServiceRepository {
 
             if(serviceId < 0)
             {
-                return false;
+                return null;
             }
 
             for(Category temp: categoryList)
@@ -326,7 +326,8 @@ public class ServiceRepository {
             connection.commit();
             connection.setAutoCommit(true);
 
-           return true;
+            service.setServiceId(serviceId);
+           return service;
         }
         catch (SQLException e)
         {

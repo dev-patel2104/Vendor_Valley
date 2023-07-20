@@ -114,27 +114,34 @@ public class ProfileController
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addService")
-    public ResponseEntity<String> addService(@RequestBody Service service)
+    public ResponseEntity<Service> addService(@RequestBody Service service)
     {
+        Service addedService;
         try
         {
             if(service == null)
             {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
             }
 
-            if(!vendorProfileService.addService(service,categories))
+            addedService = vendorProfileService.addService(service,categories);
+            if(addedService == null)
             {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
         }
         catch (SQLException e)
         {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database issue present");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
         }
-        return ResponseEntity.ok("Service successfully added");
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok(addedService);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -164,5 +171,10 @@ public class ProfileController
         }
         return ResponseEntity.ok("Company details successfully edited");
     }
+
+//    public ResponseEntity<String> editProfile()
+//    {
+//
+//    }
 
 }

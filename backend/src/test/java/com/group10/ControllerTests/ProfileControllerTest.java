@@ -289,34 +289,35 @@ public class ProfileControllerTest
         assertEquals(response, profileController.getCategories());
     }
     @Test
-    public void addService_Successful() throws SQLException
+    public void addService_Successful() throws SQLException, NoInformationFoundException
     {
-        Service service = new Service();
-        List<Category> categoryList = new ArrayList<>();
-        when(vendorProfileService.addService(service, categoryList)).thenReturn(true);
-        ResponseEntity<String> res = ResponseEntity.ok("Service successfully added");
+        initializeService();
+        initializeCategoryList();
+
+        when(vendorProfileService.addService(any(), any())).thenReturn(service);
+        ResponseEntity<Service> res = ResponseEntity.ok(service);
         assertEquals(res, profileController.addService(service));
     }
     @Test
-    public void addService_UnSuccessful() throws SQLException
+    public void addService_UnSuccessful() throws SQLException, NoInformationFoundException
     {
         Service service = new Service();
         List<Category> categoryList = new ArrayList<>();
-        when(vendorProfileService.addService(service, categoryList)).thenReturn(false);
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");;
+        when(vendorProfileService.addService(service, categoryList)).thenReturn(null);
+        ResponseEntity<Service> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);;
         assertEquals(res, profileController.addService(service));
     }
     @Test
-    public void addService_ServiceNotMapped() throws SQLException
+    public void addService_ServiceNotMapped() throws SQLException, NoInformationFoundException
     {
         Service service = null;
         List<Category> categoryList = new ArrayList<>();
 
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+        ResponseEntity<Service> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.addService(service));
     }
     @Test
-    public void addService_SQLException() throws SQLException
+    public void addService_SQLException() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
@@ -324,11 +325,11 @@ public class ProfileControllerTest
         doThrow(SQLException.class).when(vendorProfileService).addService(any(), any());
 
         // Call the method under test
-        ResponseEntity<String> response = profileController.addService(service);
+        ResponseEntity<Service> response = profileController.addService(service);
 
         // Verify the expected response
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Database issue present", response.getBody());
+        assertEquals(null, response.getBody());
     }
     @Test
     public void editCompanyDetails_Successful() throws SQLException, NoInformationFoundException

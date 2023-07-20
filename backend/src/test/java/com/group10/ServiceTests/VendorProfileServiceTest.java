@@ -193,84 +193,86 @@ public class VendorProfileServiceTest
     }
 
     @Test
-    public void addService_Successful() throws SQLException
+    public void addService_Successful() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
-        when(serviceRepository.insertService(service, categoryList)).thenReturn(true);
-        assertEquals(true, vendorProfileService.addService(service, categoryList));
+        when(serviceRepository.insertService(service, categoryList)).thenReturn(service);
+        assertEquals(service, vendorProfileService.addService(service, categoryList));
     }
     @Test
-    public void addService_MissingName() throws  SQLException
+    public void addService_MissingName() throws  SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         service.setServiceName(null);
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         service.setServiceName("");
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
     }
     @Test
-    public void addService_MissingDescription() throws SQLException
+    public void addService_MissingDescription() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         service.setServiceDescription(null);
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         service.setServiceDescription("");
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
     }
     @Test
-    public void addService_MissingPrice() throws SQLException
+    public void addService_MissingPrice() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         service.setServicePrice(null);
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         service.setServicePrice("");
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
     }
     @Test
-    public void addService_MissingCategoryName() throws SQLException
+    public void addService_MissingCategoryName() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         service.setCategoryNames(null);
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         service.setCategoryNames(new ArrayList<>());
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
+
     }
     @Test
-    public void addService_MissingCategoryInfo() throws SQLException
+    public void addService_MissingCategoryInfo() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         categoryList = null;
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         categoryList = new ArrayList<>();
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
+
     }
     @Test
-    public void addService_MissingImages() throws SQLException
+    public void addService_MissingImages() throws SQLException, NoInformationFoundException
     {
         initializeService();
         initializeCategoryList();
 
         service.setImages(null);
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
 
         service.setImages(new ArrayList<>());
-        assertEquals(false, vendorProfileService.addService(service, categoryList));
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.addService(service,categoryList));
     }
     @Test
     public void addService_SQLException() throws SQLException
