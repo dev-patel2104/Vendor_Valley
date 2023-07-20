@@ -88,7 +88,7 @@ public class VendorProfileService extends ProfileService
         return false;
     }
 
-    public boolean editCompanyDetails(SignUpModel updatedDetails) throws SQLException, NoInformationFoundException
+    public SignUpModel editCompanyDetails(SignUpModel updatedDetails) throws SQLException, NoInformationFoundException
     {
         if(updatedDetails == null)
         {

@@ -165,7 +165,7 @@ public class VendorRepository{
         return bookingList;
     }
 
-    public boolean editCompanyDetails(SignUpModel updatedDetails) throws SQLException
+    public SignUpModel editCompanyDetails(SignUpModel updatedDetails) throws SQLException
     {
         Vendor vendor = updatedDetails.buildVendorModel();
         vendor.setUserId(updatedDetails.getUserId());
@@ -187,10 +187,10 @@ public class VendorRepository{
             // User found
             if (rowsUpdated > 0) {
                 // Updated properties as needed
-                return true;
+                return updatedDetails;
             }
             // User not found
-            return false;
+            return null;
         }
         catch (SQLException e)
         {

@@ -336,8 +336,8 @@ public class ProfileControllerTest
     {
         initializeUser();
 
-        when(vendorProfileService.editCompanyDetails(user)).thenReturn(true);
-        ResponseEntity<String> res = ResponseEntity.ok("Company details successfully edited");
+        when(vendorProfileService.editCompanyDetails(any())).thenReturn(user);
+        ResponseEntity<SignUpModel> res = ResponseEntity.ok(user);
 
         assertEquals(res, profileController.editCompanyDetails(user));
     }
@@ -346,8 +346,8 @@ public class ProfileControllerTest
     {
         initializeUser();
 
-        when(vendorProfileService.editCompanyDetails(user)).thenReturn(false);
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No changes where made");
+        when(vendorProfileService.editCompanyDetails(user)).thenReturn(null);
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         assertEquals(res, profileController.editCompanyDetails(user));
     }
@@ -356,15 +356,15 @@ public class ProfileControllerTest
     {
         user = null;
 
-        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException("Requested input is missing"));
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException(null));
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
 
         initializeUser();
         user.setUserId(-1);
 
-        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException("The userId for the user to be updated is not available"));
-        res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("The userId for the user to be updated is not available");
+        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException(null));
+        res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
     }
     @Test
@@ -373,7 +373,7 @@ public class ProfileControllerTest
         initializeUser();
 
         when(vendorProfileService.editCompanyDetails(user)).thenThrow(new SQLException("Database Issue"));
-        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database Issue");
+        ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
     }
 

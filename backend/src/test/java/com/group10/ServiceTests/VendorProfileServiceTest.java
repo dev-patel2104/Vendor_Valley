@@ -289,8 +289,8 @@ public class VendorProfileServiceTest
     {
         initializeUser();
 
-        when(vendorRepository.editCompanyDetails(user)).thenReturn(true);
-        assertEquals(true, vendorProfileService.editCompanyDetails(user));
+        when(vendorRepository.editCompanyDetails(user)).thenReturn(user);
+        assertEquals(user, vendorProfileService.editCompanyDetails(user));
     }
 
     @Test
@@ -298,8 +298,8 @@ public class VendorProfileServiceTest
     {
         initializeUser();
 
-        when(vendorRepository.editCompanyDetails(user)).thenReturn(false);
-        assertEquals(false, vendorProfileService.editCompanyDetails(user));
+        when(vendorRepository.editCompanyDetails(user)).thenReturn(null);
+        assertEquals(null, vendorProfileService.editCompanyDetails(user));
     }
     @Test
     public void editCompanyDetails_NoInformationFoundException() throws SQLException, NoInformationFoundException

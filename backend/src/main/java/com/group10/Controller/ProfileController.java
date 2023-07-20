@@ -146,30 +146,32 @@ public class ProfileController
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/edit/company")
-    public ResponseEntity<String> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
+    public ResponseEntity<SignUpModel> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
     {
+        SignUpModel changedDetails;
         try
         {
             if(updatedDetails == null)
             {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Requested input is missing");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
             }
 
-            if(!vendorProfileService.editCompanyDetails(updatedDetails))
+            changedDetails = vendorProfileService.editCompanyDetails(updatedDetails);
+            if(changedDetails == null)
             {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No changes where made");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
         }
         catch (SQLException e)
         {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 
         }
         catch (NoInformationFoundException e)
         {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         }
-        return ResponseEntity.ok("Company details successfully edited");
+        return ResponseEntity.ok(changedDetails);
     }
 
 //    public ResponseEntity<String> editProfile()
