@@ -83,11 +83,6 @@ public class VendorProfileService extends ProfileService
         return serviceRepository.insertService(service, categoryList);
     }
 
-    @Override
-    public boolean editProfile(int userId) throws SQLException {
-        return false;
-    }
-
     public SignUpModel editCompanyDetails(SignUpModel updatedDetails) throws SQLException, NoInformationFoundException
     {
         if(updatedDetails == null)

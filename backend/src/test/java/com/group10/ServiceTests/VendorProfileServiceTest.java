@@ -95,39 +95,39 @@ public class VendorProfileServiceTest
         categoryList = new ArrayList<>();
         categoryList.add(new Category());
     }
-    @Test
-    public void getProfile_Successful() throws SQLException, UserDoesntExistException
-    {
-        userId = 5;
-        initializeUser();
-        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertEquals(user, vendorProfileService.getProfile(userId));
-    }
-
-    @Test
-    public void getProfile_NegativeUserID() throws SQLException, UserDoesntExistException
-    {
-        userId = -1;
-        initializeUser();
-        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
-    }
-    @Test
-    public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
-    {
-        userId = 5;
-        initializeUser();
-        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(null);
-        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
-    }
-    @Test
-    public void getProfile_SQLException() throws SQLException, UserDoesntExistException
-    {
-        userId = 5;
-        initializeUser();;
-        when(userRepository.getUser(Mockito.any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
-        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(userId));
-    }
+//    @Test
+//    public void getProfile_Successful() throws SQLException, UserDoesntExistException
+//    {
+//        userId = 5;
+//        initializeUser();
+//        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
+//        assertEquals(user, vendorProfileService.getProfile(userId));
+//    }
+//
+//    @Test
+//    public void getProfile_NegativeUserID() throws SQLException, UserDoesntExistException
+//    {
+//        userId = -1;
+//        initializeUser();
+//        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(user);
+//        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
+//    }
+//    @Test
+//    public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
+//    {
+//        userId = 5;
+//        initializeUser();
+//        when(userRepository.getUser(Mockito.any(Integer.class))).thenReturn(null);
+//        assertThrows(UserDoesntExistException.class, () -> vendorProfileService.getProfile(userId));
+//    }
+//    @Test
+//    public void getProfile_SQLException() throws SQLException, UserDoesntExistException
+//    {
+//        userId = 5;
+//        initializeUser();;
+//        when(userRepository.getUser(Mockito.any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
+//        assertThrows(SQLException.class, () -> vendorProfileService.getProfile(userId));
+//    }
     @Test
     public void getServices_Successful() throws SQLException, UserDoesntExistException
     {

@@ -23,7 +23,7 @@ public class ProfileController
 {
 
     @Autowired
-    private CustomerProfileService customerProfileService;
+    private CustomerProfileService userProfileService;
 
     @Autowired
     private VendorProfileService vendorProfileService;
@@ -38,7 +38,7 @@ public class ProfileController
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         SignUpModel user;
         try {
-           user = customerProfileService.getProfile(token.getClaim("userId").asInt());
+           user = userProfileService.getProfile(token.getClaim("userId").asInt());
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -174,9 +174,32 @@ public class ProfileController
         return ResponseEntity.ok(changedDetails);
     }
 
-//    public ResponseEntity<String> editProfile()
-//    {
-//
-//    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/profile")
+    public ResponseEntity<String> editProfile(@RequestBody SignUpModel newInfo)
+    {
+        try
+        {
+            if(newInfo == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+
+            if(!userProfileService.editProfile(newInfo))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
+        return ResponseEntity.ok("Successfully edited the user's profile information");
+
+    }
 
 }

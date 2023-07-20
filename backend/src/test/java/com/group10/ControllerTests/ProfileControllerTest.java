@@ -308,7 +308,7 @@ public class ProfileControllerTest
         assertEquals(res, profileController.addService(service));
     }
     @Test
-    public void addService_ServiceNotMapped() throws SQLException, NoInformationFoundException
+    public void addService_ServiceNotMapped()
     {
         Service service = null;
         List<Category> categoryList = new ArrayList<>();
@@ -355,14 +355,10 @@ public class ProfileControllerTest
     public void editCompanyDetails_NoInformationFoundException() throws SQLException, NoInformationFoundException
     {
         user = null;
-
-        when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException(null));
         ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
 
         initializeUser();
-        user.setUserId(-1);
-
         when(vendorProfileService.editCompanyDetails(user)).thenThrow(new NoInformationFoundException(null));
         res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
@@ -375,6 +371,46 @@ public class ProfileControllerTest
         when(vendorProfileService.editCompanyDetails(user)).thenThrow(new SQLException("Database Issue"));
         ResponseEntity<SignUpModel> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         assertEquals(res, profileController.editCompanyDetails(user));
+    }
+    @Test
+    public void editProfile_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(customerProfileService.editProfile(user)).thenReturn(true);
+        ResponseEntity<String> res = ResponseEntity.ok("Successfully edited the user's profile information");
+
+        assertEquals(res, profileController.editProfile(user));
+    }
+    @Test
+    public void editProfile_UnSuccessful() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+
+        when(customerProfileService.editProfile(user)).thenReturn(false);
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        assertEquals(res, profileController.editProfile(user));
+    }
+    @Test
+    public void editProfile_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        user = null;
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        assertEquals(res, profileController.editProfile(user));
+
+        initializeUser();
+        when(customerProfileService.editProfile(user)).thenThrow(new NoInformationFoundException("The userId for the user to be updated is not available"));
+        res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        assertEquals(res, profileController.editProfile(user));
+    }
+    @Test
+    public void editProfile_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeUser();
+        when(customerProfileService.editProfile(user)).thenThrow(new SQLException("Database Issue"));
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        assertEquals(res, profileController.editProfile(user));
     }
 
 }

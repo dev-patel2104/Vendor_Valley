@@ -1,6 +1,7 @@
 package com.group10.Service;
 
 import com.group10.Model.Booking;
+import com.group10.Model.SignUpModel;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -14,10 +15,5 @@ public class CustomerProfileService extends ProfileService
             return null;
     }
 
-    @Override
-    public boolean editProfile(int userId) throws SQLException
-    {
 
-        return false;
-    }
 }
