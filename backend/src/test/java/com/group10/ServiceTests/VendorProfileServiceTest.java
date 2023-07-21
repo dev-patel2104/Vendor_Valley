@@ -2,6 +2,7 @@ package com.group10.ServiceTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
@@ -302,7 +303,7 @@ public class VendorProfileServiceTest
         assertEquals(null, vendorProfileService.editCompanyDetails(user));
     }
     @Test
-    public void editCompanyDetails_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    public void editCompanyDetails_NoInformationFoundException()
     {
         user = null;
 
@@ -314,11 +315,111 @@ public class VendorProfileServiceTest
         assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editCompanyDetails(user));
     }
     @Test
-    public void editCompanyDetails_SQLException() throws SQLException, NoInformationFoundException
+    public void editCompanyDetails_SQLException() throws SQLException
     {
         initializeUser();
 
         when(vendorRepository.editCompanyDetails(user)).thenThrow(new SQLException("Database Issue"));
         assertThrows(SQLException.class, () -> vendorProfileService.editCompanyDetails(user));
+    }
+    @Test
+    public void deleteService_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(serviceRepository.deleteService(any())).thenReturn(true);
+        assertEquals(true, vendorProfileService.deleteService(service));
+    }
+    @Test
+    public void deleteService_UnSuccessful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(serviceRepository.deleteService(any())).thenReturn(false);
+        assertEquals(false, vendorProfileService.deleteService(service));
+    }
+    @Test
+    public void deleteService_NoInformationException()
+    {
+        service = null;
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.deleteService(service));
+
+        initializeService();
+        service.setServiceId(-1);
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.deleteService(service));
+    }
+    @Test
+    public void deleteService_SQLException() throws SQLException
+    {
+        initializeService();
+        when(serviceRepository.deleteService(any())).thenThrow(new SQLException("Database Issue"));
+        assertThrows(SQLException.class, () -> vendorProfileService.deleteService(service));
+    }
+    @Test
+    public void editService_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+        initializeCategoryList();
+        when(serviceRepository.editService(any(), any())).thenReturn(service);
+        when(serviceRepository.editServiceImage(any())).thenReturn(service);
+        assertEquals(service, vendorProfileService.editService(service, categoryList));
+    }
+    @Test
+    public void editService_OnlyInfoNoImage() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        service.setImages(null);
+        when(serviceRepository.editService(any(), any())).thenReturn(service);
+        assertEquals(service, vendorProfileService.editService(service,categoryList));
+
+        service.setImages(new ArrayList<>());
+        assertEquals(service, vendorProfileService.editService(service,categoryList));
+    }
+    @Test
+    public void editService_ImageInfoNotUpdatedProperly() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+        initializeCategoryList();
+        when(serviceRepository.editServiceImage(any())).thenReturn(null);
+        assertEquals(null, vendorProfileService.editService(service, categoryList));
+    }
+    @Test
+    public void editService_TextualInfoNotUpdatedProperly() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+        initializeCategoryList();
+        when(serviceRepository.editServiceImage(any())).thenReturn(service);
+        when(serviceRepository.editService(any(), any())).thenReturn(null);
+        assertEquals(null, vendorProfileService.editService(service, categoryList));
+    }
+    @Test
+    public void editService_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        service = null;
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editService(service,categoryList));
+
+        initializeService();
+        categoryList = null;
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editService(service,categoryList));
+
+        categoryList = new ArrayList<>();
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editService(service,categoryList));
+
+        service.setServiceId(-1);
+        assertThrows(NoInformationFoundException.class, () -> vendorProfileService.editService(service,categoryList));
+
+    }
+    @Test
+    public void editService_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+        initializeCategoryList();
+
+        when(serviceRepository.editServiceImage(any())).thenThrow(new SQLException("Database Issue"));
+        when(serviceRepository.editService(any(), any())).thenThrow(new SQLException("Database Issue"));
+
+        assertThrows(SQLException.class, () -> vendorProfileService.editService(service, categoryList));
     }
 }

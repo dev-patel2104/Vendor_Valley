@@ -48,7 +48,93 @@ public class ProfileController
         }
         return ResponseEntity.ok().body(user);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/profile")
+    public ResponseEntity<String> editProfile(@RequestBody SignUpModel newInfo)
+    {
+        try
+        {
+            if(newInfo == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
 
+            if(!userProfileService.editProfile(newInfo))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
+        return ResponseEntity.ok("Successfully edited the user's profile information");
+
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/company")
+    public ResponseEntity<SignUpModel> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
+    {
+        SignUpModel changedDetails;
+        try
+        {
+            if(updatedDetails == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+
+            changedDetails = vendorProfileService.editCompanyDetails(updatedDetails);
+            if(changedDetails == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
+        return ResponseEntity.ok(changedDetails);
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/addService")
+    public ResponseEntity<Service> addService(@RequestBody Service service)
+    {
+        Service addedService;
+        try
+        {
+            if(service == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+
+            addedService = vendorProfileService.addService(service,categories);
+            if(addedService == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok(addedService);
+    }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/services")
     public ResponseEntity<List<Service>> getServices(@RequestParam String jwtToken)
@@ -71,7 +157,65 @@ public class ProfileController
         }
         return ResponseEntity.ok().body(serviceList);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/delete/service")
+    public ResponseEntity<String> deleteService(@RequestBody Service serviceToDelete)
+    {
+        try
+        {
+            if(serviceToDelete == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
 
+
+            if(!vendorProfileService.deleteService(serviceToDelete))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok("Service has been successfully deleted");
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/service")
+    public ResponseEntity<Service> editService(@RequestBody Service serviceToUpdate)
+    {
+        Service updatedService;
+        try
+        {
+            if(serviceToUpdate == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+            updatedService = vendorProfileService.editService(serviceToUpdate, categories);
+            if(updatedService == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok(updatedService);
+    }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
@@ -111,95 +255,4 @@ public class ProfileController
         }
         return ResponseEntity.ok(categories);
     }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/addService")
-    public ResponseEntity<Service> addService(@RequestBody Service service)
-    {
-        Service addedService;
-        try
-        {
-            if(service == null)
-            {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-            }
-
-            addedService = vendorProfileService.addService(service,categories);
-            if(addedService == null)
-            {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-
-        }
-        catch (SQLException e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-
-        }
-        catch (NoInformationFoundException e)
-        {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-
-        }
-        return ResponseEntity.ok(addedService);
-    }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PutMapping("/edit/company")
-    public ResponseEntity<SignUpModel> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
-    {
-        SignUpModel changedDetails;
-        try
-        {
-            if(updatedDetails == null)
-            {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-            }
-
-            changedDetails = vendorProfileService.editCompanyDetails(updatedDetails);
-            if(changedDetails == null)
-            {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-        }
-        catch (SQLException e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-
-        }
-        catch (NoInformationFoundException e)
-        {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-        }
-        return ResponseEntity.ok(changedDetails);
-    }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PutMapping("/edit/profile")
-    public ResponseEntity<String> editProfile(@RequestBody SignUpModel newInfo)
-    {
-        try
-        {
-            if(newInfo == null)
-            {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-            }
-
-            if(!userProfileService.editProfile(newInfo))
-            {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-        }
-        catch (SQLException e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-        catch (NoInformationFoundException e)
-        {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
-        }
-        return ResponseEntity.ok("Successfully edited the user's profile information");
-
-    }
-
 }

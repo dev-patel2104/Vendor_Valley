@@ -412,5 +412,84 @@ public class ProfileControllerTest
         ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         assertEquals(res, profileController.editProfile(user));
     }
+    @Test
+    public void deleteService_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.deleteService(any())).thenReturn(true);
+
+        ResponseEntity<String> res = ResponseEntity.ok("Service has been successfully deleted");
+        assertEquals(res, profileController.deleteService(service));
+    }
+    @Test
+    public void deleteService_UnSuccessful() throws  SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.deleteService(any())).thenReturn(false);
+
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        assertEquals(res, profileController.deleteService(service));
+    }
+    @Test
+    public void deleteService_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.deleteService(any())).thenThrow(new SQLException("Database Issue"));
+
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        assertEquals(res, profileController.deleteService(service));
+    }
+    @Test
+    public void deleteService_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        service = null;
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        assertEquals(res, profileController.deleteService(service));
+
+        initializeService();
+        when(vendorProfileService.deleteService(any())).thenThrow(new NoInformationFoundException("Requested input is missing"));
+        assertEquals(res, profileController.deleteService(service));
+    }
+    @Test
+    public void editService_Successful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.editService(any(),any())).thenReturn(service);
+        ResponseEntity<Service> res = ResponseEntity.ok(service);
+        assertEquals(res, profileController.editService(service));
+    }
+    @Test
+    public void editService_UnSuccessful() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.editService(any(),any())).thenReturn(null);
+        ResponseEntity<Service> res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        assertEquals(res, profileController.editService(service));
+    }
+    @Test
+    public void editService_NoInformationFoundException() throws SQLException, NoInformationFoundException
+    {
+        service = null;
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        assertEquals(res, profileController.editService(service));
+
+        initializeService();
+        when(vendorProfileService.editService(any(),any())).thenThrow(new NoInformationFoundException("Requested input not available"));
+        assertEquals(res, profileController.editService(service));
+    }
+    @Test
+    public void editService_SQLException() throws SQLException, NoInformationFoundException
+    {
+        initializeService();
+
+        when(vendorProfileService.editService(any(),any())).thenThrow(new SQLException("Database Issue"));
+        ResponseEntity<String> res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        assertEquals(res, profileController.editService(service));
+    }
 
 }
