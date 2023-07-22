@@ -5,7 +5,7 @@ public class BookingResponseRequest {
     private Integer bookingID;
     private String serviceName;
     private String customerEmail;
-    private Integer bookingStatus;
+    private String bookingStatus;
 
     public String getServiceName() {
         return serviceName;
@@ -31,11 +31,11 @@ public class BookingResponseRequest {
         this.bookingID = bookingID;
     }
 
-    public Integer getBookingStatus() {
+    public String getBookingStatus() {
         return bookingStatus;
     }
 
-    public void setBookingStatus(Integer bookingStatus) {
+    public void setBookingStatus(String bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
 }

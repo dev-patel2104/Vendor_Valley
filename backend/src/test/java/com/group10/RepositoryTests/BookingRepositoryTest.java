@@ -29,12 +29,6 @@ class BookingRepositoryTest {
     private DatabaseService databaseService;
 
     @Mock
-    private EmailUtil emailUtil;
-
-    @Mock
-    private EmailDetails emailDetails;
-
-    @Mock
     private Connection connection;
 
     @Mock
@@ -76,7 +70,7 @@ class BookingRepositoryTest {
     void testRespondToBooking_Success() throws SQLException, MailAuthenticationException, MailSendException, MailParseException {
         // Arrange
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
-        bookingResponseRequest.setBookingStatus(1);
+        bookingResponseRequest.setBookingStatus("decline");
         bookingResponseRequest.setBookingID(123);
         bookingResponseRequest.setServiceName("Florist");
         bookingResponseRequest.setCustomerEmail("boon@boon.com");

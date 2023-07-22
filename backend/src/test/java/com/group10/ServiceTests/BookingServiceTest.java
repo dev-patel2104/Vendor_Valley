@@ -6,8 +6,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
+import com.group10.Model.EmailDetails;
 import com.group10.Repository.BookingRepository;
 import com.group10.Service.BookingService;
+import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +34,12 @@ public class BookingServiceTest {
 
     @Mock
     JWTTokenHandler jwtTokenHandler;
+
+    @Mock
+    private EmailUtil emailUtil;
+
+    @Mock
+    private EmailDetails emailDetails;
 
     @InjectMocks
     BookingService bookingService;
@@ -46,8 +56,8 @@ public class BookingServiceTest {
 
     @Test
     public void repoFailed_requestReservation() throws SQLException {
-        DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
-        Claim claim = Mockito.mock(Claim.class);
+        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
         booking.setServiceName("florist");
@@ -69,8 +79,8 @@ public class BookingServiceTest {
 
     @Test
     public void repoSuccess_requestReservation() throws SQLException {
-        DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
-        Claim claim = Mockito.mock(Claim.class);
+        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
         booking.setServiceName("florist");
@@ -87,6 +97,43 @@ public class BookingServiceTest {
         Mockito.doReturn(true).when(bookingRepository).requestReservation(userID, booking);
 
         assertTrue(bookingService.requestReservation(token, booking));
+    }
+
+    @Test
+    public void nullBookingResponseRequest_respondToBooking() throws NoInformationFoundException, SQLException {
+        BookingResponseRequest bookingResponseRequest = null;
+
+        BookingService newBookingService = mock(BookingService.class);
+        when(newBookingService.respondToBooking(bookingResponseRequest)).thenThrow(new NoInformationFoundException("test"));
+        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking(bookingResponseRequest));
+    }
+
+    @Test
+    public void repoSuccess_respondToBooking() throws SQLException, NoInformationFoundException {
+        BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
+        bookingResponseRequest.setBookingStatus("accept");
+        bookingResponseRequest.setBookingID(342);
+        bookingResponseRequest.setServiceName("decorators");
+        bookingResponseRequest.setCustomerEmail("test@mail.com");
+
+        when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
+
+        when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
+
+        assertTrue(bookingService.respondToBooking(bookingResponseRequest));
+    }
+
+    @Test
+    public void repoFail_respondToBooking() throws SQLException, NoInformationFoundException {
+        BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
+        bookingResponseRequest.setBookingStatus("accept");
+        bookingResponseRequest.setBookingID(342);
+        bookingResponseRequest.setServiceName("decorators");
+        bookingResponseRequest.setCustomerEmail("test@mail.com");
+
+        when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(false);
+
+        assertFalse(bookingService.respondToBooking(bookingResponseRequest));
     }
 
     @Test

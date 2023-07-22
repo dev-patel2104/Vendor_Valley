@@ -62,7 +62,7 @@ public class BookingService {
                 //send mail to vendor about the customer's request
                 if (bookingModel.getVendorEmail() != null) {
                     String subject = "VendorValley: A customer has requested for " + bookingModel.getServiceName();
-                    String body = "Respond to the customer's request on the vendor valley website !!";
+                    String body = "Respond to the customer's request on the vendor valley website !!"; // todo: add site url ?
 
                     emailDetails.setRecipient(bookingModel.getVendorEmail());
                     emailDetails.setSubject(subject);
@@ -93,7 +93,7 @@ public class BookingService {
     public boolean respondToBooking(BookingResponseRequest bookingResponseRequest)
             throws SQLException, MailAuthenticationException, MailSendException, MailParseException, NoInformationFoundException {
         if (bookingResponseRequest == null) {
-            throw new NoInformationFoundException("No information found to respond for the booking");
+            throw new NoInformationFoundException("No booking information found to respond for the booking");
         }
         if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (bookingResponseRequest.getBookingID() == null) return false;

@@ -70,7 +70,7 @@ public class BookingRepository {
         try (Connection connection = databaseService.connect();
              PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.updateBookingEntry)) {
 
-            requestReservationPreparedStatement.setInt(1, bookingResponseRequest.getBookingStatus());
+            requestReservationPreparedStatement.setString(1, bookingResponseRequest.getBookingStatus());
             requestReservationPreparedStatement.setInt(2, bookingResponseRequest.getBookingID());
 
             int rowsAffected = requestReservationPreparedStatement.executeUpdate();
