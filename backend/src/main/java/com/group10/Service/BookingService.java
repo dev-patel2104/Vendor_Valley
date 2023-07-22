@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 
+/**
+ * This service class handles booking-related operations such as requesting reservations
+ * and responding to booking requests.
+ */
 @Service
 public class BookingService {
 
@@ -32,7 +36,15 @@ public class BookingService {
     @Autowired
     private EmailDetails emailDetails;
 
-
+    /**
+     * Requests a reservation using the provided JWT token and booking information.
+     *
+     * @param jwtToken     The JSON Web Token (JWT) provided by the client for authentication.
+     * @param bookingModel The booking information to be requested for reservation.
+     * @return true if the reservation request is successful, false otherwise.
+     * @throws SQLException           If there is an error executing the database query.
+     * @throws JWTVerificationException If the JWT token cannot be verified.
+     */
     public boolean requestReservation(String jwtToken, Booking bookingModel) throws SQLException, JWTVerificationException {
         if (jwtToken == null) return false;
         if (bookingModel == null) return false;
@@ -52,7 +64,19 @@ public class BookingService {
         }
     }
 
-    public boolean respondToBooking(BookingResponseRequest bookingResponseRequest) throws SQLException, MailAuthenticationException, MailSendException, MailParseException, NoInformationFoundException {
+    /**
+     * Responds to a booking request with the provided booking response information.
+     *
+     * @param bookingResponseRequest The booking response information to be processed.
+     * @return true if the booking response is successful and the email notification is sent, false otherwise.
+     * @throws SQLException               If there is an error executing the database query.
+     * @throws MailAuthenticationException If there is an authentication issue while sending the email.
+     * @throws MailSendException           If there is an issue while sending the email.
+     * @throws MailParseException          If there is a parsing issue with the email.
+     * @throws NoInformationFoundException If there is no information found to respond for the booking.
+     */
+    public boolean respondToBooking(BookingResponseRequest bookingResponseRequest)
+            throws SQLException, MailAuthenticationException, MailSendException, MailParseException, NoInformationFoundException {
         if (bookingResponseRequest == null) {
             throw new NoInformationFoundException("No information found to respond for the booking");
         }

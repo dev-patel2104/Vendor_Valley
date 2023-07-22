@@ -15,14 +15,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
-
+/**
+ * Controller class that handles incoming HTTP requests related to bookings.
+ */
 @RestController
 public class BookingController {
 
     @Autowired
     BookingService bookingService;
 
-
+    /**
+     * Handles the HTTP POST request for booking a service.
+     *
+     * @param jwtToken     The JSON Web Token (JWT) provided in the request header for authentication.
+     * @param bookingModel The booking information provided in the request body.
+     * @return A ResponseEntity containing the response message based on the booking request status.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking")
     public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody Booking bookingModel) {
@@ -37,7 +45,12 @@ public class BookingController {
         }
     }
 
-
+    /**
+     * Handles the HTTP POST request for responding to a booking request.
+     *
+     * @param bookingResponseRequestModel The booking response information provided in the request body.
+     * @return A ResponseEntity containing the response message based on the booking response status.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking/respond")
     public ResponseEntity<String> respondToBookingRequest(@RequestBody BookingResponseRequest bookingResponseRequestModel) {
@@ -47,10 +60,9 @@ public class BookingController {
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status of the service request");
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-        catch(MailSendException | MailAuthenticationException | MailParseException e){
+        } catch (MailSendException | MailAuthenticationException | MailParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
         } catch (NoInformationFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

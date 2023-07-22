@@ -14,16 +14,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
+/**
+ * This repository class handles database operations related to bookings.
+ */
 @Repository
 public class BookingRepository {
 
     @Autowired
     DatabaseService databaseService;
 
+    /**
+     * Requests a reservation by inserting booking information into the database.
+     *
+     * @param customerId   The ID of the customer making the reservation.
+     * @param bookingModel The booking information to be inserted into the database.
+     * @return true if the reservation request is successful and the data is inserted into the database, false otherwise.
+     * @throws SQLException If there is an error executing the database query.
+     */
     public boolean requestReservation(int customerId, Booking bookingModel) throws SQLException {
         try (Connection connection = databaseService.connect();
-        PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.insertBookingEntry)) {
+             PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.insertBookingEntry)) {
 
             requestReservationPreparedStatement.setInt(1, customerId);
             requestReservationPreparedStatement.setString(2, bookingModel.getServiceName());
@@ -32,9 +42,9 @@ public class BookingRepository {
             requestReservationPreparedStatement.setString(5, bookingModel.getEndDate());
             requestReservationPreparedStatement.setString(6, bookingModel.getBookingStatus());
 
-            int rowsEffected = requestReservationPreparedStatement.executeUpdate();
+            int rowsAffected = requestReservationPreparedStatement.executeUpdate();
 
-            if (rowsEffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             } else {
                 return false;
@@ -44,7 +54,18 @@ public class BookingRepository {
         }
     }
 
-    public boolean respondToBooking(BookingResponseRequest bookingResponseRequest) throws SQLException, MailAuthenticationException, MailSendException, MailParseException {
+    /**
+     * Responds to a booking request by updating the booking status in the database.
+     *
+     * @param bookingResponseRequest The booking response information to be processed.
+     * @return true if the booking response is successful and the booking status is updated in the database, false otherwise.
+     * @throws SQLException               If there is an error executing the database query.
+     * @throws MailAuthenticationException If there is an authentication issue while sending the email.
+     * @throws MailSendException           If there is an issue while sending the email.
+     * @throws MailParseException          If there is a parsing issue with the email.
+     */
+    public boolean respondToBooking(BookingResponseRequest bookingResponseRequest)
+            throws SQLException, MailAuthenticationException, MailSendException, MailParseException {
 
         try (Connection connection = databaseService.connect();
              PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.updateBookingEntry)) {
@@ -52,9 +73,9 @@ public class BookingRepository {
             requestReservationPreparedStatement.setInt(1, bookingResponseRequest.getBookingStatus());
             requestReservationPreparedStatement.setInt(2, bookingResponseRequest.getBookingID());
 
-            int rowsEffected = requestReservationPreparedStatement.executeUpdate();
+            int rowsAffected = requestReservationPreparedStatement.executeUpdate();
 
-            if (rowsEffected == 1) {
+            if (rowsAffected == 1) {
                 return true;
             } else {
                 return false;
