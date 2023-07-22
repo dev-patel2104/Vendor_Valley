@@ -58,7 +58,22 @@ public class BookingService {
         int customerId = decodedJWT.getClaim("userId").asInt();
 
         try {
-            return bookingRepository.requestReservation(customerId, bookingModel);
+            if (bookingRepository.requestReservation(customerId, bookingModel)) {
+                //send mail to vendor about the customer's request
+                if (bookingModel.getVendorEmail() != null) {
+                    String subject = "VendorValley: A customer has requested for " + bookingModel.getServiceName();
+                    String body = "Respond to the customer's request on the vendor valley website !!";
+
+                    emailDetails.setRecipient(bookingModel.getVendorEmail());
+                    emailDetails.setSubject(subject);
+                    emailDetails.setMsgBody(body);
+
+                    emailUtil.sendSimpleMail(emailDetails);
+                }
+                return true;
+            } else {
+                return false;
+            }
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
