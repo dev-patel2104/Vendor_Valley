@@ -26,7 +26,7 @@ public class SQLQueries {
         public static final String getServiceDetailsQuery = "select s.*, v.company_email from services as s join vendors as v on v.user_id = s.user_id where service_id = ?;";
         public static final String getServiceDetailsByUser = "select s.* , group_concat(sc.category_name) as categories from services as s natural join service_category_association as sca natural join service_categories as sc  where s.user_id = ? group by s.service_id;";
         public static final String getUserByID = "select * from users Left join vendors on users.user_id = vendors.user_id where users.user_id = ?;";
-        public static final String  vendorDashboardInfoQuery = "select s.service_id, u.user_id, b.booking_id, b.booking_status, b.booking_date, b.start_date, b.end_date from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id where s.user_id = ? group by s.service_id, b.booking_id, u.user_id order by u.user_id, b.booking_date;";
+        public static final String vendorDashboardInfoQuery = "select s.service_id, u.user_id, b.booking_id, b.booking_status, b.booking_date, b.start_date, b.end_date from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id where s.user_id = ? group by s.service_id, b.booking_id, u.user_id order by u.user_id, b.booking_date;";
         public static final String getVendorBookings = "select s.service_name, b.*, u.* \n" +
                 "from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id " +
                 "where s.user_id = ? \n" +
@@ -36,4 +36,7 @@ public class SQLQueries {
                 "VALUES (?, ?, ?, ?);";
         public static final String insertServiceCategoryAssociation = "INSERT INTO service_category_association (service_id, category_id) VALUES (?, ?)";
         public static final String insertServiceImages = "Insert into service_images (service_id, image, time_stamp) values (?,?,NOW());";
+        public static final String insertBookingEntry = "insert into bookings (user_id, service_id, booking_date, start_date, end_date, booking_status) values (?, ?, ?, ?, ?, ?);";
+        public static final String updateBookingEntry = "update bookings set booking_status = ? where booking_id = ?;";
+
 }
