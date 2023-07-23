@@ -4,7 +4,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 import com.group10.Constants.Constants;
-import com.group10.Service.DatabaseService;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 public class ResetPasswordRepository {
 
     @Autowired
-    DatabaseService databaseService;
+    IDatabaseService databaseService;
 
     /**
      * Stores a verification code for a user in the database.

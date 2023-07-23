@@ -3,6 +3,7 @@ package com.group10.Controller;
 import java.sql.SQLException;
 import java.util.Map;
 
+import com.group10.Service.Interfaces.IResetPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VerificationCodeExpiredException;
 import com.group10.Model.User;
-import com.group10.Service.ResetPasswordService;
+import com.group10.Service.ResetPasswordServiceImpl;
 
 @RestController
 public class ResetPasswordController {
     
     @Autowired
-    private ResetPasswordService resetPasswordService;
+    private IResetPasswordService resetPasswordService;
 
 
     /**

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.group10.Service.Interfaces.ISearchService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Model.Service;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Service.SearchService;
 
 @SpringBootTest
 public class SearchServiceTest {
@@ -29,7 +29,7 @@ public class SearchServiceTest {
     private Service service;
 
     @Autowired
-    private SearchService searchService;
+    private ISearchService searchService;
 
 
     @Test

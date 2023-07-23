@@ -1,7 +1,7 @@
 package com.group10.Repository;
 
 import com.group10.Model.*;
-import com.group10.Service.DatabaseService;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class VendorRepository{
 
     @Autowired
-    DatabaseService databaseService;
+    IDatabaseService databaseService;
 
     @Autowired
     private MapResultSetUtil mapResultSetUtilObj;

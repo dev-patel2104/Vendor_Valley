@@ -3,7 +3,7 @@ package com.group10.Controller;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Exceptions.VendorDetailsAbsentForUserException;
 import com.group10.Model.SignUpModel;
-import com.group10.Service.SignInService;
+import com.group10.Service.Interfaces.IAuthenticationService;
 import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +18,8 @@ import java.sql.SQLException;
 
 @RestController
 public class SignInController {
-
-
     @Autowired
-    private SignInService signInService;
+    private IAuthenticationService authenticationService;
 
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -30,7 +28,7 @@ public class SignInController {
 
         if (StringUtil.isNotNullAndNotEmpty(signUpModel.getEmail())) {
             try {
-                if (!signInService.SignIn(signUpModel)) {
+                if (!authenticationService.SignIn(signUpModel)) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
                 }
             } catch (SQLException | VendorDetailsAbsentForUserException e) {

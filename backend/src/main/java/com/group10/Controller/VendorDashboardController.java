@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.group10.Model.User;
 import com.group10.Model.VendorDashboard;
-import com.group10.Service.HomeService;
+import com.group10.Service.HomeServiceImpl;
 
 @RestController
 public class VendorDashboardController {
 
     @Autowired
-    private HomeService homeService;
+    private HomeServiceImpl homeService;
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
