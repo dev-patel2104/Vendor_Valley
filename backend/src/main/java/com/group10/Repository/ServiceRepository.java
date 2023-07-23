@@ -9,7 +9,6 @@ import java.util.Base64;
 import java.util.List;
 import java.sql.ResultSet;
 
-import com.group10.Enums.GetServiceDetailsQueryColumns;
 import com.group10.Model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -269,7 +268,7 @@ public class ServiceRepository {
         catch (SQLException e){
             throw new SQLException("Database Connection Lost");}
     }
-    public boolean insertService(Service service, List<Category> categoryList) throws SQLException
+    public Service insertService(Service service, List<Category> categoryList) throws SQLException
     {
         try(Connection connection = databaseService.connect();
         PreparedStatement statement1 = connection.prepareStatement(SQLQueries.insertService,Statement.RETURN_GENERATED_KEYS);
@@ -297,7 +296,7 @@ public class ServiceRepository {
 
             if(serviceId < 0)
             {
-                return false;
+                return null;
             }
 
             for(Category temp: categoryList)
@@ -318,14 +317,121 @@ public class ServiceRepository {
             for(String encodedImage : images)
             {
                 statement3.setInt(1,serviceId);
-                statement3.setString(2,encodedImage);
+
+                byte[] imageBytes = Base64.getDecoder().decode(encodedImage);
+                statement3.setBytes(2,imageBytes);
+
                 statement3.executeUpdate();
             }
 
             connection.commit();
             connection.setAutoCommit(true);
 
-           return true;
+            service.setServiceId(serviceId);
+           return service;
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException("Database Issue");
+        }
+    }
+
+    public boolean deleteService(Service serviceToDelete) throws SQLException
+    {
+        try(Connection connection = databaseService.connect();
+        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteAllServiceCategoryAssociation);
+        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.deleteAllServiceImages);
+        PreparedStatement statement3 = connection.prepareStatement(SQLQueries.deleteService);)
+        {
+            connection.setAutoCommit(false);
+            statement1.setInt(1, serviceToDelete.getServiceId());
+            statement1.executeUpdate();
+
+            statement2.setInt(1, serviceToDelete.getServiceId());
+            statement2.executeUpdate();
+
+            statement3.setInt(1, serviceToDelete.getServiceId());
+            statement3.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
+            return true;
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException("Database Issue");
+        }
+    }
+    public Service editService(Service serviceToUpdate, List<Category> categoryList) throws SQLException
+    {
+        try(Connection connection = databaseService.connect();
+        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteAllServiceCategoryAssociation);
+        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.insertServiceCategoryAssociation);
+        PreparedStatement statement3 = connection.prepareStatement(SQLQueries.updateService);)
+        {
+            List<Integer> categoryIDList = new ArrayList<>();
+            List<String> categoryNames = List.copyOf(serviceToUpdate.getCategoryNames());
+
+            connection.setAutoCommit(false);
+            statement1.setInt(1, serviceToUpdate.getServiceId());
+            statement1.executeUpdate();
+
+            for(Category temp: categoryList)
+            {
+                if(categoryNames.contains(temp.getCategoryName()))
+                {
+                    categoryIDList.add(temp.getCategoryId());
+                }
+            }
+
+            for(int categoryId : categoryIDList)
+            {
+                statement2.setInt(1, serviceToUpdate.getServiceId());
+                statement2.setInt(2, categoryId);
+                statement2.executeUpdate();
+            }
+
+            statement3.setString(1, serviceToUpdate.getServiceName());
+            statement3.setString(2, serviceToUpdate.getServiceDescription());
+            statement3.setString(3, serviceToUpdate.getServicePrice());
+            statement3.setInt(4, serviceToUpdate.getServiceId());
+
+            int rowsUpdated = statement3.executeUpdate();
+
+            if(rowsUpdated > 0)
+            {
+                connection.commit();
+                connection.setAutoCommit(true);
+                return serviceToUpdate;
+            }
+
+            return null;
+
+        }
+        catch(SQLException e)
+        {
+            throw new SQLException("Database Issue");
+        }
+    }
+    public Service editServiceImage(Service service) throws SQLException
+    {
+        try(Connection connection = databaseService.connect();
+        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteAllServiceImages);
+        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.insertServiceImages);)
+        {
+            connection.setAutoCommit(false);
+            statement1.setInt(1, service.getServiceId());
+
+            for(String encodedImage : service.getImages())
+            {
+                statement2.setInt(1, service.getServiceId());
+                byte[] imageBytes = Base64.getDecoder().decode(encodedImage);
+                statement2.setBytes(2, imageBytes);
+                statement2.executeUpdate();
+            }
+
+            connection.commit();
+            connection.setAutoCommit(true);
+            return service;
         }
         catch (SQLException e)
         {

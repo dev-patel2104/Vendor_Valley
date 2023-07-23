@@ -164,4 +164,38 @@ public class VendorRepository{
         }
         return bookingList;
     }
+
+    public SignUpModel editCompanyDetails(SignUpModel updatedDetails) throws SQLException
+    {
+        Vendor vendor = updatedDetails.buildVendorModel();
+        vendor.setUserId(updatedDetails.getUserId());
+        try(Connection connect = databaseService.connect();
+        PreparedStatement statement = connect.prepareStatement(SQLQueries.updateCompanyDetailsQuery);)
+        {
+            statement.setString(1,vendor.getUserRole());
+            statement.setString(2, vendor.getCompanyName());
+            statement.setString(3, vendor.getCompanyEmail());
+            statement.setString(4, vendor.getCompanyRegistrationID());
+            statement.setString(5, vendor.getCompanyMobile());
+            statement.setString(6,vendor.getCompanyStreet());
+            statement.setString(7, vendor.getCompanyCity());
+            statement.setString(8,vendor.getCompanyProvince());
+            statement.setString(9, vendor.getCompanyCountry());
+            statement.setInt(10, vendor.getUserId());
+
+            int rowsUpdated = statement.executeUpdate();
+            // User found
+            if (rowsUpdated > 0) {
+                // Updated properties as needed
+                return updatedDetails;
+            }
+            // User not found
+            return null;
+        }
+        catch (SQLException e)
+        {
+            throw new SQLException("Database Issue");
+        }
+
+    }
 }

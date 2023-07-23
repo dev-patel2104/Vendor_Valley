@@ -1,3 +1,4 @@
+com\group10\ServiceTests\ProfileServiceTest.class
 com\group10\UtilTests\EmailUtilTest.class
 com\group10\UtilTests\PasswordUtilTest.class
 com\group10\ServiceTests\ResetPasswordServiceTest.class

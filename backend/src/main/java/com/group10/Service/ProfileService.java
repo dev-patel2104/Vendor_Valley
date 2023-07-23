@@ -1,8 +1,10 @@
 package com.group10.Service;
 
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
+import com.group10.Model.User;
 import com.group10.Repository.UserRepository;
 import com.group10.Repository.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +33,23 @@ public abstract class ProfileService
         return user;
     }
 
+    public boolean editProfile(SignUpModel newInfo) throws SQLException, NoInformationFoundException
+    {
+        User user;
+        if(newInfo == null)
+        {
+            throw new NoInformationFoundException("Requested input is missing");
+        }
+        if(newInfo.getUserId() < 0)
+        {
+            throw  new NoInformationFoundException("The userId for the user to be updated is not available");
+        }
+        user = newInfo.buildUserModel();
+        user.setUserId(newInfo.getUserId());
+        return userRepository.updateUser(user);
+    }
+
     public abstract List<Booking> getBookings(int userId) throws UserDoesntExistException, SQLException;
+
+
 }
