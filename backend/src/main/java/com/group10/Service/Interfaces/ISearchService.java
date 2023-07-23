@@ -20,6 +20,6 @@ public interface ISearchService {
      * @throws SQLException If an error occurs while retrieving the search results from the database.
      */
     public List<Service> getSearchResults(String searchParam) throws SQLException;
-    public List<Service> sortSearchResults(List<Service> services, String sortParam, String sortOrder);
+    public List<Service> sortSearchResults(List<Service> services, String sortParam, Boolean sortOrder);
     public List<Service> filterSearchResults(List<Service> services, Map<String, String> Sortvalues);
 }

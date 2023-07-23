@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.group10.Service.Interfaces.ISearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.group10.Model.Service;
-import com.group10.Service.SearchService;
 
 /**
  * Controller class for handling search requests.
@@ -24,7 +24,7 @@ import com.group10.Service.SearchService;
 @RestController
 public class SearchController {
     @Autowired
-    private SearchService searchService;
+    private ISearchService searchService;
 
     /**
      * Retrieves search results based on the provided search parameter.

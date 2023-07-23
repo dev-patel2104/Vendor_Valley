@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,6 @@ import com.group10.Model.Service;
 import com.group10.Model.User;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.UserRepository;
-import com.group10.Service.CustomerSelectsVendorService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 
@@ -45,7 +45,7 @@ public class CustomerSelectsVendorServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private CustomerSelectsVendorService customerSelectsVendorService;
+    private ICustomerSelectsVendorService customerSelectsVendorService;
 
     @Autowired
     private User user;

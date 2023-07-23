@@ -1,7 +1,7 @@
 package com.group10.Repository;
 
 import com.group10.Model.SignUpModel;
-import com.group10.Service.DatabaseService;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Util.MapResultSetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.sql.*;
 public class UserRepository{
 
     @Autowired
-    DatabaseService databaseService;
+    IDatabaseService databaseService;
 
 
     @Autowired
