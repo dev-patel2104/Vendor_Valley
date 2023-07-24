@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(SpringExtension.class)
-public class VendorRepositoryTest {
+public class VendorRepositoryImplTest {
 
 
 

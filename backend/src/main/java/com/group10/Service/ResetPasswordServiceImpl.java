@@ -16,7 +16,7 @@ import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.User;
 import com.group10.Repository.ResetPasswordRepository;
-import com.group10.Repository.UserRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Util.EmailUtil;
 
 /**
@@ -26,7 +26,7 @@ import com.group10.Util.EmailUtil;
 public class ResetPasswordServiceImpl implements IResetPasswordService {
     
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
 
     @Autowired
     private ResetPasswordRepository resetPasswordRepository;
@@ -54,7 +54,7 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
              * @param email The email of the user to retrieve.
              * @return The user entity associated with the given email, or null if no user is found.
              */
-            user = userRepository.findByEmail(email);
+            user = CustomerRepositoryImpl.findByEmail(email);
             if (user == null) {
                throw new UserDoesntExistException("User Doesn't Exists!");
             }
@@ -211,7 +211,7 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
             // update user object's password
             user.setPassword(newPassword);
             // update the same in db
-            userRepository.updateUser(user);
+            CustomerRepositoryImpl.updateUser(user);
         }
         catch(SQLException e){
            throw new SQLException(e.getMessage());

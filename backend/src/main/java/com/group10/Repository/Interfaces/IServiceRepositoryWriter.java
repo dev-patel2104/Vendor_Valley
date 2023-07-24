@@ -1,4 +1,4 @@
-package com.group10.Repository;
+package com.group10.Repository.Interfaces;
 
 import com.group10.Model.Category;
 import com.group10.Model.Service;

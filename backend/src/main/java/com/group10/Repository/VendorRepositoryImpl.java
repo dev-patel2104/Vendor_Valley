@@ -1,6 +1,7 @@
 package com.group10.Repository;
 
 import com.group10.Model.*;
+import com.group10.Repository.Interfaces.IUserRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
@@ -16,7 +17,7 @@ import java.util.List;
  * Repository class for managing vendor data in the database.
  */
 @Repository
-public class VendorRepository{
+public class VendorRepositoryImpl implements IUserRepository{
 
     @Autowired
     IDatabaseService databaseService;
@@ -32,8 +33,11 @@ public class VendorRepository{
      * @return true if the vendor and user information were successfully saved, false otherwise.
      * @throws SQLException if there is an error with the database connection or query execution.
      */
-    public boolean saveVendor(User user, Vendor vendorModel) throws SQLException{
+    @Override
+    public boolean addUser(SignUpModel signUpModel) throws SQLException{
 
+        User user = signUpModel.buildUserModel();
+        Vendor vendorModel = signUpModel.buildVendorModel();
         try(Connection connection = databaseService.connect();)
         {
             try (PreparedStatement sqlPreparedStatement = connection.prepareStatement(SQLQueries.insertVendorQuery);
@@ -102,8 +106,8 @@ public class VendorRepository{
         return vendorDashboard;
     }
 
-    public List<User> getCustomerInfo(List<Integer> userIds) throws SQLException{
-        List<User> users = new ArrayList<>();
+    public List<SignUpModel> getUsers(List<Integer> userIds) throws SQLException{
+        List<SignUpModel> users = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder("SELECT user_id, first_name, last_name, email, city, country FROM users WHERE user_id IN (");
         for (int i = 0; i < userIds.size(); i++) {
             queryBuilder.append("?");
@@ -120,14 +124,8 @@ public class VendorRepository{
                 }
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {
-                        User user = new User();
-                        user.setUserId(rs.getInt("user_id"));
-                        user.setFirstName(rs.getString("first_name"));
-                        user.setLastName(rs.getString("last_name"));
-                        user.setEmail(rs.getString("email"));
-                        user.setCity(rs.getString("city"));
-                        user.setCountry(rs.getString("country"));
-                        users.add(user);
+                        SignUpModel signUpModel = mapResultSetUtilObj.mapResultSetToSignUpModel(rs);
+                        users.add(signUpModel);
                     }
                     return users;
                 }
@@ -146,7 +144,6 @@ public class VendorRepository{
             statement.setInt(1, userId);
             ResultSet rs = statement.executeQuery();
             Booking booking = null;
-            User user = null;
             while(rs.next())
             {
                 booking = mapResultSetUtilObj.mapResultSetToBooking(rs);
@@ -198,4 +195,5 @@ public class VendorRepository{
         }
 
     }
+
 }

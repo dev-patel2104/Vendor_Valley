@@ -18,7 +18,8 @@ import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.UserRepository;
+import com.group10.Repository.ServiceReviewsRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
@@ -33,7 +34,10 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
     private ServiceRepository serviceRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
+
+    @Autowired
+    private ServiceReviewsRepository serviceReviewsRepository;
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;
@@ -68,7 +72,7 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
              * @param serviceIdInt The ID of the service to retrieve reviews for.
              * @return The reviews for the specified service.
              */
-            return serviceRepository.getReviewsForService(serviceIdInt);
+            return serviceReviewsRepository.getReviewsForService(serviceIdInt);
         }
         catch (NumberFormatException e){
             throw new NumberFormatException("Not a valid service id");
@@ -113,8 +117,6 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
      */
     @Override
     public boolean writeReviews(Review review, String JWTToken) throws SQLException, JWTVerificationException {
-        boolean result = false;
-        
         /**
          * Decodes a JWT token using the provided JWT token handler.
          *
@@ -130,6 +132,11 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
         if (!bookingExists){
             return false;
         }
+        return startWritingReview(review, JWTToken);
+    }
+
+    private boolean startWritingReview(Review review, String JWTToken) throws SQLException {
+        boolean result = false;
         DecodedJWT jwt = jwtTokenHandler.decodeJWTToken(JWTToken);
         // Get user id from JWT Token
         int userId = jwt.getClaim("userId").asInt();
@@ -147,7 +154,7 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
          * @param review The review to be written.
          * @return The result of the write operation.
          */
-        result = serviceRepository.writeReviews(review);
+        result = serviceReviewsRepository.writeReviews(review);
         return result;
     }
 
@@ -181,7 +188,7 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
         // Get user email from JWT Token
         String senderEmail = jwt.getClaim("email").asString(); 
         // Get user name from user email
-        User user = userRepository.findByEmail(senderEmail);
+        User user = CustomerRepositoryImpl.findByEmail(senderEmail);
         String name = user.getFullName();
         // Get service name from service id
         int serviceIdInt = Integer.parseInt(serviceId);

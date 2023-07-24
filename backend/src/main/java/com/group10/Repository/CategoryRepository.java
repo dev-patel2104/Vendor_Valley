@@ -111,7 +111,6 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             PreparedStatement statement = connection.prepareStatement(SQLQueries.getCategories);)
         {
-            String name = null;
             List<Category> categoryList = new ArrayList<>();
             Category cat = null;
             ResultSet resultSet = statement.executeQuery();

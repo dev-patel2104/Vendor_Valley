@@ -1,14 +1,12 @@
 package com.group10.ServiceTests;
 
-import com.group10.Constants.Constants;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
-import com.group10.Model.Vendor;
-import com.group10.Repository.UserRepository;
-import com.group10.Repository.VendorRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IAuthenticationService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -29,11 +27,12 @@ public class AuthenticationServiceImplTest
 {
     @Autowired
     private IAuthenticationService authenticationService;
+    
     @MockBean
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
 
     @MockBean
-    private VendorRepository vendorRepository;
+    private VendorRepositoryImpl VendorRepositoryImpl;
 
     private SignUpModel signUpModel;
     @Autowired
@@ -71,8 +70,8 @@ public class AuthenticationServiceImplTest
     {
         intializeUser();
 
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(1);
-        when(vendorRepository.saveVendor(Mockito.any(User.class),Mockito.any(Vendor.class))).thenReturn(true);
+        when(CustomerRepositoryImpl.addUser(Mockito.any(SignUpModel.class))).thenReturn(true);
+        when(VendorRepositoryImpl.addUser(Mockito.any(SignUpModel.class))).thenReturn(true);
         boolean signUpUser = authenticationService.SignIn(signUpModel);
         assertEquals(true, signUpUser);
 
@@ -213,25 +212,25 @@ public class AuthenticationServiceImplTest
         assertFalse(authenticationService.SignIn(signUpModel));
 
         signUpModel.setIsVendor(0);
-        when(userRepository.addUser(any(User.class))).thenReturn(1);
+        when(CustomerRepositoryImpl.addUser(any(SignUpModel.class))).thenReturn(true);
         assertTrue(authenticationService.SignIn(signUpModel));
 
         signUpModel.setIsVendor(1);
-        when(vendorRepository.saveVendor(any(User.class), any(Vendor.class))).thenReturn(true);
+        when(VendorRepositoryImpl.addUser(any(SignUpModel.class))).thenReturn(true);
         assertTrue(authenticationService.SignIn(signUpModel));
     }
 
     @Test
     public void SignInTest_UserAlreadyPresentException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
-        when(userRepository.addUser(Mockito.any(User.class))).thenReturn(Constants.USERALREADYEXISTS);
+        when(CustomerRepositoryImpl.addUser(Mockito.any(SignUpModel.class))).thenReturn(false);
         assertThrows(UserAlreadyPresentException.class, () -> authenticationService.SignIn(signUpModel));
     }
 
     @Test
     public void SignInTest_SQLException() throws SQLException, UserAlreadyPresentException {
         intializeUser();
-        when(userRepository.addUser(Mockito.any(User.class))).thenThrow(new SQLException());
+        when(CustomerRepositoryImpl.addUser(Mockito.any(SignUpModel.class))).thenThrow(new SQLException());
         assertThrows(SQLException.class, () -> authenticationService.SignIn(signUpModel));
     }
 
@@ -240,7 +239,7 @@ public class AuthenticationServiceImplTest
         String email = "test@mail.com";
         String password = "password";
         user.setPassword(password);
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
         assertEquals(user, authenticationService.login(email,password));
     }
 
@@ -249,7 +248,7 @@ public class AuthenticationServiceImplTest
         String email = "test@mail.com";
         String password = "password";
         user.setPassword(password+"wrong");
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(InvalidPasswordException.class, () -> authenticationService.login(email,password));
     }
 
@@ -257,7 +256,7 @@ public class AuthenticationServiceImplTest
     public void userNotFound_login() throws SQLException, UserDoesntExistException, InvalidPasswordException{
         String email = "test@mail.com";
         String password = "password";
-        Mockito.doReturn(null).when(userRepository).findByEmail(email);
+        Mockito.doReturn(null).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(UserDoesntExistException.class, () -> authenticationService.login(email,password));
     }
 
@@ -265,7 +264,7 @@ public class AuthenticationServiceImplTest
     public void dbConnectionError_login() throws SQLException, UserDoesntExistException, InvalidPasswordException{
         String email = "test@mail.com";
         String password = "password";
-        Mockito.doThrow(new SQLException("Database Connection Lost!")).when(userRepository).findByEmail(email);
+        Mockito.doThrow(new SQLException("Database Connection Lost!")).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(SQLException.class, () -> authenticationService.login(email,password));
     }
 }

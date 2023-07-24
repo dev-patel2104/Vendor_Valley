@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.group10.Constants.Constants;
 import com.group10.Model.Service;
+import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Service.Interfaces.ISearchService;
 import com.group10.Util.BookingsComparator;
@@ -30,6 +31,10 @@ public class SearchServiceImpl implements ISearchService{
     @Autowired
     private ServiceRepository searchRepository;
 
+
+    @Autowired
+    private ServiceImageRepository serviceImageRepository;
+    
     /**
      * Retrieves a list of services based on the provided search parameter.
      *
@@ -46,7 +51,16 @@ public class SearchServiceImpl implements ISearchService{
              * @param searchParam The search parameter used to filter the services.
              * @return A list of services that match the search parameter.
              */
-            return searchRepository.getServicesBasedOnSearchParam(searchParam);
+            List<Service> servicesList = searchRepository.getServicesBasedOnSearchParam(searchParam);
+            
+            /**
+             * Retrieves images for a given service and search parameter.
+             *
+             * @param servicesList A list of services to search for images.
+             * @param searchParam The search parameter to use when retrieving images.
+             * @return A list of images related to the given service and search parameter.
+             */
+            return serviceImageRepository.getImagesForService(servicesList, searchParam);
         }
         catch (SQLException e)
         {
@@ -70,6 +84,9 @@ public class SearchServiceImpl implements ISearchService{
         }
         ComparatorUtil comparatorUtilObj;
     
+        if (sortParam == null || sortParam.isEmpty()){
+            return services;
+        }
         if (sortParam.equalsIgnoreCase(Constants.PRICE)){
             comparatorUtilObj = new ComparatorUtil(new PriceComparator(), sortOrder);
         }

@@ -21,11 +21,11 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.Category;
 import com.group10.Model.Service;
+import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Model.VendorDashboard;
 import com.group10.Repository.CategoryRepository;
-import com.group10.Repository.VendorRepository;
-import com.group10.Service.HomeServiceImpl;
+import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Util.JWTTokenHandler;
 
 @SpringBootTest
@@ -36,7 +36,7 @@ public class HomeServiceImplTest
     @MockBean
     private CategoryRepository categoryRepository;
     @MockBean
-    private VendorRepository vendorRepository;
+    private VendorRepositoryImpl VendorRepositoryImpl;
     @MockBean
     private JWTTokenHandler jwtTokenHandler;
     private List<Category> expectedCategories;
@@ -130,7 +130,7 @@ public class HomeServiceImplTest
         Mockito.when(mockClaim.asInt()).thenReturn(1);
         Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
         Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(new VendorDashboard()).when(vendorRepository).getStatistics(Mockito.anyInt());
+        Mockito.doReturn(new VendorDashboard()).when(VendorRepositoryImpl).getStatistics(Mockito.anyInt());
         VendorDashboard vendorDashboard = homeServiceImpl.getVendorDashboardInfo(token);
         assertEquals(vendorDashboard.getClass(), VendorDashboard.class);
     }
@@ -143,7 +143,7 @@ public class HomeServiceImplTest
         Mockito.when(mockClaim.asInt()).thenReturn(1);
         Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
         Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(null).when(vendorRepository).getStatistics(Mockito.anyInt());
+        Mockito.doReturn(null).when(VendorRepositoryImpl).getStatistics(Mockito.anyInt());
         VendorDashboard vendorDashboard = homeServiceImpl.getVendorDashboardInfo(token);
         assertNull(vendorDashboard);
     }
@@ -156,7 +156,7 @@ public class HomeServiceImplTest
         Mockito.when(mockClaim.asInt()).thenReturn(1);
         Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
         Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(vendorRepository).getStatistics(Mockito.anyInt());
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(VendorRepositoryImpl).getStatistics(Mockito.anyInt());
         assertThrows(SQLException.class, () -> homeServiceImpl.getVendorDashboardInfo(token));
     }
 
@@ -168,7 +168,7 @@ public class HomeServiceImplTest
         Mockito.when(mockClaim.asInt()).thenReturn(1);
         Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
         Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doThrow(new JWTVerificationException("JWT Verification Failed!")).when(vendorRepository).getStatistics(Mockito.anyInt());
+        Mockito.doThrow(new JWTVerificationException("JWT Verification Failed!")).when(VendorRepositoryImpl).getStatistics(Mockito.anyInt());
         assertThrows(JWTVerificationException.class, () -> homeServiceImpl.getVendorDashboardInfo(token));
     }
 
@@ -180,7 +180,7 @@ public class HomeServiceImplTest
         Mockito.when(mockClaim.asInt()).thenReturn(1);
         Mockito.when(decodedJwtToken.getClaim("userId")).thenReturn(mockClaim);
         // Mockito.doReturn(decodedJwtToken).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(new VendorDashboard()).when(vendorRepository).getStatistics(Mockito.anyInt());
+        Mockito.doReturn(new VendorDashboard()).when(VendorRepositoryImpl).getStatistics(Mockito.anyInt());
         assertThrows(NullPointerException.class, () -> homeServiceImpl.getVendorDashboardInfo(token));
     }
 
@@ -200,8 +200,8 @@ public class HomeServiceImplTest
         user = new User();
         user.setUserId(3);
         expectedUsers.add(user);
-        Mockito.doReturn(expectedUsers).when(vendorRepository).getCustomerInfo(userIds);
-        List<User> users = homeServiceImpl.getCustomerInfo(userIds);
+        Mockito.doReturn(expectedUsers).when(VendorRepositoryImpl).getUsers(userIds);
+        List<SignUpModel> users = homeServiceImpl.getCustomerInfo(userIds);
         assertEquals(users.size(), expectedUsers.size());
     }
 
@@ -211,7 +211,7 @@ public class HomeServiceImplTest
         userIds.add(1);
         userIds.add(2);
         userIds.add(3);
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(vendorRepository).getCustomerInfo(userIds);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(VendorRepositoryImpl).getUsers(userIds);
         assertThrows(SQLException.class, () -> homeServiceImpl.getCustomerInfo(userIds));
     }
 
@@ -222,8 +222,8 @@ public class HomeServiceImplTest
         userIds.add(2);
         userIds.add(3);
         List<User> expectedUsers = new ArrayList<>();
-        Mockito.doReturn(expectedUsers).when(vendorRepository).getCustomerInfo(userIds);
-        List<User> users = homeServiceImpl.getCustomerInfo(userIds);
+        Mockito.doReturn(expectedUsers).when(VendorRepositoryImpl).getUsers(userIds);
+        List<SignUpModel> users = homeServiceImpl.getCustomerInfo(userIds);
         assertEquals(users.size(), expectedUsers.size());
     }
 

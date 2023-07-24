@@ -25,15 +25,14 @@ import com.group10.Exceptions.VerificationCodeExpiredException;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.User;
 import com.group10.Repository.ResetPasswordRepository;
-import com.group10.Repository.UserRepository;
-import com.group10.Service.ResetPasswordServiceImpl;
+import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Util.EmailUtil;
 
 @SpringBootTest
 public class ResetPasswordServiceImplTest {
     
     @MockBean 
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
     
     @MockBean 
     private ResetPasswordRepository resetPasswordRepository;
@@ -53,21 +52,21 @@ public class ResetPasswordServiceImplTest {
     @Test
     public void successPath_checkIfUserExists() throws SQLException, UserDoesntExistException{
         String email = "test@gmail.com";
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
         assertEquals(user, resetPasswordService.checkIfUserExists(email));
     }
 
     @Test
     public void testUserDoesntExist_checkIfUserExists() throws SQLException{
         String email = "test@gmail.com";
-        Mockito.doReturn(null).when(userRepository).findByEmail(email);
+        Mockito.doReturn(null).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(UserDoesntExistException.class,() -> resetPasswordService.checkIfUserExists(email));
     }
 
     @Test
     public  void testSQLException_checkIfUserExists() throws SQLException{
         String email = "test@gmail.com";
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(userRepository).findByEmail(email);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(SQLException.class,() -> resetPasswordService.checkIfUserExists(email));
     }
 
@@ -177,8 +176,8 @@ public class ResetPasswordServiceImplTest {
         String newPassword = "newpass123";
         user.setEmail(email);
         user.setPassword("oldpass456");
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
-        Mockito.doReturn(true).when(userRepository).updateUser(user);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
+        Mockito.doReturn(true).when(CustomerRepositoryImpl).updateUser(user);
         resetPasswordService.updatePassword(email, newPassword);
     }
 
@@ -188,8 +187,8 @@ public class ResetPasswordServiceImplTest {
         String newPassword = "newpass123";
         user.setEmail(email);
         user.setPassword("oldpass456");
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(userRepository).updateUser(user);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(CustomerRepositoryImpl).updateUser(user);
         assertThrows(SQLException.class, () -> resetPasswordService.updatePassword(email, newPassword));
     }
 
@@ -197,7 +196,7 @@ public class ResetPasswordServiceImplTest {
     public void testUserDoesntExistException_updatePassword() throws SQLException, UserDoesntExistException, PasswordsCantBeSameException {
         String email = "test@gmail.com";
         String newPassword = "newpass123";
-        Mockito.doReturn(null).when(userRepository).findByEmail(email);
+        Mockito.doReturn(null).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(UserDoesntExistException.class, () -> resetPasswordService.updatePassword(email, newPassword));
     }
 
@@ -207,7 +206,7 @@ public class ResetPasswordServiceImplTest {
         String newPassword = "oldpass456";
         user.setEmail(email);
         user.setPassword("oldpass456");
-        Mockito.doReturn(user).when(userRepository).findByEmail(email);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(email);
         assertThrows(PasswordsCantBeSameException.class, () -> resetPasswordService.updatePassword(email, newPassword));
     }
 

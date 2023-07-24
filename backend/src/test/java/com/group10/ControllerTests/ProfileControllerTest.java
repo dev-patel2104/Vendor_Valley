@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.group10.Exceptions.NoInformationFoundException;
@@ -311,7 +310,6 @@ public class ProfileControllerTest
     public void addService_ServiceNotMapped()
     {
         Service service = null;
-        List<Category> categoryList = new ArrayList<>();
 
         ResponseEntity<Service> res = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
         assertEquals(res, profileController.addService(service));

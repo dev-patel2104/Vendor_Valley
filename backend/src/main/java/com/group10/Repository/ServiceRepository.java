@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
-import com.group10.Model.Review;
 import com.group10.Model.Service;
 
 /**
@@ -54,30 +53,7 @@ public class ServiceRepository {
         }
     }
 
-    /**
-     * Retrieves a list of reviews for a given service ID from the database.
-     *
-     * @param serviceId The ID of the service to retrieve reviews for.
-     * @return A list of Review objects representing the reviews for the service.
-     * @throws SQLException If there is an error connecting to the database or executing the query.
-     */
-    public List<Review> getReviewsForService(int serviceId) throws SQLException{
-        try(Connection connection = databaseService.connect();
-        PreparedStatement statement = connection.prepareStatement(SQLQueries.getReviewsForServiceQuery);)
-        {
-            statement.setInt(1, serviceId);
-            ResultSet result = statement.executeQuery();
-            List<Review> reviews = new ArrayList<>();
-            while (result.next()){
-                Review review = mapResultSetUtilObj.mapResultSetToReview(result);
-                reviews.add(review);
-            }
-            return reviews;
-        }
-        catch (SQLException e){
-            throw new SQLException("Database Connection Lost");
-        }
-    }
+
 
     /**
      * Retrieves a list of services based on a search parameter.
@@ -102,14 +78,6 @@ public class ServiceRepository {
                 Service service = mapResultSetUtilObj.mapResultSetToService(result, true);
                 servicesList.add(service);
             }
-            /**
-             * Retrieves images for a given service and search parameter.
-             *
-             * @param servicesList A list of services to search for images.
-             * @param searchParam The search parameter to use when retrieving images.
-             * @return A list of images related to the given service and search parameter.
-             */
-            getImagesForService(servicesList, searchParam);
         }
         catch(SQLException e){
             throw new SQLException("Database Connection Lost");
@@ -117,69 +85,8 @@ public class ServiceRepository {
         return servicesList;
     }
 
-    /**
-     * Retrieves images for a given service based on a search parameter.
-     *
-     * @param servicesList The list of services to update with images.
-     * @param searchParam The search parameter to match against service records.
-     * @throws SQLException If there is an error connecting to the database or executing the query.
-     */
-    private void getImagesForService(List<Service> servicesList, String searchParam) throws SQLException {
-        try(Connection connection = databaseService.connect();
-            PreparedStatement statement = connection.prepareStatement(SQLQueries.getImagesForService);)
-        {
-            statement.setString(1, searchParam);
-            statement.setString(2, searchParam);
-            statement.setString(3, searchParam);
-            statement.setString(4, searchParam);
-            statement.setString(5, searchParam);
-            ResultSet result = statement.executeQuery(); 
-            while (result.next()){
-                for (Service service : servicesList){
-                    if (service.getServiceId() == result.getInt("service_id")){
-                        byte[] imageData = result.getBytes("image");
-                        if(imageData != null)
-                        {
-                            service.getImages().add(Base64.getEncoder().encodeToString(imageData));
-                        }
-                    }
-                }
-            }
-        }
-        catch(SQLException e){
-            throw new SQLException("Database Connection Lost");
-        }
-    }
 
-    /**
-     * Writes a review to the database.
-     *
-     * @param review The review object containing the review details.
-     * @return True if the review was successfully written to the database, false otherwise.
-     * @throws SQLException If there is an error with the database connection.
-     */
-    public boolean writeReviews(Review review) throws SQLException {
-        try(Connection connection = databaseService.connect();
-            PreparedStatement statement = connection.prepareStatement(SQLQueries.insertReviewQuery, Statement.RETURN_GENERATED_KEYS);)
-        {
-            statement.setInt(1, review.getServiceId());
-            statement.setInt(2, review.getReviewerId());
-            statement.setString(3, review.getReviewTitle());
-            statement.setString(4, review.getReviewComment());
-            statement.setString(5, review.getReviewDate());
-            statement.setInt(6, review.getReviewRating());
-            statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            if (resultSet.next()){
-                return true;
-            }
-            return false;
-        }
-        catch(SQLException e){
-            throw new SQLException("Database Connection Lost");
-        }
-    }
-    
+
     /**
      * Retrieves the details of a service based on the given service ID.
      *
@@ -268,6 +175,7 @@ public class ServiceRepository {
         catch (SQLException e){
             throw new SQLException("Database Connection Lost");}
     }
+
     public Service insertService(Service service, List<Category> categoryList) throws SQLException
     {
         try(Connection connection = databaseService.connect();
@@ -361,6 +269,7 @@ public class ServiceRepository {
             throw new SQLException("Database Issue");
         }
     }
+
     public Service editService(Service serviceToUpdate, List<Category> categoryList) throws SQLException
     {
         try(Connection connection = databaseService.connect();
@@ -412,30 +321,5 @@ public class ServiceRepository {
             throw new SQLException("Database Issue");
         }
     }
-    public Service editServiceImage(Service service) throws SQLException
-    {
-        try(Connection connection = databaseService.connect();
-        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteAllServiceImages);
-        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.insertServiceImages);)
-        {
-            connection.setAutoCommit(false);
-            statement1.setInt(1, service.getServiceId());
-
-            for(String encodedImage : service.getImages())
-            {
-                statement2.setInt(1, service.getServiceId());
-                byte[] imageBytes = Base64.getDecoder().decode(encodedImage);
-                statement2.setBytes(2, imageBytes);
-                statement2.executeUpdate();
-            }
-
-            connection.commit();
-            connection.setAutoCommit(true);
-            return service;
-        }
-        catch (SQLException e)
-        {
-            throw new SQLException("Database Issue");
-        }
-    }
+    
 }
