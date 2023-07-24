@@ -9,14 +9,17 @@ import org.springframework.stereotype.Repository;
 
 import com.group10.Constants.Constants;
 import com.group10.Model.User;
+import com.group10.Repository.Interfaces.IUserRepository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Repository class for managing user data.
  */
 @Repository
-public class UserRepository{
+public class CustomerRepositoryImpl implements IUserRepository{
 
     @Autowired
     IDatabaseService databaseService;
@@ -109,14 +112,15 @@ public class UserRepository{
      * @return The generated user ID, or 0 if the user already exists.
      * @throws SQLException If there is an error executing the SQL query.
      */
-    public int addUser(User user) throws SQLException {
+    public boolean addUser(SignUpModel signUpModel) throws SQLException {
 
+        User user = signUpModel.buildUserModel();
         try (Connection connection = databaseService.connect();
              PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
         {
 
             if(findByEmail(user.getEmail()) != null) {
-                return Constants.USERALREADYEXISTS;
+                return false;
             }
             addUserPreparedStatement.setString(1, user.getFirstName());
             addUserPreparedStatement.setString(2, user.getLastName());
@@ -133,18 +137,19 @@ public class UserRepository{
             ResultSet rs = addUserPreparedStatement.getGeneratedKeys();
 
             if (rs.next()) {
-                int userId = rs.getInt(1);
-                return userId;
+                return true;
             }
-            return Constants.USERNOTINSERTED;
+            return false;
         }
         catch(SQLException e) {
             throw new SQLException("data not being added");
         }
     }
 
-    public SignUpModel getUser(int user_id) throws SQLException {
-        SignUpModel customer = null;
+    public List<SignUpModel> getUsers(List<Integer> userIds) throws SQLException {
+        SignUpModel user = null;
+        List<SignUpModel> userList = new ArrayList<>();
+        int user_id = userIds.get(0);
         try(Connection connection = databaseService.connect();
         PreparedStatement getCustomerPreparedStatement = connection.prepareStatement(SQLQueries.getUserByID))
         {
@@ -153,34 +158,16 @@ public class UserRepository{
             //ToDo: add the check to see if cnt is greater than 1 then throw and exception saying more than one user
             while(rs.next())
             {
-                customer =  SignUpModel.builder().userId(rs.getInt(1)).
-                        firstName(rs.getString(2)).
-                        lastName(rs.getString(3)).
-                        street(rs.getString(4)).
-                        city(rs.getString(5)).
-                        province(rs.getString(6)).
-                        country(rs.getString(7)).
-                        email(rs.getString(8)).
-                        mobile(rs.getString(9)).
-                        isVendor(rs.getInt(10)).
-                        password(rs.getString(11)).
-                        userRole(rs.getString(13)).
-                        companyName(rs.getString(14)).
-                        companyEmail(rs.getString(15)).
-                        companyRegistrationID(rs.getString(16)).
-                        companyMobile(rs.getString(17)).
-                        companyStreet(rs.getString(18)).
-                        companyCity(rs.getString(19)).
-                        companyProvince(rs.getString(20)).
-                        companyCountry(rs.getString(21)).
-                        build();
-                
+                user =  mapResultSetUtilObj.mapResultSetToSignUpModel(rs);
+                userList.add(user);
             }
         }
         catch (SQLException e)
         {
             throw new SQLException(e.getMessage());
         }
-       return customer;
+       return userList;
     }
+
+
 }

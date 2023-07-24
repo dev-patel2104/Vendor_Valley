@@ -1,21 +1,18 @@
 package com.group10.Service;
 
-import com.group10.Constants.Constants;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VendorDetailsAbsentForUserException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
-import com.group10.Model.Vendor;
-import com.group10.Repository.UserRepository;
-import com.group10.Repository.VendorRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IAuthenticationService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.PasswordUtil;
 import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -24,9 +21,9 @@ import java.sql.SQLException;
 public class AuthenticationServiceImpl implements IAuthenticationService
 {
     @Autowired
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
     @Autowired
-    private VendorRepository vendorRepository;
+    private VendorRepositoryImpl VendorRepositoryImpl;
     @Autowired
     private User user;
     private final int IS_VENDOR = 1;
@@ -70,13 +67,10 @@ public class AuthenticationServiceImpl implements IAuthenticationService
         if(!EmailUtil.isValidEmail(signUpModel.getEmail())) {
             return false;
         }
-        int userId=0;
-        User userModel = signUpModel.buildUserModel();
-        Vendor vendorModel = signUpModel.buildVendorModel();
 
         if(signUpModel.getIsVendor() == IS_VENDOR)
         {
-            if(vendorRepository.saveVendor(userModel, vendorModel))
+            if(VendorRepositoryImpl.addUser(signUpModel))
             {
                 return true;
             }
@@ -87,16 +81,13 @@ public class AuthenticationServiceImpl implements IAuthenticationService
         }
         else
         {
-            userId = userRepository.addUser(userModel);
-            if(userId== Constants.USERALREADYEXISTS)
-            {
-                throw new UserAlreadyPresentException("The user is already present");
+            if(CustomerRepositoryImpl.addUser(signUpModel)){
+                return true;
             }
-            else if(userId==Constants.USERNOTINSERTED)
-            {
-                return false;
+            else{
+                throw new UserAlreadyPresentException("User Already Exists!");
             }
-            return true;
+
         }
 
     }
@@ -118,7 +109,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService
              * @param email The email of the user to retrieve.
              * @return The user entity associated with the given email, or null if no user is found.
              */
-            user = userRepository.findByEmail(email);
+            user = CustomerRepositoryImpl.findByEmail(email);
         }
         catch (SQLException e){
             throw new SQLException(e.getMessage());

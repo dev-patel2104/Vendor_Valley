@@ -6,8 +6,9 @@ import com.group10.Model.Booking;
 import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.VendorRepository;
+import com.group10.Repository.VendorRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,9 @@ public class VendorProfileService extends ProfileService
     @Autowired
     private ServiceRepository serviceRepository;
     @Autowired
-    private VendorRepository vendorRepository;
+    private ServiceImageRepository serviceImageRepository;
+    @Autowired
+    private VendorRepositoryImpl VendorRepositoryImpl;
     @Autowired
     private CategoryRepository categoryRepository;
     @Override
@@ -31,7 +34,7 @@ public class VendorProfileService extends ProfileService
         {
             throw new UserDoesntExistException("No such user is present");
         }
-        return vendorRepository.getBookingsInfo(userId);
+        return VendorRepositoryImpl.getBookingsInfo(userId);
     }
 
     public List<com.group10.Model.Service> getServices(int userId) throws UserDoesntExistException, SQLException
@@ -93,7 +96,7 @@ public class VendorProfileService extends ProfileService
         {
             throw new NoInformationFoundException("The userId for the user to be updated is not available");
         }
-        return vendorRepository.editCompanyDetails(updatedDetails);
+        return VendorRepositoryImpl.editCompanyDetails(updatedDetails);
     }
 
     public boolean deleteService(com.group10.Model.Service serviceToDelete) throws SQLException, NoInformationFoundException
@@ -102,12 +105,13 @@ public class VendorProfileService extends ProfileService
         {
             throw new NoInformationFoundException("Requested input is missing");
         }
-        else if(serviceToDelete.getServiceId() < 0)
+        else if(serviceToDelete.getServiceId() <= 0)
         {
             throw new NoInformationFoundException("The serviceId for the service to be deleted is not a valid one");
         }
         return serviceRepository.deleteService(serviceToDelete);
     }
+  
     public com.group10.Model.Service editService(com.group10.Model.Service serviceToUpdate, List<Category> categoryList) throws SQLException, NoInformationFoundException
     {
         if(serviceToUpdate == null)
@@ -125,7 +129,7 @@ public class VendorProfileService extends ProfileService
 
         if(serviceToUpdate.getImages() != null && !serviceToUpdate.getImages().isEmpty())
         {
-           serviceToUpdate = serviceRepository.editServiceImage(serviceToUpdate);
+           serviceToUpdate = serviceImageRepository.editServiceImage(serviceToUpdate);
         }
         if(serviceToUpdate == null)
         {

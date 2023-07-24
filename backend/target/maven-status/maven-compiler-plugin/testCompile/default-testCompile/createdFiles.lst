@@ -11,10 +11,10 @@ com\group10\ExceptionTests\UserDoesntExistExceptionTest.class
 com\group10\ControllerTests\ProfileControllerTest.class
 com\group10\ConstantTests\IntegerConstantsTest.class
 com\group10\ControllerTests\ResetPasswordControllerTest.class
-com\group10\RepositoryTests\VendorRepositoryTest.class
 com\group10\VendorValley\VendorValleyApplicationTests.class
 com\group10\ServiceTests\AuthenticationServiceImplTest.class
 com\group10\ServiceTests\ResetPasswordServiceImplTest.class
+com\group10\RepositoryTests\VendorRepositoryImplTest.class
 com\group10\ControllerTests\HomeControllerTest.class
 com\group10\ExceptionTests\VendorDetailsAbsentForUserExceptionTest.class
 com\group10\ControllerTests\LoginControllerTest.class

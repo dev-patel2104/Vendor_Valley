@@ -3,15 +3,14 @@ package com.group10.Service;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.Category;
-import com.group10.Model.User;
+import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
 import com.group10.Repository.CategoryRepository;
-import com.group10.Repository.VendorRepository;
+import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IHomeService;
 import com.group10.Util.JWTTokenHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -25,7 +24,7 @@ public class HomeServiceImpl implements IHomeService
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private VendorRepository vendorRepository;
+    private VendorRepositoryImpl VendorRepositoryImpl;
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;
@@ -70,7 +69,7 @@ public class HomeServiceImpl implements IHomeService
         if (userId == 0) {
             return null;
         }
-        return vendorRepository.getStatistics(userId);
+        return VendorRepositoryImpl.getStatistics(userId);
     }
 
     /**
@@ -80,8 +79,8 @@ public class HomeServiceImpl implements IHomeService
      * @return A list of User objects representing the customer information.
      * @throws SQLException If there is an error connecting to the database or executing the query.
      */
-    public List<User> getCustomerInfo(List<Integer> userIds) throws SQLException{
+    public List<SignUpModel> getCustomerInfo(List<Integer> userIds) throws SQLException{
         
-        return vendorRepository.getCustomerInfo(userIds);
+        return VendorRepositoryImpl.getUsers(userIds);
     }
 }

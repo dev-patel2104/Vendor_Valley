@@ -3,8 +3,8 @@ package com.group10.ServiceTests;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.SignUpModel;
-import com.group10.Repository.UserRepository;
-import com.group10.Repository.VendorRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.CustomerProfileService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,9 +28,9 @@ public class ProfileServiceTest
     private CustomerProfileService profileService;
 
     @MockBean
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
     @MockBean
-    private VendorRepository vendorRepository;
+    private VendorRepositoryImpl VendorRepositoryImpl;
 
     private SignUpModel user;
     private int userId;
@@ -61,48 +63,52 @@ public class ProfileServiceTest
     @Test
     public void getProfile_Successful() throws SQLException, UserDoesntExistException
     {
-        userId = 5;
         initializeUser();
-        when(userRepository.getUser(any(Integer.class))).thenReturn(user);
+        List<SignUpModel> users = new ArrayList<>();
+        users.add(user);
+        userId = 5;
+        when(CustomerRepositoryImpl.getUsers(any())).thenReturn(users);
         assertEquals(user, profileService.getProfile(userId));
     }
 
     @Test
     public void getProfile_NegativeUserID() throws SQLException
     {
-        userId = -1;
         initializeUser();
-        when(userRepository.getUser(any(Integer.class))).thenReturn(user);
+        List<SignUpModel> users = new ArrayList<>();
+        users.add(user);
+        userId = -1;
+        when(CustomerRepositoryImpl.getUsers(any())).thenReturn(users);
         assertThrows(UserDoesntExistException.class, () -> profileService.getProfile(userId));
     }
     @Test
     public void getProfile_UserDoesntExistException() throws SQLException
     {
-        userId = 5;
         initializeUser();
-        when(userRepository.getUser(any(Integer.class))).thenReturn(null);
+        userId = 5;
+        when(CustomerRepositoryImpl.getUsers(any())).thenReturn(null);
         assertThrows(UserDoesntExistException.class, () -> profileService.getProfile(userId));
     }
     @Test
     public void getProfile_SQLException() throws SQLException
     {
-        userId = 5;
         initializeUser();
-        when(userRepository.getUser(any(Integer.class))).thenThrow(new SQLException("Problem while fetching from database"));
+        userId = 5;
+        when(CustomerRepositoryImpl.getUsers(any())).thenThrow(new SQLException("Problem while fetching from database"));
         assertThrows(SQLException.class, () -> profileService.getProfile(userId));
     }
     @Test
     public void editProfile_Successful() throws SQLException, NoInformationFoundException
     {
         initializeUser();
-        when(userRepository.updateUser(any())).thenReturn(true);
+        when(CustomerRepositoryImpl.updateUser(any())).thenReturn(true);
         assertEquals(true, profileService.editProfile(user));
     }
     @Test
     public void editProfile_UnSuccessful() throws SQLException, NoInformationFoundException
     {
         initializeUser();
-        when(userRepository.updateUser(any())).thenReturn(false);
+        when(CustomerRepositoryImpl.updateUser(any())).thenReturn(false);
         assertEquals(false, profileService.editProfile(user));
     }
     @Test
@@ -119,7 +125,7 @@ public class ProfileServiceTest
     public void editProfile_SQLException() throws SQLException
     {
         initializeUser();
-        when(userRepository.updateUser(any())).thenThrow(new SQLException("Database Issue"));
+        when(CustomerRepositoryImpl.updateUser(any())).thenThrow(new SQLException("Database Issue"));
         assertThrows(SQLException.class, () -> profileService.editProfile(user));
     }
 }

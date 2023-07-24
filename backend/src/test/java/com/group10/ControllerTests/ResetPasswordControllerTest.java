@@ -26,7 +26,6 @@ import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VerificationCodeExpiredException;
 import com.group10.Model.User;
-import com.group10.Service.ResetPasswordServiceImpl;
 
 @SpringBootTest
 public class ResetPasswordControllerTest {

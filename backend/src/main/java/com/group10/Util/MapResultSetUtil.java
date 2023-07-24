@@ -227,4 +227,55 @@ public class MapResultSetUtil {
         return vendorDashboard;
     }
 
+    public SignUpModel mapResultSetToSignUpModel(ResultSet rs) throws SQLException {
+        int isVendor;
+        try{
+            isVendor = rs.getInt("is_vendor");
+        }
+        catch (SQLException e){
+            // do nothing
+            isVendor = 0;
+        }
+        return SignUpModel.builder().userId(rs.getInt("user_id")).
+                firstName((String) getValueOrNull(rs, "first_name")).
+                lastName((String) getValueOrNull(rs, "last_name")).
+                street((String) getValueOrNull(rs, "street")).
+                city((String) getValueOrNull(rs, "city")).
+                province((String) getValueOrNull(rs, "province")).
+                country((String) getValueOrNull(rs, "country")).
+                email((String) getValueOrNull(rs, "email")).
+                mobile((String) getValueOrNull(rs, "mobile")).
+                isVendor(isVendor).
+                password((String) getValueOrNull(rs,"password")).
+                userRole((String) getValueOrNull(rs, "user_role")).
+                companyName((String) getValueOrNull(rs, "company_name")).
+                companyEmail((String) getValueOrNull(rs, "company_email")).
+                companyRegistrationID((String) getValueOrNull(rs, "company_registration_number")).
+                companyMobile((String) getValueOrNull(rs, "company_mobile")).
+                companyStreet((String) getValueOrNull(rs, "company_street")).
+                companyCity((String) getValueOrNull(rs, "company_city")).
+                companyProvince((String) getValueOrNull(rs, "company_province")).
+                companyCountry((String) getValueOrNull(rs, "company_country")).
+                build();
+    }
+
+    private Object getValueOrNull(ResultSet rs, String columnName) throws SQLException {
+        int columnIndex = 0;
+        try{
+
+            columnIndex = rs.findColumn(columnName);
+        }
+        catch (SQLException e){
+            return null;
+        }
+        Object value = rs.getObject(columnIndex) != null ? rs.getObject(columnIndex) : null;
+        if (value instanceof Integer){
+            value = Integer.parseInt((String) value);
+        }
+        if (value instanceof Double){
+            value = Double.parseDouble((String) value);
+        }
+        return value;
+    }
+    
 }
