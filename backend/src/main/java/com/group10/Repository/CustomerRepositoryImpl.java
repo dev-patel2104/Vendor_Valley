@@ -108,7 +108,7 @@ public class CustomerRepositoryImpl implements IUserRepository{
     /**
      * Adds a new user to the database and returns the generated user ID.
      *
-     * @param user The user object to be added.
+     * @param signUpModel The signUpModel object to add the user.
      * @return The generated user ID, or 0 if the user already exists.
      * @throws SQLException If there is an error executing the SQL query.
      */

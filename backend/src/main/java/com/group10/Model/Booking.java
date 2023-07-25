@@ -12,6 +12,9 @@ public class Booking {
     private String endDate;
     private String bookingStatus;
 
+    private String vendorEmail;
+    private String vendorMobile;
+
     public String getServiceName() {
         return serviceName;
     }
@@ -56,5 +59,21 @@ public class Booking {
     }
     public void setBookingStatus(String bookingStatus) {
         this.bookingStatus = bookingStatus;
-    } 
+    }
+
+    public String getVendorEmail() {
+        return vendorEmail;
+    }
+
+    public void setVendorEmail(String vendorEmail) {
+        this.vendorEmail = vendorEmail;
+    }
+
+    public String getVendorMobile() {
+        return vendorMobile;
+    }
+
+    public void setVendorMobile(String vendorMobile) {
+        this.vendorMobile = vendorMobile;
+    }
 }
