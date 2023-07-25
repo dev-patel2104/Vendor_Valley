@@ -2,7 +2,7 @@ package com.group10.Controller;
 
 import com.group10.Model.Category;
 import com.group10.Model.Service;
-import com.group10.Service.HomeService;
+import com.group10.Service.Interfaces.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class HomeController {
     private List<Category> featuredCategories;
     private List<Service> trendingServices;
     @Autowired
-    private HomeService homeService;
+    private IHomeService homeService;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping("/")

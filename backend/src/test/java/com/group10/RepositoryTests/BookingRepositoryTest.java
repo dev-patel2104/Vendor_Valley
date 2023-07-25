@@ -2,10 +2,8 @@ package com.group10.RepositoryTests;
 
 import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
-import com.group10.Model.EmailDetails;
 import com.group10.Repository.BookingRepository;
-import com.group10.Service.DatabaseService;
-import com.group10.Util.EmailUtil;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,7 @@ import static org.mockito.Mockito.*;
 class BookingRepositoryTest {
 
     @Mock
-    private DatabaseService databaseService;
+    private IDatabaseService databaseService;
 
     @Mock
     private Connection connection;

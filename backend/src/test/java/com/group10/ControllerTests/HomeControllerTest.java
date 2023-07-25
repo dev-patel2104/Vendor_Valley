@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import com.group10.Controller.HomeController;
 import com.group10.Model.Category;
 import com.group10.Model.Service;
-import com.group10.Service.HomeService;
+import com.group10.Service.HomeServiceImpl;
 
 @SpringBootTest
 public class HomeControllerTest
@@ -25,7 +25,7 @@ public class HomeControllerTest
     @Autowired
     private HomeController homeController;
     @MockBean
-    private HomeService homeService;
+    private HomeServiceImpl homeService;
     private List<Category> expectedCategories;
     private List<Service> expectedServices;
     

@@ -2,7 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Model.Category;
 import com.group10.Model.Service;
-import com.group10.Service.DatabaseService;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CategoryRepository
 {
     @Autowired
-    DatabaseService databaseService;
+    IDatabaseService databaseService;
     private final int numberOfFeaturedCategories = 3;
     private final int numberOfTrendingServices = 5;
     private List<Category> categoryList;
@@ -111,7 +111,6 @@ public class CategoryRepository
         try(Connection connection = databaseService.connect();
             PreparedStatement statement = connection.prepareStatement(SQLQueries.getCategories);)
         {
-            String name = null;
             List<Category> categoryList = new ArrayList<>();
             Category cat = null;
             ResultSet resultSet = statement.executeQuery();

@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.group10.Service.Interfaces.IAuthenticationService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +17,18 @@ import com.group10.Controller.LoginController;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.User;
-import com.group10.Service.LoginService;
 
 @SpringBootTest
 public class LoginControllerTest {
-    
-    @MockBean 
-    private LoginService loginService;
 
     @Autowired
     private LoginController loginController;
-    
+    @MockBean
+    private IAuthenticationService authenticationService;
     @Test
     public void successPath_login() throws UserDoesntExistException, InvalidPasswordException, SQLException{
         User user = new User();
-        Mockito.doReturn(user).when(loginService).login(anyString(),anyString());
+        Mockito.doReturn(user).when(authenticationService).login(anyString(),anyString());
         
         Map<String, String> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
@@ -47,7 +46,7 @@ public class LoginControllerTest {
         Map<String, String> result =  new HashMap<>();
         result.put("error", errMessage);
         res = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-        Mockito.doThrow(new UserDoesntExistException(errMessage)).when(loginService).login(anyString(),anyString());
+        Mockito.doThrow(new UserDoesntExistException(errMessage)).when(authenticationService).login(anyString(),anyString());
         Map<String, String> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
         credentials.put("password", "password");
@@ -64,7 +63,7 @@ public class LoginControllerTest {
         Map<String, String> result =  new HashMap<>();
         result.put("error", errMessage);
         res = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-        Mockito.doThrow(new InvalidPasswordException(errMessage)).when(loginService).login(anyString(),anyString());
+        Mockito.doThrow(new InvalidPasswordException(errMessage)).when(authenticationService).login(anyString(),anyString());
         Map<String, String> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
         credentials.put("password", "password");
@@ -81,7 +80,7 @@ public class LoginControllerTest {
         Map<String, String> result =  new HashMap<>();
         result.put("error", errMessage);
         res = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
-        Mockito.doThrow(new InvalidPasswordException(errMessage)).when(loginService).login(anyString(),anyString());
+        Mockito.doThrow(new InvalidPasswordException(errMessage)).when(authenticationService).login(anyString(),anyString());
         Map<String, String> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
         credentials.put("password", "password");

@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.group10.Model.User;
+import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
-import com.group10.Service.HomeService;
+import com.group10.Service.HomeServiceImpl;
 
 @RestController
 public class VendorDashboardController {
 
     @Autowired
-    private HomeService homeService;
+    private HomeServiceImpl homeService;
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
@@ -46,7 +46,7 @@ public class VendorDashboardController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getCustomerInfo")
-    public ResponseEntity<List<User>> getCustomerInformation(@RequestBody List<Integer> body){
+    public ResponseEntity<List<SignUpModel>> getCustomerInformation(@RequestBody List<Integer> body){
         List<Integer> userIds = body;
         if (userIds == null || userIds.size() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -57,7 +57,7 @@ public class VendorDashboardController {
             }
         }
         try {
-            List<User> users = homeService.getCustomerInfo(userIds);
+            List<SignUpModel> users = homeService.getCustomerInfo(userIds);
             if (users == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }

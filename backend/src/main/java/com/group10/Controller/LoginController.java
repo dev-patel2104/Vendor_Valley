@@ -1,4 +1,5 @@
 package com.group10.Controller;
+import com.group10.Service.Interfaces.IAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group10.Exceptions.InvalidPasswordException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.User;
-import com.group10.Service.LoginService;
 import com.group10.Util.JWTTokenHandler;
 
 import java.sql.SQLException;
@@ -25,9 +25,8 @@ public class LoginController {
 
     @Value("${secret.key}")
     private String secretKey;
-
     @Autowired
-    private LoginService loginService;
+    private IAuthenticationService authenticationService;
 
     @Autowired
     private JWTTokenHandler tokenHandler;
@@ -68,7 +67,7 @@ public class LoginController {
              * @param password The password of the user
              * @return The logged in user object
              */
-            User user = loginService.login(email, password);
+            User user = authenticationService.login(email, password);
 
             /**
              * Generates a JWT token for the given user using the token handler.

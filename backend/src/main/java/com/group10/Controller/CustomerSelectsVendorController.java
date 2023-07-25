@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group10.Model.Review;
-import com.group10.Service.CustomerSelectsVendorService;
 
 /**
  * Controller class for handling customer selecting vendor service operations.
@@ -23,7 +24,7 @@ import com.group10.Service.CustomerSelectsVendorService;
 public class CustomerSelectsVendorController {
     
     @Autowired
-    private CustomerSelectsVendorService customerSelectsVendorService;
+    private ICustomerSelectsVendorService customerSelectsVendorService;
 
     /**
      * Retrieves a list of reviews for a given service ID.

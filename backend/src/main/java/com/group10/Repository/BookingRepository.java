@@ -2,7 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
-import com.group10.Service.DatabaseService;
+import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
@@ -21,7 +21,7 @@ import java.sql.SQLException;
 public class BookingRepository {
 
     @Autowired
-    DatabaseService databaseService;
+    IDatabaseService databaseService;
 
     /**
      * Requests a reservation by inserting booking information into the database.

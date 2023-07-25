@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
+import com.group10.Service.Interfaces.IAuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,14 @@ import org.springframework.http.ResponseEntity;
 import com.group10.Controller.SignInController;
 import com.group10.Exceptions.UserAlreadyPresentException;
 import com.group10.Model.SignUpModel;
-import com.group10.Service.SignInService;
 
 @SpringBootTest
 public class SignInControllerTest
 {
     @Autowired
     private SignInController signInController;
-
     @MockBean
-    private SignInService signInService;
+    private IAuthenticationService authenticationService;
 
     private SignUpModel signUpModel;
 
@@ -62,7 +61,7 @@ public class SignInControllerTest
 
     @Test
     public void SignInSuccessful() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenReturn(true);
+        when(authenticationService.SignIn(signUpModel)).thenReturn(true);
         ResponseEntity<String> res;
         res = ResponseEntity.ok("User has been added successfully");
         assertEquals(res, signInController.signIn(signUpModel));
@@ -70,7 +69,7 @@ public class SignInControllerTest
 
     @Test
     public void SignIn_SQLException() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenThrow(new SQLException("DBMS connection error"));
+        when(authenticationService.SignIn(signUpModel)).thenThrow(new SQLException("DBMS connection error"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("DBMS connection error");
         assertEquals(res, signInController.signIn(signUpModel));
@@ -78,7 +77,7 @@ public class SignInControllerTest
 
     @Test
     public void SignIn_UserAlreadyPresentException() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenThrow(new UserAlreadyPresentException("The user is already present"));
+        when(authenticationService.SignIn(signUpModel)).thenThrow(new UserAlreadyPresentException("The user is already present"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user is already present");
         assertEquals(res, signInController.signIn(signUpModel));

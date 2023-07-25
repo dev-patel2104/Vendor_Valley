@@ -1,6 +1,7 @@
 package com.group10.Controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
@@ -22,7 +23,7 @@ public class ProfileController
 {
 
     @Autowired
-    private CustomerProfileService customerProfileService;
+    private CustomerProfileService userProfileService;
 
     @Autowired
     private VendorProfileService vendorProfileService;
@@ -37,7 +38,7 @@ public class ProfileController
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         SignUpModel user;
         try {
-           user = customerProfileService.getProfile(token.getClaim("userId").asInt());
+           user = userProfileService.getProfile(token.getClaim("userId").asInt());
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -47,7 +48,93 @@ public class ProfileController
         }
         return ResponseEntity.ok().body(user);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/profile")
+    public ResponseEntity<String> editProfile(@RequestBody SignUpModel newInfo)
+    {
+        try
+        {
+            if(newInfo == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
 
+            if(!userProfileService.editProfile(newInfo))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
+        return ResponseEntity.ok("Successfully edited the user's profile information");
+
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/company")
+    public ResponseEntity<SignUpModel> editCompanyDetails(@RequestBody SignUpModel updatedDetails)
+    {
+        SignUpModel changedDetails;
+        try
+        {
+            if(updatedDetails == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+
+            changedDetails = vendorProfileService.editCompanyDetails(updatedDetails);
+            if(changedDetails == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+        }
+        return ResponseEntity.ok(changedDetails);
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/addService")
+    public ResponseEntity<Service> addService(@RequestBody Service service)
+    {
+        Service addedService;
+        try
+        {
+            if(service == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+
+            addedService = vendorProfileService.addService(service,categories);
+            if(addedService == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok(addedService);
+    }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/services")
     public ResponseEntity<List<Service>> getServices(@RequestParam String jwtToken)
@@ -66,11 +153,69 @@ public class ProfileController
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         }
         return ResponseEntity.ok().body(serviceList);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/delete/service")
+    public ResponseEntity<String> deleteService(@RequestBody Service serviceToDelete)
+    {
+        try
+        {
+            if(serviceToDelete == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
 
+
+            if(!vendorProfileService.deleteService(serviceToDelete))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok("Service has been successfully deleted");
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/edit/service")
+    public ResponseEntity<Service> editService(@RequestBody Service serviceToUpdate)
+    {
+        Service updatedService;
+        try
+        {
+            if(serviceToUpdate == null)
+            {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+            }
+            updatedService = vendorProfileService.editService(serviceToUpdate, categories);
+            if(updatedService == null)
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+        }
+        catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
+        }
+        catch (NoInformationFoundException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null);
+
+        }
+        return ResponseEntity.ok(updatedService);
+    }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
@@ -91,7 +236,7 @@ public class ProfileController
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(null);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         }
         return ResponseEntity.ok(bookingList);
     }
@@ -110,31 +255,4 @@ public class ProfileController
         }
         return ResponseEntity.ok(categories);
     }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/addService")
-    public ResponseEntity<String> addService(@RequestBody Service service)
-    {
-        // ToDo : Make the SQLException test case pass some how
-        try
-        {
-            if(service == null)
-            {
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Input not mapped to the body");
-            }
-
-            if(!vendorProfileService.addService(service,categories))
-            {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data is not processable");
-            }
-
-        }
-        catch (SQLException e)
-        {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database issue present");
-
-        }
-        return ResponseEntity.ok("Service successfully added");
-    }
-
 }
