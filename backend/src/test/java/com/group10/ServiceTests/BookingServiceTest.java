@@ -60,7 +60,7 @@ public class BookingServiceTest {
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
-        booking.setServiceName("florist");
+        booking.setServiceName(22);
         booking.setBookingDate("07-12-2023");
         booking.setStartDate("07-12-2023");
         booking.setEndDate("07-12-2023");
@@ -83,7 +83,7 @@ public class BookingServiceTest {
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
-        booking.setServiceName("florist");
+        booking.setServiceName(23);
         booking.setBookingDate("07-12-2023");
         booking.setStartDate("07-12-2023");
         booking.setEndDate("07-12-2023");
@@ -113,7 +113,7 @@ public class BookingServiceTest {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
         bookingResponseRequest.setBookingStatus("accept");
         bookingResponseRequest.setBookingID(342);
-        bookingResponseRequest.setServiceName("decorators");
+        bookingResponseRequest.setServiceID(23);
         bookingResponseRequest.setCustomerEmail("test@mail.com");
 
         when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
@@ -128,7 +128,7 @@ public class BookingServiceTest {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
         bookingResponseRequest.setBookingStatus("accept");
         bookingResponseRequest.setBookingID(342);
-        bookingResponseRequest.setServiceName("decorators");
+        bookingResponseRequest.setServiceID(23);
         bookingResponseRequest.setCustomerEmail("test@mail.com");
 
         when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(false);

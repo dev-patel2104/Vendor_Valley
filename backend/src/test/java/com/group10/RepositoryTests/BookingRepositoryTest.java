@@ -45,7 +45,7 @@ class BookingRepositoryTest {
         // Arrange
         int customerId = 1;
         Booking bookingModel = new Booking();
-        bookingModel.setServiceName("Service");
+        bookingModel.setServiceName(23);
         bookingModel.setBookingDate("2023-07-20");
         bookingModel.setStartDate("2023-07-21");
         bookingModel.setEndDate("2023-07-23");
@@ -70,7 +70,7 @@ class BookingRepositoryTest {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
         bookingResponseRequest.setBookingStatus("decline");
         bookingResponseRequest.setBookingID(123);
-        bookingResponseRequest.setServiceName("Florist");
+        bookingResponseRequest.setServiceID(23);
         bookingResponseRequest.setCustomerEmail("boon@boon.com");
 
         when(databaseService.connect()).thenReturn(connection);
