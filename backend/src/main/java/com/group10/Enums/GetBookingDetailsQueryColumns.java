@@ -1,6 +1,4 @@
 package com.group10.Enums;
-
-import com.group10.Model.Booking;
 /**
  * Enum representing query columns for getting booking details.
  */

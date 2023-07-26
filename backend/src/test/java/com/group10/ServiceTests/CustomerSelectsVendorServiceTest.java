@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,8 +25,8 @@ import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.UserRepository;
-import com.group10.Service.CustomerSelectsVendorService;
+import com.group10.Repository.ServiceReviewsRepository;
+import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 
@@ -36,16 +37,19 @@ public class CustomerSelectsVendorServiceTest {
     private ServiceRepository serviceRepository;
 
     @MockBean
+    private ServiceReviewsRepository serviceReviewsRepository;
+
+    @MockBean
     private JWTTokenHandler jwtTokenHandler;
 
     @MockBean
     private EmailUtil emailUtil;
 
     @MockBean
-    private UserRepository userRepository;
+    private CustomerRepositoryImpl CustomerRepositoryImpl;
 
     @Autowired
-    private CustomerSelectsVendorService customerSelectsVendorService;
+    private ICustomerSelectsVendorService customerSelectsVendorService;
 
     @Autowired
     private User user;
@@ -59,7 +63,7 @@ public class CustomerSelectsVendorServiceTest {
         // Mock repository layer and check if the correct results are returned
         String serviceId = "2";
         int serviceIdInt = Integer.parseInt(serviceId);
-        Mockito.doReturn(new ArrayList<>()).when(serviceRepository).getReviewsForService(serviceIdInt);
+        Mockito.doReturn(new ArrayList<>()).when(serviceReviewsRepository).getReviewsForService(serviceIdInt);
         assertEquals(new ArrayList<>(), customerSelectsVendorService.getReviews(serviceId));
     }
 
@@ -68,7 +72,7 @@ public class CustomerSelectsVendorServiceTest {
         // Mock repository layer and check if the correct results are returned
         String serviceId = "2";
         int serviceIdInt = Integer.parseInt(serviceId);
-        Mockito.doReturn(new ArrayList<>()).when(serviceRepository).getReviewsForService(serviceIdInt);
+        Mockito.doReturn(new ArrayList<>()).when(serviceReviewsRepository).getReviewsForService(serviceIdInt);
         assertEquals(new ArrayList<>(), customerSelectsVendorService.getReviews(serviceId));
     }
 
@@ -105,7 +109,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("userId")).thenReturn(claim);
         Mockito.when(claim.asInt()).thenReturn(fakeUserId);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(status).when(serviceRepository).writeReviews(Mockito.any());
+        Mockito.doReturn(status).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertEquals(true, customerSelectsVendorService.writeReviews(review, token));
     }
 
@@ -122,7 +126,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("userId")).thenReturn(claim);
         Mockito.when(claim.asInt()).thenReturn(fakeUserId);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(status).when(serviceRepository).writeReviews(Mockito.any());
+        Mockito.doReturn(status).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertEquals(false, customerSelectsVendorService.writeReviews(review, token));
     }
 
@@ -146,7 +150,7 @@ public class CustomerSelectsVendorServiceTest {
         String token = "token";
         review.setBookingId(1);
         Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
-        Mockito.doThrow(new JWTVerificationException("Invalid Token!")).when(serviceRepository).writeReviews(Mockito.any());
+        Mockito.doThrow(new JWTVerificationException("Invalid Token!")).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertThrows(Exception.class, () -> customerSelectsVendorService.writeReviews(review, token));
     }
 
@@ -156,7 +160,7 @@ public class CustomerSelectsVendorServiceTest {
         String token = "token";
         review.setBookingId(1);
         Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
-        Mockito.doThrow(new SQLException("SQL Exception!")).when(serviceRepository).writeReviews(Mockito.any());
+        Mockito.doThrow(new SQLException("SQL Exception!")).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertThrows(Exception.class, () -> customerSelectsVendorService.writeReviews(review, token));
     }
 
@@ -171,7 +175,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doReturn(service).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         Mockito.doReturn(true).when(emailUtil).sendSimpleMail(Mockito.any());
         assertTrue(customerSelectsVendorService.sendEmail(serviceId, emailText, token));
@@ -188,7 +192,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doReturn(service).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         Mockito.doReturn(false).when(emailUtil).sendSimpleMail(Mockito.any());
         assertFalse(customerSelectsVendorService.sendEmail(serviceId, emailText, token));        
@@ -219,7 +223,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doThrow(new SQLException("Database Connection Lost")).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doThrow(new SQLException("Database Connection Lost")).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         assertThrows(SQLException.class, () -> customerSelectsVendorService.sendEmail(serviceId, emailText, token));
     }
 
@@ -234,7 +238,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doThrow(new SQLException("Database Connection Lost!")).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         assertThrows(SQLException.class, () -> customerSelectsVendorService.sendEmail(serviceId, emailText, token));
     }
@@ -250,7 +254,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doReturn(service).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         Mockito.doThrow(new MailAuthenticationException("Mail authentication failed!")).when(emailUtil).sendSimpleMail(Mockito.any());
         assertThrows(MailAuthenticationException.class, () -> customerSelectsVendorService.sendEmail(serviceId, emailText, token));
@@ -267,7 +271,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doReturn(service).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         Mockito.doThrow(new MailSendException("Mail authentication failed!")).when(emailUtil).sendSimpleMail(Mockito.any());
         assertThrows(MailSendException.class, () -> customerSelectsVendorService.sendEmail(serviceId, emailText, token));
@@ -284,7 +288,7 @@ public class CustomerSelectsVendorServiceTest {
         Mockito.when(decodedJWT.getClaim("email")).thenReturn(claim);
         Mockito.when(claim.asString()).thenReturn(fakeUserEmail);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
-        Mockito.doReturn(user).when(userRepository).findByEmail(fakeUserEmail);
+        Mockito.doReturn(user).when(CustomerRepositoryImpl).findByEmail(fakeUserEmail);
         Mockito.doReturn(service).when(serviceRepository).getServiceDetails(Mockito.anyInt());
         Mockito.doThrow(new MailParseException("Mail authentication failed!")).when(emailUtil).sendSimpleMail(Mockito.any());
         assertThrows(MailParseException.class, () -> customerSelectsVendorService.sendEmail(serviceId, emailText, token));

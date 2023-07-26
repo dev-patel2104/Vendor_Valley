@@ -12,6 +12,9 @@ public class Booking {
     private String endDate;
     private String bookingStatus;
 
+    private String vendorEmail;
+    private String vendorMobile;
+
     public String getServiceName() {
         return serviceName;
     }
@@ -19,6 +22,7 @@ public class Booking {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
     public User getUser() {
         return user;
     }
@@ -56,5 +60,36 @@ public class Booking {
     }
     public void setBookingStatus(String bookingStatus) {
         this.bookingStatus = bookingStatus;
-    } 
+    }
+
+    public String getVendorEmail() {
+        return vendorEmail;
+    }
+
+    public void setVendorEmail(String vendorEmail) {
+        this.vendorEmail = vendorEmail;
+    }
+
+    public String getVendorMobile() {
+        return vendorMobile;
+    }
+
+    public void setVendorMobile(String vendorMobile) {
+        this.vendorMobile = vendorMobile;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", user=" + user +
+                ", serviceName='" + serviceName + '\'' +
+                ", bookingDate='" + bookingDate + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                ", vendorEmail='" + vendorEmail + '\'' +
+                ", vendorMobile='" + vendorMobile + '\'' +
+                '}';
+    }
 }

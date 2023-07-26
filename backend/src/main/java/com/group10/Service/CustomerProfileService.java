@@ -12,4 +12,5 @@ public class CustomerProfileService extends ProfileService
     public List<Booking> getBookings(int userId) {
             return null;
     }
+
 }
