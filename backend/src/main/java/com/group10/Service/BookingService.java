@@ -54,9 +54,8 @@ public class BookingService {
         if (bookingModel.getEndDate() == null) return false;
         if (bookingModel.getBookingStatus() == null) return false;
 
-//        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
-        int customerId = 1;
-                //decodedJWT.getClaim("userId").asInt();
+        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
+        int customerId = decodedJWT.getClaim("userId").asInt();
 
         try {
             if (bookingRepository.requestReservation(customerId, bookingModel)) {
