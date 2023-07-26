@@ -45,7 +45,7 @@ class BookingRepositoryTest {
         // Arrange
         int customerId = 1;
         Booking bookingModel = new Booking();
-        bookingModel.setServiceName(23);
+        bookingModel.setServiceName("Florist");
         bookingModel.setBookingDate("2023-07-20");
         bookingModel.setStartDate("2023-07-21");
         bookingModel.setEndDate("2023-07-23");

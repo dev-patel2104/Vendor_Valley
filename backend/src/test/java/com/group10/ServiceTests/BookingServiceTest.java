@@ -60,7 +60,7 @@ public class BookingServiceTest {
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
-        booking.setServiceName(22);
+        booking.setServiceName("Florist");
         booking.setBookingDate("07-12-2023");
         booking.setStartDate("07-12-2023");
         booking.setEndDate("07-12-2023");
@@ -83,7 +83,7 @@ public class BookingServiceTest {
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
         Booking booking = new Booking();
-        booking.setServiceName(23);
+        booking.setServiceName("Florist");
         booking.setBookingDate("07-12-2023");
         booking.setStartDate("07-12-2023");
         booking.setEndDate("07-12-2023");

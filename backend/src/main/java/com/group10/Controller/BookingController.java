@@ -35,12 +35,10 @@ public class BookingController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking")
-    public ResponseEntity<String> requestReservation(
-            //@RequestHeader String jwtToken,
-            @RequestBody Booking bookingModel) {
+    public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody Booking bookingModel) {
         log.info("request reservation payload - BookingController: {}", bookingModel.toString());
         try {
-            if (bookingService.requestReservation("jwtToken", bookingModel)) {
+            if (bookingService.requestReservation(jwtToken, bookingModel)) {
                 return ResponseEntity.ok("Booking request has been made");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cannot request the service now, Please try again");

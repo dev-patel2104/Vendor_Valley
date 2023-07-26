@@ -14,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * This repository class handles database operations related to bookings.
@@ -39,11 +37,11 @@ public class BookingRepository {
              PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.insertBookingEntry)) {
 
             requestReservationPreparedStatement.setInt(1, customerId);
-            requestReservationPreparedStatement.setInt(2, bookingModel.getServiceName());
-            requestReservationPreparedStatement.setDate(3, StringUtil.dateStringToDate(bookingModel.getBookingDate()));
-            requestReservationPreparedStatement.setDate(4, StringUtil.dateStringToDate(bookingModel.getStartDate()));
-            requestReservationPreparedStatement.setDate(5, StringUtil.dateStringToDate(bookingModel.getEndDate()));
-            requestReservationPreparedStatement.setString(6, bookingModel.getBookingStatus());
+            requestReservationPreparedStatement.setDate(2, StringUtil.dateStringToDate(bookingModel.getBookingDate()));
+            requestReservationPreparedStatement.setDate(3, StringUtil.dateStringToDate(bookingModel.getStartDate()));
+            requestReservationPreparedStatement.setDate(4, StringUtil.dateStringToDate(bookingModel.getEndDate()));
+            requestReservationPreparedStatement.setString(5, bookingModel.getBookingStatus());
+            requestReservationPreparedStatement.setString(6, bookingModel.getServiceName());
 
             int rowsAffected = requestReservationPreparedStatement.executeUpdate();
 
