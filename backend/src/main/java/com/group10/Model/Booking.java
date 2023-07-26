@@ -22,6 +22,7 @@ public class Booking {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+
     public User getUser() {
         return user;
     }
@@ -75,5 +76,20 @@ public class Booking {
 
     public void setVendorMobile(String vendorMobile) {
         this.vendorMobile = vendorMobile;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", user=" + user +
+                ", serviceName='" + serviceName + '\'' +
+                ", bookingDate='" + bookingDate + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                ", vendorEmail='" + vendorEmail + '\'' +
+                ", vendorMobile='" + vendorMobile + '\'' +
+                '}';
     }
 }

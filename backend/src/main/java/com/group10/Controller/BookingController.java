@@ -5,6 +5,7 @@ import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Service.BookingService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
  * Controller class that handles incoming HTTP requests related to bookings.
  */
 @RestController
+@Slf4j
 public class BookingController {
 
     @Autowired
@@ -34,6 +36,7 @@ public class BookingController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking")
     public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody Booking bookingModel) {
+        log.info("request reservation payload - BookingController: {}", bookingModel.toString());
         try {
             if (bookingService.requestReservation(jwtToken, bookingModel)) {
                 return ResponseEntity.ok("Booking request has been made");
@@ -54,6 +57,7 @@ public class BookingController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking/respond")
     public ResponseEntity<String> respondToBookingRequest(@RequestBody BookingResponseRequest bookingResponseRequestModel) {
+        log.info("respond to bookingRequest - BookingController: {}", bookingResponseRequestModel.toString());
         try {
             if (bookingService.respondToBooking(bookingResponseRequestModel)) {
                 return ResponseEntity.ok("Booking status updated by vendor");

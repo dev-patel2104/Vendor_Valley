@@ -97,13 +97,13 @@ public class BookingService {
         }
         if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (bookingResponseRequest.getBookingID() == null) return false;
-        if (bookingResponseRequest.getServiceName() == null) return false;
+        if (bookingResponseRequest.getServiceID() == null) return false;
         if (bookingResponseRequest.getCustomerEmail() == null) return false;
 
         if (bookingRepository.respondToBooking(bookingResponseRequest)) {
             //send a mail to customer
             String subject = "VendorValley: You have received a response to your booking request";
-            String body = "Request for " + bookingResponseRequest.getServiceName() + " " + bookingResponseRequest.getBookingStatus();
+            String body = "Request for " + bookingResponseRequest.getServiceID() + " " + bookingResponseRequest.getBookingStatus();
 
             emailDetails.setRecipient(bookingResponseRequest.getCustomerEmail());
             emailDetails.setSubject(subject);
