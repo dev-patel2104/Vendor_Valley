@@ -3,16 +3,16 @@ package com.group10.Model;
 public class BookingResponseRequest {
 
     private Integer bookingID;
-    private String serviceName;
+    private Integer serviceID;
     private String customerEmail;
     private String bookingStatus;
 
-    public String getServiceName() {
-        return serviceName;
+    public Integer getServiceID() {
+        return serviceID;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceID(Integer serviceID) {
+        this.serviceID = serviceID;
     }
 
     public String getCustomerEmail() {
@@ -37,5 +37,15 @@ public class BookingResponseRequest {
 
     public void setBookingStatus(String bookingStatus) {
         this.bookingStatus = bookingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingResponseRequest{" +
+                "bookingID=" + bookingID +
+                ", serviceName='" + serviceID + '\'' +
+                ", customerEmail='" + customerEmail + '\'' +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                '}';
     }
 }

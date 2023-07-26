@@ -54,8 +54,9 @@ public class BookingService {
         if (bookingModel.getEndDate() == null) return false;
         if (bookingModel.getBookingStatus() == null) return false;
 
-        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
-        int customerId = decodedJWT.getClaim("userId").asInt();
+//        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
+        int customerId = 1;
+                //decodedJWT.getClaim("userId").asInt();
 
         try {
             if (bookingRepository.requestReservation(customerId, bookingModel)) {
@@ -97,13 +98,13 @@ public class BookingService {
         }
         if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (bookingResponseRequest.getBookingID() == null) return false;
-        if (bookingResponseRequest.getServiceName() == null) return false;
+        if (bookingResponseRequest.getServiceID() == null) return false;
         if (bookingResponseRequest.getCustomerEmail() == null) return false;
 
         if (bookingRepository.respondToBooking(bookingResponseRequest)) {
             //send a mail to customer
             String subject = "VendorValley: You have received a response to your booking request";
-            String body = "Request for " + bookingResponseRequest.getServiceName() + " " + bookingResponseRequest.getBookingStatus();
+            String body = "Request for " + bookingResponseRequest.getServiceID() + " " + bookingResponseRequest.getBookingStatus();
 
             emailDetails.setRecipient(bookingResponseRequest.getCustomerEmail());
             emailDetails.setSubject(subject);

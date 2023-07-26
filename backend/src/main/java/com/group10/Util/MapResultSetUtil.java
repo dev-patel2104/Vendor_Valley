@@ -135,7 +135,8 @@ public class MapResultSetUtil {
         Booking booking = new Booking();
         User user;
         booking = new Booking();
-        booking.setServiceName(resultSet.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+        booking.setServiceName(resultSet.getInt(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+//        booking.setServiceName(resultSet.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
         booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
         booking.setBookingDate(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
         booking.setStartDate(resultSet.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));

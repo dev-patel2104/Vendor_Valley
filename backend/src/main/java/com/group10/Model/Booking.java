@@ -6,7 +6,8 @@ package com.group10.Model;
 public class Booking {
     private int bookingId;
     private User user;
-    private String serviceName;
+//    private String serviceName;
+    private Integer serviceName;
     private String bookingDate;
     private String startDate;
     private String endDate;
@@ -15,13 +16,23 @@ public class Booking {
     private String vendorEmail;
     private String vendorMobile;
 
-    public String getServiceName() {
+//    public String getServiceName() {
+//        return serviceName;
+//    }
+
+//    public void setServiceName(String serviceName) {
+//        this.serviceName = serviceName;
+//    }
+
+
+    public Integer getServiceName() {
         return serviceName;
     }
 
-    public void setServiceName(String serviceName) {
+    public void setServiceName(Integer serviceName) {
         this.serviceName = serviceName;
     }
+
     public User getUser() {
         return user;
     }
@@ -75,5 +86,20 @@ public class Booking {
 
     public void setVendorMobile(String vendorMobile) {
         this.vendorMobile = vendorMobile;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", user=" + user +
+                ", serviceName='" + serviceName + '\'' +
+                ", bookingDate='" + bookingDate + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                ", vendorEmail='" + vendorEmail + '\'' +
+                ", vendorMobile='" + vendorMobile + '\'' +
+                '}';
     }
 }

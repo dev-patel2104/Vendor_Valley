@@ -19,7 +19,6 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.4.8" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.4.8" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.20.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.20.0" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jul-to-slf4j:2.0.7" level="project" />
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.33" level="project" />
@@ -52,6 +51,11 @@
     <orderEntry type="library" name="Maven: io.micrometer:micrometer-observation:1.11.2" level="project" />
     <orderEntry type="library" name="Maven: io.micrometer:micrometer-commons:1.11.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:6.0.11" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-log4j2:3.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.20.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.20.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-jul:2.20.0" level="project" />
     <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.18.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.15.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.15.2" level="project" />

@@ -4,6 +4,7 @@ import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
+import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * This repository class handles database operations related to bookings.
@@ -36,10 +39,10 @@ public class BookingRepository {
              PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.insertBookingEntry)) {
 
             requestReservationPreparedStatement.setInt(1, customerId);
-            requestReservationPreparedStatement.setString(2, bookingModel.getServiceName());
-            requestReservationPreparedStatement.setString(3, bookingModel.getBookingDate());
-            requestReservationPreparedStatement.setString(4, bookingModel.getStartDate());
-            requestReservationPreparedStatement.setString(5, bookingModel.getEndDate());
+            requestReservationPreparedStatement.setInt(2, bookingModel.getServiceName());
+            requestReservationPreparedStatement.setDate(3, StringUtil.dateStringToDate(bookingModel.getBookingDate()));
+            requestReservationPreparedStatement.setDate(4, StringUtil.dateStringToDate(bookingModel.getStartDate()));
+            requestReservationPreparedStatement.setDate(5, StringUtil.dateStringToDate(bookingModel.getEndDate()));
             requestReservationPreparedStatement.setString(6, bookingModel.getBookingStatus());
 
             int rowsAffected = requestReservationPreparedStatement.executeUpdate();
