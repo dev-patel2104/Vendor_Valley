@@ -1,7 +1,7 @@
 package com.group10.RepositoryTests;
 
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
+import com.group10.Model.RequestBooking;
 import com.group10.Repository.BookingRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
@@ -44,12 +44,11 @@ class BookingRepositoryTest {
     void testRequestReservation_Success() throws SQLException {
         // Arrange
         int customerId = 1;
-        Booking bookingModel = new Booking();
-        bookingModel.setServiceName("Florist");
+        RequestBooking bookingModel = new RequestBooking();
+        bookingModel.setServiceID(8);
         bookingModel.setBookingDate("2023-07-20");
         bookingModel.setStartDate("2023-07-21");
         bookingModel.setEndDate("2023-07-23");
-        bookingModel.setBookingStatus("Pending");
 
         when(databaseService.connect()).thenReturn(connection);
         when(connection.prepareStatement(SQLQueries.insertBookingEntry)).thenReturn(preparedStatement);
@@ -71,7 +70,6 @@ class BookingRepositoryTest {
         bookingResponseRequest.setBookingStatus("decline");
         bookingResponseRequest.setBookingID(123);
         bookingResponseRequest.setServiceID(23);
-        bookingResponseRequest.setCustomerEmail("boon@boon.com");
 
         when(databaseService.connect()).thenReturn(connection);
         when(connection.prepareStatement(SQLQueries.updateBookingEntry)).thenReturn(preparedStatement);
