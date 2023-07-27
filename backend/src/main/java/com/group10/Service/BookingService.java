@@ -2,12 +2,14 @@ package com.group10.Service;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.group10.Enums.BookingStatus;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.RequestBooking;
 import com.group10.Repository.BookingRepository;
 import com.group10.Repository.ServiceRepository;
+import com.group10.Util.BookingUtil;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +104,10 @@ public class BookingService {
         }
 
         if (jwtToken == null) return false;
-        if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (bookingResponseRequest.getBookingID() == null) return false;
         if (bookingResponseRequest.getServiceID() == null) return false;
+        if (bookingResponseRequest.getBookingStatus() == null) return false;
+        if (!BookingUtil.isValidBookingStatus(bookingResponseRequest.getBookingStatus())) return false;
 
         DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
         String customerEmail = decodedJWT.getClaim("email").asString();
