@@ -14,6 +14,9 @@ public class BookingUtil {
      * @return true if the booking status is valid, false otherwise.
      */
     public static boolean isValidBookingStatus(String bookingStatus) {
+        if (bookingStatus == null) return false;
+        if (bookingStatus.isEmpty() || bookingStatus.isBlank()) return false;
+
         for (BookingStatus status : BookingStatus.values()) {
             if (status.getBookingStatus().equals(bookingStatus)) {
                 return true;
