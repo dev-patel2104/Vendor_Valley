@@ -95,22 +95,26 @@ public class BookingService {
      * @throws MailParseException          If there is a parsing issue with the email.
      * @throws NoInformationFoundException If there is no information found to respond for the booking.
      */
-    public boolean respondToBooking(BookingResponseRequest bookingResponseRequest)
+    public boolean respondToBooking(String jwtToken, BookingResponseRequest bookingResponseRequest)
             throws SQLException, MailAuthenticationException, MailSendException, MailParseException, NoInformationFoundException {
         if (bookingResponseRequest == null) {
             throw new NoInformationFoundException("No booking information found to respond for the booking");
         }
+
+        if (jwtToken == null) return false;
         if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (bookingResponseRequest.getBookingID() == null) return false;
         if (bookingResponseRequest.getServiceID() == null) return false;
-        if (bookingResponseRequest.getCustomerEmail() == null) return false;
+
+        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
+        String customerEmail = decodedJWT.getClaim("email").asString();
 
         if (bookingRepository.respondToBooking(bookingResponseRequest)) {
             //send a mail to customer
             String subject = "VendorValley: You have received a response to your booking request";
-            String body = "Request for " + bookingResponseRequest.getServiceID() + " " + bookingResponseRequest.getBookingStatus();
+            String body = "Request for the service: " + bookingResponseRequest.getServiceID() + " has been " + bookingResponseRequest.getBookingStatus();
 
-            emailDetails.setRecipient(bookingResponseRequest.getCustomerEmail());
+            emailDetails.setRecipient(customerEmail);
             emailDetails.setSubject(subject);
             emailDetails.setMsgBody(body);
 

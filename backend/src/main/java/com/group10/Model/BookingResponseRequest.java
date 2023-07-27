@@ -4,7 +4,6 @@ public class BookingResponseRequest {
 
     private Integer bookingID;
     private Integer serviceID;
-    private String customerEmail;
     private String bookingStatus;
 
     public Integer getServiceID() {
@@ -13,14 +12,6 @@ public class BookingResponseRequest {
 
     public void setServiceID(Integer serviceID) {
         this.serviceID = serviceID;
-    }
-
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
-
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
     }
 
     public Integer getBookingID() {
@@ -44,7 +35,6 @@ public class BookingResponseRequest {
         return "BookingResponseRequest{" +
                 "bookingID=" + bookingID +
                 ", serviceName='" + serviceID + '\'' +
-                ", customerEmail='" + customerEmail + '\'' +
                 ", bookingStatus='" + bookingStatus + '\'' +
                 '}';
     }

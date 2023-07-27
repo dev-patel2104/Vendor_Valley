@@ -57,10 +57,10 @@ public class BookingController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking/respond")
-    public ResponseEntity<String> respondToBookingRequest(@RequestBody BookingResponseRequest bookingResponseRequestModel) {
+    public ResponseEntity<String> respondToBookingRequest(@RequestHeader String jwtToken, @RequestBody BookingResponseRequest bookingResponseRequestModel) {
         log.info("respond to bookingRequest - BookingController: {}", bookingResponseRequestModel.toString());
         try {
-            if (bookingService.respondToBooking(bookingResponseRequestModel)) {
+            if (bookingService.respondToBooking(jwtToken, bookingResponseRequestModel)) {
                 return ResponseEntity.ok("Booking status updated by vendor");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status of the service request");
