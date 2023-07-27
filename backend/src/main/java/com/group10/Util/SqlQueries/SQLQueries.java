@@ -42,7 +42,7 @@ public class SQLQueries {
                 "VALUES (?, ?, ?, ?);";
         public static final String insertServiceCategoryAssociation = "INSERT INTO service_category_association (service_id, category_id) VALUES (?, ?)";
         public static final String insertServiceImages = "Insert into service_images (service_id, image, time_stamp) values (?,?,NOW());";
-        public static final String insertBookingEntry = "INSERT INTO bookings (user_id, service_id, booking_date, start_date, end_date, booking_status) SELECT ?, service_id, ?, ?, ?, ? FROM services WHERE service_name = ?;";
+        public static final String insertBookingEntry = "INSERT INTO bookings (user_id, service_id, booking_date, start_date, end_date, booking_status) VALUES (?, ?, ?, ?, ?, ?);";
         public static final String updateBookingEntry = "update bookings set booking_status = ? where booking_id = ?;";
 
 }

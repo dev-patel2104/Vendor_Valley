@@ -3,10 +3,11 @@ package com.group10.Service;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.NoInformationFoundException;
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.EmailDetails;
+import com.group10.Model.RequestBooking;
 import com.group10.Repository.BookingRepository;
+import com.group10.Repository.ServiceRepository;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class BookingService {
     private BookingRepository bookingRepository;
 
     @Autowired
+    private ServiceRepository serviceRepository;
+
+    @Autowired
     private JWTTokenHandler jwtTokenHandler;
 
     @Autowired
@@ -40,31 +44,32 @@ public class BookingService {
      * Requests a reservation using the provided JWT token and booking information.
      *
      * @param jwtToken     The JSON Web Token (JWT) provided by the client for authentication.
-     * @param bookingModel The booking information to be requested for reservation.
+     * @param requestBookingModel The booking information to be requested for reservation.
      * @return true if the reservation request is successful, false otherwise.
      * @throws SQLException           If there is an error executing the database query.
      * @throws JWTVerificationException If the JWT token cannot be verified.
      */
-    public boolean requestReservation(String jwtToken, Booking bookingModel) throws SQLException, JWTVerificationException {
+    public boolean requestReservation(String jwtToken, RequestBooking requestBookingModel) throws SQLException, JWTVerificationException {
         if (jwtToken == null) return false;
-        if (bookingModel == null) return false;
-        if (bookingModel.getServiceName() == null) return false;
-        if (bookingModel.getBookingDate() == null) return false;
-        if (bookingModel.getStartDate() == null) return false;
-        if (bookingModel.getEndDate() == null) return false;
-        if (bookingModel.getBookingStatus() == null) return false;
+        if (requestBookingModel == null) return false;
+        if (requestBookingModel.getServiceID() == null) return false;
+        if (requestBookingModel.getBookingDate() == null) return false;
+        if (requestBookingModel.getStartDate() == null) return false;
+        if (requestBookingModel.getEndDate() == null) return false;
 
         DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
         int customerId = decodedJWT.getClaim("userId").asInt();
 
         try {
-            if (bookingRepository.requestReservation(customerId, bookingModel)) {
+            if (bookingRepository.requestReservation(customerId, requestBookingModel)) {
                 //send mail to vendor about the customer's request
-                if (bookingModel.getVendorEmail() != null) {
-                    String subject = "VendorValley: A customer has requested for " + bookingModel.getServiceName();
+                com.group10.Model.Service vendorService = serviceRepository.getServiceDetails(requestBookingModel.getServiceID());
+
+                if (vendorService != null && vendorService.getServiceName() != null && vendorService.getCompanyEmail() != null) {
+                    String subject = "VendorValley: A customer has requested for " + vendorService.getServiceName();
                     String body = "Respond to the customer's request on the vendor valley website !!"; // todo: add site url ?
 
-                    emailDetails.setRecipient(bookingModel.getVendorEmail());
+                    emailDetails.setRecipient(vendorService.getCompanyEmail());
                     emailDetails.setSubject(subject);
                     emailDetails.setMsgBody(body);
 
