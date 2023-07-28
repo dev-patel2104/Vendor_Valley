@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.HomeControllerTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.338 s - in com.group10.ControllerTests.HomeControllerTest
+=======
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.021 s - in com.group10.ControllerTests.HomeControllerTest
+>>>>>>> asdc-project/Develop

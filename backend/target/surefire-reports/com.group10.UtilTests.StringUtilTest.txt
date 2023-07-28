@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.UtilTests.StringUtilTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s - in com.group10.UtilTests.StringUtilTest
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s - in com.group10.UtilTests.StringUtilTest
+>>>>>>> asdc-project/Develop

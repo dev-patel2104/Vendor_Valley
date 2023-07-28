@@ -9,7 +9,9 @@ public enum GetBookingDetailsQueryColumns
     BOOKING_DATE("booking_date"),
     START_DATE("start_date"),
     END_DATE("end_date"),
-    BOOKING_STATUS("booking_status");
+    BOOKING_STATUS("booking_status"),
+
+    SERVICE_ID("service_id");
 
     private final String columnName;
 

@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.ProfileControllerTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 33, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.087 s - in com.group10.ControllerTests.ProfileControllerTest
+=======
+Tests run: 33, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.941 s - in com.group10.ControllerTests.ProfileControllerTest
+>>>>>>> asdc-project/Develop
