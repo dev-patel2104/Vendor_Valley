@@ -11,6 +11,15 @@ public class Booking {
     private String startDate;
     private String endDate;
     private String bookingStatus;
+    private int serviceId;
+    public int getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
+    }
+
 
     public String getServiceName() {
         return serviceName;
