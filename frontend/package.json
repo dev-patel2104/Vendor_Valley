@@ -13,7 +13,7 @@
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.6",
-    "lottie-vuejs": "^0.4.0",
+    "lottie-vuejs": "^0.1.0",
     "stylus": "^0.59.0",
     "stylus-loader": "^3.0.2",
     "sweet-alert": "^2.0.5",
