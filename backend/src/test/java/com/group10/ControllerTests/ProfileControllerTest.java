@@ -213,12 +213,23 @@ public class ProfileControllerTest
         String encodedToken = "validToken";
         DecodedJWT token = Mockito.mock(DecodedJWT.class);
         when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
         when(token.getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(token.getClaim("isVendor")).thenReturn(Mockito.mock(Claim.class));
         when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
         List<Booking> expectedBookingList = new ArrayList<>();
         when(vendorProfileService.getBookings(user_id)).thenReturn(expectedBookingList);
 
         ResponseEntity<List<Booking>> response = ResponseEntity.ok(expectedBookingList);
+
+        assertEquals(response,profileController.getBookings(encodedToken));
+
+        user_id = 2;
+        when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(0);
+
+        when(customerProfileService.getBookings(user_id)).thenReturn(expectedBookingList);
 
         assertEquals(response,profileController.getBookings(encodedToken));
     }
@@ -229,12 +240,21 @@ public class ProfileControllerTest
         String encodedToken = "validToken";
         DecodedJWT token = Mockito.mock(DecodedJWT.class);
         when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
         when(token.getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(token.getClaim("isVendor")).thenReturn(Mockito.mock(Claim.class));
         when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
 
         when(vendorProfileService.getBookings(user_id)).thenThrow(new SQLException("Database issue!"));
-
         ResponseEntity<List<Booking>> response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        assertEquals(response,profileController.getBookings(encodedToken));
+
+        user_id = 2;
+        when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
+
+        when(vendorProfileService.getBookings(user_id)).thenThrow(new SQLException("Database issue!"));
 
         assertEquals(response,profileController.getBookings(encodedToken));
     }
@@ -245,12 +265,23 @@ public class ProfileControllerTest
         String encodedToken = "validToken";
         DecodedJWT token = Mockito.mock(DecodedJWT.class);
         when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
         when(token.getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(token.getClaim("isVendor")).thenReturn(Mockito.mock(Claim.class));
         when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
 
         when(vendorProfileService.getBookings(user_id)).thenThrow(new UserDoesntExistException("No such user is present"));
 
         ResponseEntity<List<Booking>> response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        assertEquals(response,profileController.getBookings(encodedToken));
+
+        user_id = 2;
+        when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
+
+        when(vendorProfileService.getBookings(user_id)).thenThrow(new UserDoesntExistException("No such user is present"));
 
         assertEquals(response,profileController.getBookings(encodedToken));
     }
@@ -261,12 +292,23 @@ public class ProfileControllerTest
         String encodedToken = "validToken";
         DecodedJWT token = Mockito.mock(DecodedJWT.class);
         when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
+        when(jwtTokenHandler.decodeJWTToken(encodedToken)).thenReturn(token);
         when(token.getClaim("userId")).thenReturn(Mockito.mock(Claim.class));
+        when(token.getClaim("isVendor")).thenReturn(Mockito.mock(Claim.class));
         when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
 
         when(vendorProfileService.getBookings(user_id)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
 
         ResponseEntity<List<Booking>> response = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
+
+        assertEquals(response,profileController.getBookings(encodedToken));
+
+        user_id = 2;
+        when(token.getClaim("userId").asInt()).thenReturn(user_id);
+        when(token.getClaim("isVendor").asInt()).thenReturn(1);
+
+        when(vendorProfileService.getBookings(user_id)).thenThrow(new RuntimeException("Some unexpected exception occurred"));
 
         assertEquals(response,profileController.getBookings(encodedToken));
     }

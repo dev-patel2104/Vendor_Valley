@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group10.Model.Booking;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +30,7 @@ public class CustomerProfileServiceTest
     private CustomerRepositoryImpl CustomerRepositoryImpl;
 
     private SignUpModel user;
-    private int user_id;
+    private int userId;
 
 
     private void initializeUser() {
@@ -63,9 +64,9 @@ public class CustomerProfileServiceTest
         initializeUser();
         List<SignUpModel> users = new ArrayList<>();
         users.add(user);
-        user_id = 5;
+        userId = 5;
         when(CustomerRepositoryImpl.getUsers(any())).thenReturn(users);
-        assertEquals(user, customerProfileService.getProfile(user_id));
+        assertEquals(user, customerProfileService.getProfile(userId));
     }
 
     @Test
@@ -74,26 +75,51 @@ public class CustomerProfileServiceTest
         initializeUser();
         List<SignUpModel> users = new ArrayList<>();
         users.add(user);
-        user_id = -1;
+        userId = -1;
         when(CustomerRepositoryImpl.getUsers(any())).thenReturn(users);
-        assertThrows(UserDoesntExistException.class, () -> customerProfileService.getProfile(user_id));
+        assertThrows(UserDoesntExistException.class, () -> customerProfileService.getProfile(userId));
     }
 
     @Test
     public void getProfile_UserDoesntExistException() throws SQLException, UserDoesntExistException
     {
         initializeUser();
-        user_id = 5;
+        userId = 5;
         when(CustomerRepositoryImpl.getUsers(any())).thenReturn(null);
-        assertThrows(UserDoesntExistException.class, () -> customerProfileService.getProfile(user_id));    
+        assertThrows(UserDoesntExistException.class, () -> customerProfileService.getProfile(userId));
     }
 
     @Test
     public void getProfile_SQLException() throws SQLException, UserDoesntExistException
     {
         initializeUser();
-        user_id = 5;
+        userId = 5;
         when(CustomerRepositoryImpl.getUsers(any())).thenThrow(new SQLException("Problem while fetching from database"));
-        assertThrows(SQLException.class, () -> customerProfileService.getProfile(user_id));
+        assertThrows(SQLException.class, () -> customerProfileService.getProfile(userId));
+    }
+
+    @Test
+    public void getBookings_Successful() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        List<Booking> expectedBookingList = new ArrayList<>();
+        when(CustomerRepositoryImpl.getBookings(userId)).thenReturn(expectedBookingList);
+        assertEquals(expectedBookingList, customerProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_SQLException() throws SQLException, UserDoesntExistException
+    {
+        userId = 5;
+        initializeUser();
+        when(CustomerRepositoryImpl.getBookings(userId)).thenThrow(new SQLException("Database issue"));
+        assertThrows(SQLException.class, () -> customerProfileService.getBookings(userId));
+    }
+    @Test
+    public void getBookings_UserDoesntExistException() throws SQLException, UserDoesntExistException
+    {
+        userId = -2;
+        initializeUser();
+        assertThrows(UserDoesntExistException.class, () -> customerProfileService.getBookings(userId));
     }
 }

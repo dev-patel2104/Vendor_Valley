@@ -222,9 +222,18 @@ public class ProfileController
     {
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         List<Booking> bookingList = new ArrayList<>();
+        int isVendor;
         try
         {
-            bookingList = vendorProfileService.getBookings(token.getClaim("userId").asInt());
+            isVendor = token.getClaim("isVendor").asInt();
+            if(isVendor == 1)
+            {
+                bookingList = vendorProfileService.getBookings(token.getClaim("userId").asInt());
+            }
+            else
+            {
+                bookingList = userProfileService.getBookings(token.getClaim("userId").asInt());
+            }
         }
         catch (SQLException e)
         {
