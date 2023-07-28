@@ -128,20 +128,22 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
         if (bookingId == 0){
             return false;
         }
-        boolean bookingExists = serviceRepository.checkIfBookingExists(bookingId);
-        if (!bookingExists){
-            return false;
-        }
-        return startWritingReview(review, JWTToken);
-    }
-
-    private boolean startWritingReview(Review review, String JWTToken) throws SQLException {
-        boolean result = false;
         DecodedJWT jwt = jwtTokenHandler.decodeJWTToken(JWTToken);
         // Get user id from JWT Token
         int userId = jwt.getClaim("userId").asInt();
         // Set user id in review object
         review.setReviewerId(userId);
+        boolean bookingExists = serviceRepository.checkIfBookingExists(bookingId, review.getServiceId(), review.getReviewerId());
+        if (!bookingExists){
+            return false;
+        }
+        review.setBookingId(bookingId);
+        return startWritingReview(review);
+    }
+
+    private boolean startWritingReview(Review review) throws SQLException {
+        boolean result = false;
+
         // Create review dateTime
         LocalDateTime dateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

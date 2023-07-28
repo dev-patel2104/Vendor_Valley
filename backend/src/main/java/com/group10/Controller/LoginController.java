@@ -79,6 +79,7 @@ public class LoginController {
             // Return
             response.put("token", token);
             response.put("role", String.valueOf(user.getVendor()));
+            response.put("name", user.getFirstName()+" "+user.getLastName());
             return ResponseEntity.ok(response);
         }
         catch(UserDoesntExistException | InvalidPasswordException e){

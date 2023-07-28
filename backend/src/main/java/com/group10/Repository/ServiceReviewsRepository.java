@@ -63,12 +63,13 @@ public class ServiceReviewsRepository {
         try(Connection connection = databaseService.connect();
             PreparedStatement statement = connection.prepareStatement(SQLQueries.insertReviewQuery, Statement.RETURN_GENERATED_KEYS);)
         {
-            statement.setInt(1, review.getServiceId());
-            statement.setInt(2, review.getReviewerId());
-            statement.setString(3, review.getReviewTitle());
-            statement.setString(4, review.getReviewComment());
-            statement.setString(5, review.getReviewDate());
-            statement.setInt(6, review.getReviewRating());
+            statement.setInt(1, review.getBookingId());
+            statement.setInt(2, review.getServiceId());
+            statement.setInt(3, review.getReviewerId());
+            statement.setString(4, review.getReviewTitle());
+            statement.setString(5, review.getReviewComment());
+            statement.setString(6, review.getReviewDate());
+            statement.setInt(7, review.getReviewRating());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()){
