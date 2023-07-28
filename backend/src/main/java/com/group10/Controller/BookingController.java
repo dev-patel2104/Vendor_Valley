@@ -2,7 +2,6 @@ package com.group10.Controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.group10.Exceptions.NoInformationFoundException;
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.RequestBooking;
 import com.group10.Service.BookingService;

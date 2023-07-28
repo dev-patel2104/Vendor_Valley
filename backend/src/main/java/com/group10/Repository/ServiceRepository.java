@@ -17,12 +17,14 @@ import org.springframework.stereotype.Repository;
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Model.Service;
+import com.group10.Repository.Interfaces.IServiceRepositoryRetriever;
+import com.group10.Repository.Interfaces.IServiceRepositoryWriter;
 
 /**
  * Repository class for managing services in the database.
  */
 @Repository
-public class ServiceRepository {
+public class ServiceRepository implements IServiceRepositoryRetriever, IServiceRepositoryWriter{
     
     @Autowired
     IDatabaseService databaseService;

@@ -1,7 +1,6 @@
 package com.group10.Repository;
 
 import com.group10.Enums.BookingStatus;
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.RequestBooking;
 import com.group10.Service.Interfaces.IDatabaseService;

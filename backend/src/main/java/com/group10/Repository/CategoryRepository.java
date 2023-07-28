@@ -2,6 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Model.Category;
 import com.group10.Model.Service;
+import com.group10.Repository.Interfaces.ICategoryRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import java.util.Base64;
 import java.util.List;
 
 @Repository
-public class CategoryRepository
-{
+public class CategoryRepository implements ICategoryRepository {
+    
     @Autowired
     IDatabaseService databaseService;
     private final int numberOfFeaturedCategories = 3;

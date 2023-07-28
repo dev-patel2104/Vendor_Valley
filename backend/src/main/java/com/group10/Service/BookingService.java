@@ -2,7 +2,6 @@ package com.group10.Service;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.group10.Enums.BookingStatus;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.EmailDetails;
