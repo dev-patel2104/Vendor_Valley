@@ -148,6 +148,7 @@ public class MapResultSetUtil {
         booking.setStartDate(resultSet.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
         booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
         booking.setBookingStatus(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+        booking.setServiceId(resultSet.getInt(GetBookingDetailsQueryColumns.SERVICE_ID.getColumnName()));
 
         user = mapResultSetToUser(resultSet);
         if(user.getUserId() == Constants.USERDOESNTEXIST)
