@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.ProfileControllerTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 33, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.827 s - in com.group10.ControllerTests.ProfileControllerTest
-=======
-Tests run: 33, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.293 s - in com.group10.ControllerTests.ProfileControllerTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 33, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.208 s - in com.group10.ControllerTests.ProfileControllerTest

@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.VendorValley.VendorValleyApplicationTests
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 s - in com.group10.VendorValley.VendorValleyApplicationTests
-=======
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s - in com.group10.VendorValley.VendorValleyApplicationTests
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s - in com.group10.VendorValley.VendorValleyApplicationTests

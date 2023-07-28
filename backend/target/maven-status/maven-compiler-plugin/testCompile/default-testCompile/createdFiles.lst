@@ -21,10 +21,7 @@ com\group10\RepositoryTests\VendorRepositoryImplTest.class
 com\group10\ControllerTests\HomeControllerTest.class
 com\group10\ExceptionTests\VendorDetailsAbsentForUserExceptionTest.class
 com\group10\ControllerTests\LoginControllerTest.class
-<<<<<<< HEAD
 com\group10\UtilTests\BookingUtilTest.class
-=======
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.class
 com\group10\UtilTests\UserUtilTest.class
 com\group10\ServiceTests\HomeServiceImplTest.class

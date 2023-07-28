@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ServiceTests.ProfileServiceTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.075 s - in com.group10.ServiceTests.ProfileServiceTest
-=======
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.069 s - in com.group10.ServiceTests.ProfileServiceTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.177 s - in com.group10.ServiceTests.ProfileServiceTest

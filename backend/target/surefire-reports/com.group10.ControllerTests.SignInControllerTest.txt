@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.SignInControllerTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.053 s - in com.group10.ControllerTests.SignInControllerTest
-=======
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s - in com.group10.ControllerTests.SignInControllerTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.104 s - in com.group10.ControllerTests.SignInControllerTest

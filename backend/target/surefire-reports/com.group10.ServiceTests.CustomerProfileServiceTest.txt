@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ServiceTests.CustomerProfileServiceTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.435 s - in com.group10.ServiceTests.CustomerProfileServiceTest
-=======
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.412 s - in com.group10.ServiceTests.CustomerProfileServiceTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.076 s - in com.group10.ServiceTests.CustomerProfileServiceTest

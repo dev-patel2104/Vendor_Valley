@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ServiceTests.BookingServiceTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.18 s - in com.group10.ServiceTests.BookingServiceTest
-=======
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.166 s - in com.group10.ServiceTests.BookingServiceTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.739 s - in com.group10.ServiceTests.BookingServiceTest

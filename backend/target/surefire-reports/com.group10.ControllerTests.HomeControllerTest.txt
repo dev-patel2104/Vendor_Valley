@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ControllerTests.HomeControllerTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.007 s - in com.group10.ControllerTests.HomeControllerTest
-=======
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.733 s - in com.group10.ControllerTests.HomeControllerTest
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.512 s - in com.group10.ControllerTests.HomeControllerTest

@@ -5,10 +5,7 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\InvalidPasswordException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\Category.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Constants\IntegerConstants.java
-<<<<<<< HEAD
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\BookingUtil.java
-=======
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\BookingService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\VendorDashboardController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Enums\GetBookingDetailsQueryColumns.java
@@ -56,19 +53,12 @@ c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Service\Interfaces\ISearchService.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\NoInformationFoundException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\EmailDetails.java
-<<<<<<< HEAD
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\RequestBooking.java
-=======
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\BookingsFilterImpl.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Controller\SignInController.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\Review.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Repository\ServiceImageRepository.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\PriceFilterImpl.java
-<<<<<<< HEAD
-=======
-c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\SqlQueries\SQLQuery.java
->>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Exceptions\VerificationCodeExpiredException.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Util\StringUtil.java
 c:\Users\rockm\Workspace\VisualStudioWorkspace\DalAssignments\ASDC\GroupProject\group10\backend\src\main\java\com\group10\Model\Service.java
