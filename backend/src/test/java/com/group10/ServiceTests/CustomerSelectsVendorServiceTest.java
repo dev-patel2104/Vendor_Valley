@@ -105,7 +105,7 @@ public class CustomerSelectsVendorServiceTest {
         int fakeUserId = 999999999;
         DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
         Claim claim = Mockito.mock(Claim.class);
-        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
+        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
         Mockito.when(decodedJWT.getClaim("userId")).thenReturn(claim);
         Mockito.when(claim.asInt()).thenReturn(fakeUserId);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
@@ -122,7 +122,7 @@ public class CustomerSelectsVendorServiceTest {
         DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
         Claim claim = Mockito.mock(Claim.class);
         review.setBookingId(1);
-        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
+        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
         Mockito.when(decodedJWT.getClaim("userId")).thenReturn(claim);
         Mockito.when(claim.asInt()).thenReturn(fakeUserId);
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
@@ -134,8 +134,17 @@ public class CustomerSelectsVendorServiceTest {
     public void testInvalidBookingId_writeReviews() throws Exception{
         Review review = new Review();
         review.setBookingId(1);
-        Mockito.doReturn(false).when(serviceRepository).checkIfBookingExists(anyInt());
-        assertFalse(customerSelectsVendorService.writeReviews(review, "token"));
+        String token = "token";
+        int fakeUserId = 999999999;
+        DecodedJWT decodedJWT = Mockito.mock(DecodedJWT.class);
+        Claim claim = Mockito.mock(Claim.class);
+        review.setBookingId(1);
+        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
+        Mockito.when(decodedJWT.getClaim("userId")).thenReturn(claim);
+        Mockito.when(claim.asInt()).thenReturn(fakeUserId);
+        Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doReturn(false).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
+        assertFalse(customerSelectsVendorService.writeReviews(review, token));
     }
 
     @Test
@@ -149,7 +158,7 @@ public class CustomerSelectsVendorServiceTest {
         Review review = new Review();
         String token = "token";
         review.setBookingId(1);
-        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
+        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
         Mockito.doThrow(new JWTVerificationException("Invalid Token!")).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertThrows(Exception.class, () -> customerSelectsVendorService.writeReviews(review, token));
     }
@@ -159,7 +168,7 @@ public class CustomerSelectsVendorServiceTest {
         Review review = new Review();
         String token = "token";
         review.setBookingId(1);
-        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt());
+        Mockito.doReturn(true).when(serviceRepository).checkIfBookingExists(anyInt(),anyInt(),anyInt());
         Mockito.doThrow(new SQLException("SQL Exception!")).when(serviceReviewsRepository).writeReviews(Mockito.any());
         assertThrows(Exception.class, () -> customerSelectsVendorService.writeReviews(review, token));
     }
