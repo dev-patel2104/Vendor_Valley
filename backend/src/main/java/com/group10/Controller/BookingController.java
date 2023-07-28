@@ -2,8 +2,8 @@ package com.group10.Controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.group10.Exceptions.NoInformationFoundException;
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
+import com.group10.Model.RequestBooking;
 import com.group10.Service.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +30,15 @@ public class BookingController {
      * Handles the HTTP POST request for booking a service.
      *
      * @param jwtToken     The JSON Web Token (JWT) provided in the request header for authentication.
-     * @param bookingModel The booking information provided in the request body.
+     * @param requestBookingModel The booking information provided in the request body.
      * @return A ResponseEntity containing the response message based on the booking request status.
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking")
-    public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody Booking bookingModel) {
-        log.info("request reservation payload - BookingController: {}", bookingModel.toString());
+    public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody RequestBooking requestBookingModel) {
+        log.info("request reservation payload - BookingController: {}", requestBookingModel.toString());
         try {
-            if (bookingService.requestReservation(jwtToken, bookingModel)) {
+            if (bookingService.requestReservation(jwtToken, requestBookingModel)) {
                 return ResponseEntity.ok("Booking request has been made");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cannot request the service now, Please try again");
@@ -56,10 +56,10 @@ public class BookingController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking/respond")
-    public ResponseEntity<String> respondToBookingRequest(@RequestBody BookingResponseRequest bookingResponseRequestModel) {
+    public ResponseEntity<String> respondToBookingRequest(@RequestHeader String jwtToken, @RequestBody BookingResponseRequest bookingResponseRequestModel) {
         log.info("respond to bookingRequest - BookingController: {}", bookingResponseRequestModel.toString());
         try {
-            if (bookingService.respondToBooking(bookingResponseRequestModel)) {
+            if (bookingService.respondToBooking(jwtToken, bookingResponseRequestModel)) {
                 return ResponseEntity.ok("Booking status updated by vendor");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status of the service request");

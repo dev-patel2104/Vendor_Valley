@@ -1,7 +1,8 @@
 package com.group10.Repository;
 
-import com.group10.Model.Booking;
+import com.group10.Enums.BookingStatus;
 import com.group10.Model.BookingResponseRequest;
+import com.group10.Model.RequestBooking;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Util.StringUtil;
@@ -28,20 +29,20 @@ public class BookingRepository {
      * Requests a reservation by inserting booking information into the database.
      *
      * @param customerId   The ID of the customer making the reservation.
-     * @param bookingModel The booking information to be inserted into the database.
+     * @param requestBookingModel The booking information to be inserted into the database.
      * @return true if the reservation request is successful and the data is inserted into the database, false otherwise.
      * @throws SQLException If there is an error executing the database query.
      */
-    public boolean requestReservation(int customerId, Booking bookingModel) throws SQLException {
+    public boolean requestReservation(int customerId, RequestBooking requestBookingModel) throws SQLException {
         try (Connection connection = databaseService.connect();
              PreparedStatement requestReservationPreparedStatement = connection.prepareStatement(SQLQueries.insertBookingEntry)) {
 
             requestReservationPreparedStatement.setInt(1, customerId);
-            requestReservationPreparedStatement.setDate(2, StringUtil.dateStringToDate(bookingModel.getBookingDate()));
-            requestReservationPreparedStatement.setDate(3, StringUtil.dateStringToDate(bookingModel.getStartDate()));
-            requestReservationPreparedStatement.setDate(4, StringUtil.dateStringToDate(bookingModel.getEndDate()));
-            requestReservationPreparedStatement.setString(5, bookingModel.getBookingStatus());
-            requestReservationPreparedStatement.setString(6, bookingModel.getServiceName());
+            requestReservationPreparedStatement.setInt(2, requestBookingModel.getServiceID());
+            requestReservationPreparedStatement.setDate(3, StringUtil.dateStringToDate(requestBookingModel.getBookingDate()));
+            requestReservationPreparedStatement.setDate(4, StringUtil.dateStringToDate(requestBookingModel.getStartDate()));
+            requestReservationPreparedStatement.setDate(5, StringUtil.dateStringToDate(requestBookingModel.getEndDate()));
+            requestReservationPreparedStatement.setString(6, BookingStatus.AWAITING.getBookingStatus());
 
             int rowsAffected = requestReservationPreparedStatement.executeUpdate();
 

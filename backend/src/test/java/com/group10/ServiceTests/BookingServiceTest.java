@@ -4,10 +4,9 @@ package com.group10.ServiceTests;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.NoInformationFoundException;
-import com.group10.Model.Booking;
-import com.group10.Model.BookingResponseRequest;
-import com.group10.Model.EmailDetails;
+import com.group10.Model.*;
 import com.group10.Repository.BookingRepository;
+import com.group10.Repository.ServiceRepository;
 import com.group10.Service.BookingService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
@@ -33,6 +32,9 @@ public class BookingServiceTest {
     BookingRepository bookingRepository;
 
     @Mock
+    ServiceRepository serviceRepository;
+
+    @Mock
     JWTTokenHandler jwtTokenHandler;
 
     @Mock
@@ -46,7 +48,7 @@ public class BookingServiceTest {
 
     @Test
     public void nullJWTtoken_requestReservation() throws SQLException {
-        assertFalse(bookingService.requestReservation(null, new Booking()));
+        assertFalse(bookingService.requestReservation(null, new RequestBooking()));
     }
 
     @Test
@@ -59,12 +61,11 @@ public class BookingServiceTest {
         DecodedJWT decodedJWT = mock(DecodedJWT.class);
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
-        Booking booking = new Booking();
-        booking.setServiceName("Florist");
-        booking.setBookingDate("07-12-2023");
-        booking.setStartDate("07-12-2023");
-        booking.setEndDate("07-12-2023");
-        booking.setBookingStatus("decline");
+        RequestBooking requestBooking = new RequestBooking();
+        requestBooking.setServiceID(666);
+        requestBooking.setBookingDate("07-12-2023");
+        requestBooking.setStartDate("07-12-2023");
+        requestBooking.setEndDate("07-12-2023");
 
         int userID = 616;
 
@@ -72,9 +73,8 @@ public class BookingServiceTest {
         Mockito.doReturn(claim).when(decodedJWT).getClaim("userId");
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
 
-        Mockito.doReturn(false).when(bookingRepository).requestReservation(userID, booking);
-
-        assertFalse(bookingService.requestReservation(token, booking));
+        Mockito.doReturn(false).when(bookingRepository).requestReservation(userID, requestBooking);
+        assertFalse(bookingService.requestReservation(token, requestBooking));
     }
 
     @Test
@@ -82,21 +82,23 @@ public class BookingServiceTest {
         DecodedJWT decodedJWT = mock(DecodedJWT.class);
         Claim claim = mock(Claim.class);
         String token = "jwt_token";
-        Booking booking = new Booking();
-        booking.setServiceName("Florist");
-        booking.setBookingDate("07-12-2023");
-        booking.setStartDate("07-12-2023");
-        booking.setEndDate("07-12-2023");
-        booking.setBookingStatus("decline");
+        RequestBooking requestBooking = new RequestBooking();
+        requestBooking.setServiceID(6);
+        requestBooking.setBookingDate("07-12-2023");
+        requestBooking.setStartDate("07-12-2023");
+        requestBooking.setEndDate("07-12-2023");
         int userID = 616;
 
         Mockito.doReturn(userID).when(claim).asInt();
         Mockito.doReturn(claim).when(decodedJWT).getClaim("userId");
         Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
+        Mockito.doReturn(true).when(bookingRepository).requestReservation(userID, requestBooking);
 
-        Mockito.doReturn(true).when(bookingRepository).requestReservation(userID, booking);
+        Service someVendorService = new Service();
+        someVendorService.setCompanyEmail("test@boon.ca");
+        Mockito.doReturn(someVendorService).when(serviceRepository).getServiceDetails(Mockito.anyInt());
 
-        assertTrue(bookingService.requestReservation(token, booking));
+        assertTrue(bookingService.requestReservation(token, requestBooking));
     }
 
     @Test
@@ -104,41 +106,46 @@ public class BookingServiceTest {
         BookingResponseRequest bookingResponseRequest = null;
 
         BookingService newBookingService = mock(BookingService.class);
-        when(newBookingService.respondToBooking(bookingResponseRequest)).thenThrow(new NoInformationFoundException("test"));
-        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking(bookingResponseRequest));
+        when(newBookingService.respondToBooking("jwt token", bookingResponseRequest)).thenThrow(new NoInformationFoundException("test"));
+        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking("jwt token", bookingResponseRequest));
     }
 
     @Test
     public void repoSuccess_respondToBooking() throws SQLException, NoInformationFoundException {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
-        bookingResponseRequest.setBookingStatus("accept");
+        bookingResponseRequest.setBookingStatus("accepted");
         bookingResponseRequest.setBookingID(342);
         bookingResponseRequest.setServiceID(23);
-        bookingResponseRequest.setCustomerEmail("test@mail.com");
+
+        DecodedJWT decodedJWT = mock(DecodedJWT.class);
+        Claim claim = mock(Claim.class);
+
+        String token = "jwt_token";
+        String email = "boon@dal.ca";
+        Mockito.doReturn(email).when(claim).asString();
+        Mockito.doReturn(claim).when(decodedJWT).getClaim("email");
+        Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
 
         when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
 
         when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
 
-        assertTrue(bookingService.respondToBooking(bookingResponseRequest));
+        assertTrue(bookingService.respondToBooking(token, bookingResponseRequest));
     }
 
     @Test
     public void repoFail_respondToBooking() throws SQLException, NoInformationFoundException {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
-        bookingResponseRequest.setBookingStatus("accept");
+        bookingResponseRequest.setBookingStatus("invalid booking status");
         bookingResponseRequest.setBookingID(342);
         bookingResponseRequest.setServiceID(23);
-        bookingResponseRequest.setCustomerEmail("test@mail.com");
 
-        when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(false);
-
-        assertFalse(bookingService.respondToBooking(bookingResponseRequest));
+        assertFalse(bookingService.respondToBooking("jwt token", bookingResponseRequest));
     }
 
     @Test
     public void emptyAttrsRequestModel_respondToBooking() throws NoInformationFoundException, SQLException {
         BookingResponseRequest bookingResponseRequest = new BookingResponseRequest();
-        assertFalse(bookingService.respondToBooking(bookingResponseRequest));
+        assertFalse(bookingService.respondToBooking("jwt token", bookingResponseRequest));
     }
 }

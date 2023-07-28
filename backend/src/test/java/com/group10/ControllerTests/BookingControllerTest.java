@@ -2,8 +2,8 @@ package com.group10.ControllerTests;
 
 
 import com.group10.Controller.BookingController;
-import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
+import com.group10.Model.RequestBooking;
 import com.group10.Service.BookingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,15 +33,15 @@ public class BookingControllerTest {
 
     @Test
     public void requestReservationTest() throws Exception {
-        when(bookingService.requestReservation(Mockito.anyString(), Mockito.any(Booking.class))).thenReturn(true);
+        when(bookingService.requestReservation(Mockito.anyString(), Mockito.any(RequestBooking.class))).thenReturn(true);
         mockMvc.perform(post("/booking").header("jwtToken", "my jwt token").contentType("application/json").content("{\"bookingId\": 2}")).andExpect(status().is2xxSuccessful());
 
     }
 
     @Test
     public void respondToBookingRequestTest() throws Exception {
-        when(bookingService.respondToBooking(Mockito.any(BookingResponseRequest.class))).thenReturn(true);
-        mockMvc.perform(post("/booking/respond").contentType("application/json").content("{\"bookingID\": 666}")).andExpect(status().is2xxSuccessful());
+        when(bookingService.respondToBooking(Mockito.anyString(), Mockito.any(BookingResponseRequest.class))).thenReturn(true);
+        mockMvc.perform(post("/booking/respond").header("jwtToken", "my jwt token").contentType("application/json").content("{\"bookingID\": 666}")).andExpect(status().is2xxSuccessful());
     }
 
 }

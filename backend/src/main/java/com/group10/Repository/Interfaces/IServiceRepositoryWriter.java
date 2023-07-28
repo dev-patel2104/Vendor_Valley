@@ -10,5 +10,4 @@ public interface IServiceRepositoryWriter {
     public Service editService(Service serviceToUpdate, List<Category> categoryList) throws SQLException;
     public Service insertService(Service service, List<Category> categoryList) throws SQLException;
     public boolean deleteService(Service serviceToDelete) throws SQLException;
-    public Service editServiceImage(Service service) throws SQLException;
 }

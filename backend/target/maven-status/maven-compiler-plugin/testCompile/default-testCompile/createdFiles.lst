@@ -21,6 +21,7 @@ com\group10\RepositoryTests\VendorRepositoryImplTest.class
 com\group10\ControllerTests\HomeControllerTest.class
 com\group10\ExceptionTests\VendorDetailsAbsentForUserExceptionTest.class
 com\group10\ControllerTests\LoginControllerTest.class
+com\group10\UtilTests\BookingUtilTest.class
 com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.class
 com\group10\UtilTests\UserUtilTest.class
 com\group10\ServiceTests\HomeServiceImplTest.class
