@@ -6,6 +6,8 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IAuthenticationService;
 import org.junit.jupiter.api.Test;
@@ -29,10 +31,10 @@ public class AuthenticationServiceImplTest
     private IAuthenticationService authenticationService;
     
     @MockBean
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
 
     @MockBean
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
 
     private SignUpModel signUpModel;
     @Autowired

@@ -12,6 +12,9 @@ import java.util.List;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.*;
 import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.Interfaces.ICategoryRepository;
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepositoryImpl;
@@ -31,15 +34,15 @@ public class VendorProfileServiceTest
     private VendorProfileService vendorProfileService;
     
     @MockBean
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
     @MockBean
     private ServiceImageRepository serviceImageRepository;
     @MockBean
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
     @MockBean
     private ServiceRepository serviceRepository;
     @MockBean
-    private CategoryRepository categoryRepository;
+    private ICategoryRepository categoryRepository;
 
     private SignUpModel user;
     private int userId;
@@ -160,7 +163,7 @@ public class VendorProfileServiceTest
         userId = 5;
         initializeUser();
         List<Booking> expectedBookingList = new ArrayList<>();
-        when(VendorRepositoryImpl.getBookingsInfo(userId)).thenReturn(expectedBookingList);
+        when(VendorRepositoryImpl.getBookings(userId)).thenReturn(expectedBookingList);
         assertEquals(expectedBookingList, vendorProfileService.getBookings(userId));
     }
     @Test
@@ -168,7 +171,7 @@ public class VendorProfileServiceTest
     {
         userId = 5;
         initializeUser();
-        when(VendorRepositoryImpl.getBookingsInfo(userId)).thenThrow(new SQLException("Database issue"));
+        when(VendorRepositoryImpl.getBookings(userId)).thenThrow(new SQLException("Database issue"));
         assertThrows(SQLException.class, () -> vendorProfileService.getBookings(userId));
     }
     @Test

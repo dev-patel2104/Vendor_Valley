@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group10.Model.Booking;
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +28,7 @@ public class CustomerProfileServiceTest
     private CustomerProfileService customerProfileService;
     
     @MockBean
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
 
     private SignUpModel user;
     private int userId;

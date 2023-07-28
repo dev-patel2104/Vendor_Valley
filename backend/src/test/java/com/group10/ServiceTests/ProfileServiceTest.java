@@ -4,6 +4,8 @@ import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.CustomerProfileService;
 import org.junit.jupiter.api.Test;
@@ -28,9 +30,9 @@ public class ProfileServiceTest
     private CustomerProfileService profileService;
 
     @MockBean
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
     @MockBean
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
 
     private SignUpModel user;
     private int userId;

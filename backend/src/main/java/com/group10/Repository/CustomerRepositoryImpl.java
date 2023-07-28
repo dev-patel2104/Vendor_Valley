@@ -3,6 +3,7 @@ package com.group10.Repository;
 import com.group10.Enums.GetBookingDetailsQueryColumns;
 import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Util.MapResultSetUtil;
@@ -21,7 +22,7 @@ import java.util.List;
  * Repository class for managing user data.
  */
 @Repository
-public class CustomerRepositoryImpl implements IUserRepository{
+public class CustomerRepositoryImpl implements ICustomerRepository {
 
     @Autowired
     IDatabaseService databaseService;

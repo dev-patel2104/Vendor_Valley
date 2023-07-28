@@ -6,6 +6,8 @@ import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
 import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.Interfaces.ICategoryRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IHomeService;
 import com.group10.Util.JWTTokenHandler;
@@ -21,10 +23,10 @@ public class HomeServiceImpl implements IHomeService
 {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ICategoryRepository categoryRepository;
 
     @Autowired
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;

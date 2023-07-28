@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -34,7 +35,7 @@ public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorS
     private ServiceRepository serviceRepository;
 
     @Autowired
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
 
     @Autowired
     private ServiceReviewsRepository serviceReviewsRepository;

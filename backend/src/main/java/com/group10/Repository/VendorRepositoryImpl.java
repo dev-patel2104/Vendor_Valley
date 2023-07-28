@@ -2,6 +2,7 @@ package com.group10.Repository;
 
 import com.group10.Model.*;
 import com.group10.Repository.Interfaces.IUserRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
@@ -17,7 +18,7 @@ import java.util.List;
  * Repository class for managing vendor data in the database.
  */
 @Repository
-public class VendorRepositoryImpl implements IUserRepository{
+public class VendorRepositoryImpl implements IVendorRepository {
 
     @Autowired
     IDatabaseService databaseService;
@@ -28,8 +29,7 @@ public class VendorRepositoryImpl implements IUserRepository{
     /**
      * Saves a vendor and associated user information to the database.
      *
-     * @param user The user object containing the vendor's information.
-     * @param vendorModel The vendor object to be saved.
+     * @param signUpModel The user object containing the vendor's information.
      * @return true if the vendor and user information were successfully saved, false otherwise.
      * @throws SQLException if there is an error with the database connection or query execution.
      */
@@ -135,7 +135,7 @@ public class VendorRepositoryImpl implements IUserRepository{
         }
     }
 
-    public List<Booking> getBookingsInfo(int userId) throws SQLException
+    public List<Booking> getBookings(int userId) throws SQLException
     {
         List<Booking> bookingList = new ArrayList<>();
         try(Connection connection = databaseService.connect();

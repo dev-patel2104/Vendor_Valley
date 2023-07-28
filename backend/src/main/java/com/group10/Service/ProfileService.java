@@ -6,6 +6,8 @@ import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.VendorRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,9 +17,9 @@ import java.util.List;
 public abstract class ProfileService
 {
     @Autowired
-    protected CustomerRepositoryImpl CustomerRepositoryImpl;
+    protected ICustomerRepository CustomerRepositoryImpl;
     @Autowired
-    protected VendorRepositoryImpl VendorRepositoryImpl;
+    protected IVendorRepository VendorRepositoryImpl;
 
     public SignUpModel getProfile(int user_id) throws SQLException, UserDoesntExistException {
         if(user_id < 0)

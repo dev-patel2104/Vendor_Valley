@@ -4,6 +4,7 @@ import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class CustomerProfileService extends ProfileService
 {
     @Autowired
-    private CustomerRepositoryImpl customerRepository;
+    private ICustomerRepository customerRepository;
     @Override
     public List<Booking> getBookings(int userId) throws SQLException, UserDoesntExistException
     {

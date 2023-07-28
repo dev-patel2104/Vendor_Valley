@@ -7,6 +7,8 @@ import com.group10.Exceptions.VendorDetailsAbsentForUserException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Repository.CustomerRepositoryImpl;
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IAuthenticationService;
 import com.group10.Util.EmailUtil;
@@ -21,9 +23,9 @@ import java.sql.SQLException;
 public class AuthenticationServiceImpl implements IAuthenticationService
 {
     @Autowired
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
     @Autowired
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
     @Autowired
     private User user;
     private final int IS_VENDOR = 1;

@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group10.Repository.Interfaces.ICategoryRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Service.Interfaces.IHomeService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,9 +36,9 @@ public class HomeServiceImplTest
     @Autowired
     private IHomeService homeServiceImpl;
     @MockBean
-    private CategoryRepository categoryRepository;
+    private ICategoryRepository categoryRepository;
     @MockBean
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
     @MockBean
     private JWTTokenHandler jwtTokenHandler;
     private List<Category> expectedCategories;

@@ -6,6 +6,8 @@ import com.group10.Model.Booking;
 import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.CategoryRepository;
+import com.group10.Repository.Interfaces.ICategoryRepository;
+import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.VendorRepositoryImpl;
@@ -24,9 +26,9 @@ public class VendorProfileService extends ProfileService
     @Autowired
     private ServiceImageRepository serviceImageRepository;
     @Autowired
-    private VendorRepositoryImpl VendorRepositoryImpl;
+    private IVendorRepository VendorRepositoryImpl;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ICategoryRepository categoryRepository;
     @Override
     public List<Booking> getBookings(int userId) throws UserDoesntExistException, SQLException
     {
@@ -34,7 +36,7 @@ public class VendorProfileService extends ProfileService
         {
             throw new UserDoesntExistException("No such user is present");
         }
-        return VendorRepositoryImpl.getBookingsInfo(userId);
+        return VendorRepositoryImpl.getBookings(userId);
     }
 
     public List<com.group10.Model.Service> getServices(int userId) throws UserDoesntExistException, SQLException

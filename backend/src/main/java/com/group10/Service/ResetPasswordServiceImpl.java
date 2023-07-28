@@ -2,6 +2,7 @@ package com.group10.Service;
 import java.security.SecureRandom;
 import java.sql.SQLException;
 
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Service.Interfaces.IResetPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
@@ -26,7 +27,7 @@ import com.group10.Util.EmailUtil;
 public class ResetPasswordServiceImpl implements IResetPasswordService {
     
     @Autowired
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
 
     @Autowired
     private ResetPasswordRepository resetPasswordRepository;

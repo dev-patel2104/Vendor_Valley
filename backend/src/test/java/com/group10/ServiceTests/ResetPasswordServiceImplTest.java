@@ -1,5 +1,6 @@
 package com.group10.ServiceTests;
 
+import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Service.Interfaces.IResetPasswordService;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.Assert.assertEquals;
@@ -32,7 +33,7 @@ import com.group10.Util.EmailUtil;
 public class ResetPasswordServiceImplTest {
     
     @MockBean 
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
     
     @MockBean 
     private ResetPasswordRepository resetPasswordRepository;
