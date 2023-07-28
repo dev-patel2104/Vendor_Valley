@@ -164,10 +164,12 @@ public class ServiceRepository {
      @return true if the booking exists, false otherwise
      @throws SQLException if there is an error with the database connection
      */
-    public boolean checkIfBookingExists(int bookingId) throws SQLException{
+    public boolean checkIfBookingExists(int bookingId, int serviceId, int userId) throws SQLException{
         try(Connection connection = databaseService.connect();
             PreparedStatement statement = connection.prepareStatement(SQLQueries.checkIfBookingExistsQuery);){
             statement.setInt(1, bookingId);
+            statement.setInt(2,serviceId);
+            statement.setInt(3,userId);
             ResultSet result = statement.executeQuery();
             if (result.next()){
                 return true;}
