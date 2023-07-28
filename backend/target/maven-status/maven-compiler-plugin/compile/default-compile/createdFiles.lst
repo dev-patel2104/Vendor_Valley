@@ -49,11 +49,18 @@ com\group10\Model\User.class
 com\group10\Exceptions\VerificationCodeExpiredException.class
 com\group10\Exceptions\InvalidPasswordException.class
 com\group10\Model\Category.class
+<<<<<<< HEAD
+=======
+com\group10\Util\SqlQueries\SQLQuery.class
+>>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 com\group10\Exceptions\PasswordsCantBeSameException.class
 com\group10\Repository\ServiceReviewsRepository.class
 com\group10\Util\StringUtil.class
 com\group10\Controller\SignInController.class
+<<<<<<< HEAD
 com\group10\Model\RequestBooking.class
+=======
+>>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 com\group10\Util\Interfaces\IFilter.class
 com\group10\Service\Interfaces\IHomeService.class
 com\group10\Service\CustomerProfileService.class
@@ -74,7 +81,10 @@ com\group10\Util\CategoryFilterImpl.class
 com\group10\Service\Interfaces\IDatabaseService.class
 com\group10\Util\RatingsFilterImpl.class
 com\group10\Util\BookingsComparator.class
+<<<<<<< HEAD
 com\group10\Util\BookingUtil.class
+=======
+>>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553
 com\group10\Exceptions\VendorDetailsAbsentForUserException.class
 com\group10\Service\HomeServiceImpl.class
 com\group10\Enums\GetBookingDetailsQueryColumns.class

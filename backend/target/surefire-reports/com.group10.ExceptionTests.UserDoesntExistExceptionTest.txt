@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ExceptionTests.UserDoesntExistExceptionTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s - in com.group10.ExceptionTests.UserDoesntExistExceptionTest
+=======
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s - in com.group10.ExceptionTests.UserDoesntExistExceptionTest
+>>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553

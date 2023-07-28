@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.ServiceTests.CustomerSelectsVendorServiceTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.608 s - in com.group10.ServiceTests.CustomerSelectsVendorServiceTest
+=======
+Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.57 s - in com.group10.ServiceTests.CustomerSelectsVendorServiceTest
+>>>>>>> 9e6f0cd9f7c1c0c5eb9ea8c1057da725d169b553

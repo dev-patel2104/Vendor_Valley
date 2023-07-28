@@ -11,7 +11,7 @@ public class SQLQueries {
                 "group by service_id \n" +
                 "order by totalBookingsForService desc;";
         public static final String trendingServiceQueryDefault = "select * from services order by service_id desc;";
-        public static final String checkIfBookingExistsQuery = "select * from bookings where booking_id = ?;";
+        public static final String checkIfBookingExistsQuery = "select * from bookings where booking_id = ? and service_id = ? and user_id = ?;";
         public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";
         public static final String updateUserQuery = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";
         public static final String updateCompanyDetailsQuery = "update vendors set user_role = ?, company_name = ?, company_email = ?, company_registration_number = ?, company_mobile = ?, company_street = ?, company_city = ?, company_province = ?, company_country = ?\n" +
@@ -28,7 +28,7 @@ public class SQLQueries {
         public static final String getImagesForServiceID = "select * from services as s Left join service_images as si on s.service_id = si.service_id where s.service_id = ?;";
         public static final String checkIfServiceExistsQuery = "select * from services where service_id = ?";
         public static final String getReviewsForServiceQuery = "select r.*, concat(u.first_name,' ',u.last_name) as name, u.city, u.country from reviews as r join users as u on r.user_id = u.user_id where service_id = ? order by review_id desc;";
-        public static final String insertReviewQuery = "insert into reviews (service_id, user_id, title, comment_text, review_date, rating) values(?, ?, ?, ?, ?, ?);";
+        public static final String insertReviewQuery = "insert into reviews (booking_id, service_id, user_id, title, comment_text, review_date, rating) values(?, ?, ?, ?, ?, ?, ?);";
         public static final String getServiceDetailsQuery = "select s.*, v.company_email from services as s join vendors as v on v.user_id = s.user_id where service_id = ?;";
         public static final String getServiceDetailsByUser = "select s.* , group_concat(sc.category_name) as categories from services as s natural join service_category_association as sca natural join service_categories as sc  where s.user_id = ? group by s.service_id;";
         public static final String getUserByID = "select * from users Left join vendors on users.user_id = vendors.user_id where users.user_id = ?;";

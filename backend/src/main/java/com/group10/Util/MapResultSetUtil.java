@@ -100,7 +100,14 @@ public class MapResultSetUtil {
         service.setCompanyCity(resultSet.getString(SearchServiceQueryColumns.COMPANY_CITY.getColumnName()));
         service.setCompanyProvince(resultSet.getString(SearchServiceQueryColumns.COMPANY_PROVINCE.getColumnName()));
         service.setCompanyCountry(resultSet.getString(SearchServiceQueryColumns.COMPANY_COUNTRY.getColumnName()));
-        service.setAverageRating(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+        String ratingString =  resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName());
+        if (ratingString!=null && ratingString.contains(".")){
+            Double rating =Double.parseDouble(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+            service.setAverageRating(String.format("%.1f", rating));
+        }
+        else{
+            service.setAverageRating(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+        }
         service.setTotalBookings(resultSet.getString(SearchServiceQueryColumns.TOTAL_BOOKINGS.getColumnName()));
         return service;
     }
