@@ -35,7 +35,7 @@ public class VendorDashboardController {
         try {
             VendorDashboard vendorDashboard = homeService.getVendorDashboardInfo(jwtToken);
             if (vendorDashboard == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
             return ResponseEntity.ok(vendorDashboard);
         } 
