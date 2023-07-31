@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -25,10 +26,9 @@ public class VendorDashboardController {
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
-    public ResponseEntity<VendorDashboard> getStatistics(@RequestBody Map<String, String> body) 
+    public ResponseEntity<VendorDashboard> getStatistics(@RequestHeader String jwtToken, @RequestBody Map<String, String> body) 
     {
         // Get statistics from bookings, reviews, and users
-        String jwtToken = body.get("jwtToken");
         if (jwtToken == null || jwtToken.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
