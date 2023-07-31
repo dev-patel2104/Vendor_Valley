@@ -1,7 +1,6 @@
 package com.group10.Repository;
 
 import com.group10.Model.*;
-import com.group10.Repository.Interfaces.IUserRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.MapResultSetUtil;

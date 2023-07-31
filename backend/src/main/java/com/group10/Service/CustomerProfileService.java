@@ -2,7 +2,6 @@ package com.group10.Service;
 
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Repository.Interfaces.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
 package com.group10.Repository.Interfaces;
 
-import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 

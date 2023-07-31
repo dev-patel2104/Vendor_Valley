@@ -18,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.SignUpModel;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Service.CustomerProfileService;
 
 @SpringBootTest

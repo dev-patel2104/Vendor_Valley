@@ -5,10 +5,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
-import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.Interfaces.ICategoryRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
-import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Service.Interfaces.IHomeService;
 import com.group10.Util.JWTTokenHandler;
 

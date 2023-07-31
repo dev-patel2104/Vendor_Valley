@@ -5,12 +5,10 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
-import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.Interfaces.ICategoryRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.VendorRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

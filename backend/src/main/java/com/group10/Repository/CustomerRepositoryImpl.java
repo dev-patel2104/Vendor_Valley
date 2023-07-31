@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.group10.Constants.Constants;
 import com.group10.Model.User;
-import com.group10.Repository.Interfaces.IUserRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -5,10 +5,8 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
-import com.group10.Repository.VendorRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.SQLException;

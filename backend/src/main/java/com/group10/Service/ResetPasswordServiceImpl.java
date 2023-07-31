@@ -17,7 +17,6 @@ import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.User;
 import com.group10.Repository.ResetPasswordRepository;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Util.EmailUtil;
 
 /**

@@ -26,8 +26,6 @@ import com.group10.Model.Service;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.User;
 import com.group10.Model.VendorDashboard;
-import com.group10.Repository.CategoryRepository;
-import com.group10.Repository.VendorRepositoryImpl;
 import com.group10.Util.JWTTokenHandler;
 
 @SpringBootTest

@@ -11,20 +11,17 @@ import java.util.List;
 
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.*;
-import com.group10.Repository.CategoryRepository;
 import com.group10.Repository.Interfaces.ICategoryRepository;
 import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Repository.ServiceImageRepository;
 import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.VendorRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Exceptions.UserDoesntExistException;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Service.VendorProfileService;
 
 @SpringBootTest

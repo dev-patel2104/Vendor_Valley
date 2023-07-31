@@ -20,7 +20,6 @@ import com.group10.Model.Service;
 import com.group10.Model.User;
 import com.group10.Repository.ServiceRepository;
 import com.group10.Repository.ServiceReviewsRepository;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
