@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -137,7 +138,7 @@ public class MapResultSetUtil {
      * @return the mapped Booking object
      * @throws SQLException if a database access error occurs or if the ResultSet is not valid
      */
-    public Booking mapResultSetToBooking(ResultSet resultSet) throws SQLException
+    public Booking mapResultSetToVendorsBooking(ResultSet resultSet) throws SQLException
     {
         Booking booking = new Booking();
         User user;
@@ -286,4 +287,65 @@ public class MapResultSetUtil {
         return value;
     }
     
+    public Booking mapResultSetToCustomerBookings(ResultSet rs) throws SQLException {
+        Booking booking = new Booking();
+        booking.setServiceName(rs.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+        booking.setBookingId(rs.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+        booking.setBookingDate(rs.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
+        booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
+        booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+        booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+        return booking;
+    }
+
+    public Category mapResultSetToFeaturedCategories(ResultSet rs1) throws SQLException {
+        Category cat = new Category();
+        cat.setTotalServices(rs1.getInt(FeaturedCategories.TOTAL_SERVICES.getColumnName()));
+        cat.setCategoryId(rs1.getInt(FeaturedCategories.CATEGORY_ID.getColumnName()));
+        cat.setCategoryName(rs1.getString(FeaturedCategories.CATEGORY_NAME.getColumnName()));
+        cat.setCategoryDescription(rs1.getString(FeaturedCategories.CATEGORY_DESCRIPTION.getColumnName()));
+        byte[] imageData = rs1.getBytes(FeaturedCategories.CATEGORY_IMAGE.getColumnName());
+        if(imageData != null)
+        {
+            cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
+        }
+        else
+        {
+            cat.setBase64Image("");
+        }
+        return cat;
+    }
+
+    public Service mapResultSetToTrendingServiceQuery(ResultSet rs) throws SQLException {
+        int totalBookings;
+        try{
+            totalBookings = rs.getInt(TrendingServiceQuery.TOTAL_BOOKINGS_FOR_SERVICE.getColumnName());
+        }
+        catch(SQLException e){
+            totalBookings = 0;
+        }
+        Service ser;
+        ser = new Service();
+        ser.setServiceId(rs.getInt(TrendingServiceQuery.SERVICE_ID.getColumnName()));
+        ser.setTotalBookingsForService(totalBookings);
+        ser.setServiceName(rs.getString(TrendingServiceQuery.SERVICE_NAME.getColumnName()));
+        ser.setServiceDescription(rs.getString(TrendingServiceQuery.SERVICE_DESCRIPTION.getColumnName()));
+        ser.setServicePrice(rs.getString(TrendingServiceQuery.SERVICE_PRICE.getColumnName()));
+        byte[] imageData = rs.getBytes(TrendingServiceQuery.SERVICE_IMAGE.getColumnName());
+        if(imageData != null)
+        {
+            ser.setImages(new ArrayList<>());
+            ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
+        }
+        return ser;
+    }
+
+    public Category mapResultSetToGetCategoriesQuery(ResultSet resultSet) throws SQLException {
+        Category cat;
+        cat = new Category();
+        cat.setCategoryId(resultSet.getInt(GetCategoriesQuery.CATEGORY_ID.getColumnName()));
+        cat.setCategoryName(resultSet.getString(GetCategoriesQuery.CATEGORY_NAME.getColumnName()));
+        cat.setCategoryDescription(resultSet.getString(GetCategoriesQuery.CATEGORY_DESCRIPTION.getColumnName()));
+        return cat;
+    }
 }

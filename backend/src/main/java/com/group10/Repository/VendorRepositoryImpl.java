@@ -145,7 +145,7 @@ public class VendorRepositoryImpl implements IVendorRepository {
             Booking booking = null;
             while(rs.next())
             {
-                booking = mapResultSetUtilObj.mapResultSetToBooking(rs);
+                booking = mapResultSetUtilObj.mapResultSetToVendorsBooking(rs);
                 if(booking == null)
                 {
                     System.out.println("There is a booking in the database with no customer associated with it");

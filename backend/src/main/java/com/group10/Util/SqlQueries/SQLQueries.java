@@ -10,7 +10,7 @@ public class SQLQueries {
                 "where datediff(curdate(), booking_date) <= 30 \n" +
                 "group by service_id \n" +
                 "order by totalBookingsForService desc;";
-        public static final String trendingServiceQueryDefault = "select * from services order by service_id desc;";
+        public static final String trendingServiceQueryDefault = "select * from services as s left join service_images as si on s.service_id = si.service_id group by s.service_id order by s.service_id desc;";
         public static final String checkIfBookingExistsQuery = "select * from bookings where booking_id = ? and service_id = ? and user_id = ?;";
         public static final String getUserByEmailID = "SELECT * FROM users WHERE email = ?";
         public static final String updateUserQuery = "UPDATE users SET first_name = ?, last_name = ?, street = ?, city = ?, province = ?, country = ?, email = ?, mobile = ?, is_vendor = ?, password = ?  WHERE (user_id = ?)";

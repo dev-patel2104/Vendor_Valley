@@ -4,13 +4,13 @@ import com.group10.Model.Category;
 import com.group10.Model.Service;
 import com.group10.Repository.Interfaces.ICategoryRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
+import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Repository
@@ -22,6 +22,9 @@ public class CategoryRepository implements ICategoryRepository {
     private final int numberOfTrendingServices = 5;
     private List<Category> categoryList;
     private List<Service> serviceList;
+
+    @Autowired
+    private MapResultSetUtil mapResultSetUtilObj;
     
     public List<Category> getFeaturedCategories() throws SQLException
     {
@@ -35,20 +38,7 @@ public class CategoryRepository implements ICategoryRepository {
             Category cat = null;
             while(rs1.next() && cnt < numberOfFeaturedCategories)
             {
-                cat = new Category();
-                cat.setTotalServices(rs1.getInt(1));
-                cat.setCategoryId(rs1.getInt(2));
-                cat.setCategoryName(rs1.getString(3));
-                cat.setCategoryDescription(rs1.getString(4));
-                byte[] imageData = rs1.getBytes(5);
-                if(imageData != null)
-                {
-                    cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
-                }
-                else
-                {
-                    cat.setBase64Image("");
-                }
+                cat = mapResultSetUtilObj.mapResultSetToFeaturedCategories(rs1);
                 categoryList.add(cat);
                 cnt++;
             }
@@ -56,6 +46,7 @@ public class CategoryRepository implements ICategoryRepository {
         }
         return categoryList;
     }
+
 
     public List<Service> getTrendingServices() throws SQLException
     {
@@ -71,18 +62,7 @@ public class CategoryRepository implements ICategoryRepository {
             // currently selects the trending services within 30 days period will later change this to a longer period
             while(rs.next() && cnt < numberOfTrendingServices)
             {
-                ser = new Service();
-                ser.setServiceId(rs.getInt(1));
-                ser.setTotalBookingsForService(rs.getInt(2));
-                ser.setServiceName(rs.getString(3));
-                ser.setServiceDescription(rs.getString(4));
-                ser.setServicePrice(rs.getString(5));
-                byte[] imageData = rs.getBytes(6);
-                if(imageData != null)
-                {
-                    ser.setImages(new ArrayList<>());
-                    ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
-                }
+                ser = mapResultSetUtilObj.mapResultSetToTrendingServiceQuery(rs);
                 serviceList.add(ser);
                 cnt++;
             }
@@ -92,11 +72,7 @@ public class CategoryRepository implements ICategoryRepository {
                 {
                     while(rs.next() && cnt < numberOfTrendingServices)
                     {
-                        ser = new Service();
-                        ser.setServiceId(rs.getInt(1));
-                        ser.setServiceName(rs.getString(3));
-                        ser.setServiceDescription(rs.getString(4));
-                        ser.setServicePrice(rs.getString(5));
+                        ser = mapResultSetUtilObj.mapResultSetToTrendingServiceQuery(rs);
                         serviceList.add(ser);
                         cnt++;
                     }
@@ -117,10 +93,7 @@ public class CategoryRepository implements ICategoryRepository {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
-                cat = new Category();
-                cat.setCategoryId(resultSet.getInt(1));
-                cat.setCategoryName(resultSet.getString(2));
-                cat.setCategoryDescription(resultSet.getString(3));
+                cat = mapResultSetUtilObj.mapResultSetToGetCategoriesQuery(resultSet);
 
                 categoryList.add(cat);
             }

@@ -1,6 +1,5 @@
 package com.group10.Repository;
 
-import com.group10.Enums.GetBookingDetailsQueryColumns;
 import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.Interfaces.ICustomerRepository;
@@ -176,20 +175,15 @@ public class CustomerRepositoryImpl implements ICustomerRepository {
       try(Connection connection = databaseService.connect();
       PreparedStatement statement = connection.prepareStatement(SQLQueries.getCustomerBookings))
       {
-          ResultSet rs;
-          statement.setInt(1, userId);
-          rs = statement.executeQuery();
-          while(rs.next())
-          {
-              booking = new Booking();
-              booking.setServiceName(rs.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
-              booking.setBookingId(rs.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
-              booking.setBookingDate(rs.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
-              booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
-              booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
-              booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
-              bookingList.add(booking);
-          }
+        ResultSet rs;
+        statement.setInt(1, userId);
+        rs = statement.executeQuery();
+        while(rs.next()) {
+            booking =  mapResultSetUtilObj.mapResultSetToCustomerBookings(rs);
+            if (booking != null){
+                bookingList.add(booking);
+            }
+        }
       }
       catch (SQLException e)
       {
