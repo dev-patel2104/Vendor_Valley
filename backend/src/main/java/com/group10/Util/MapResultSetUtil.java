@@ -348,4 +348,11 @@ public class MapResultSetUtil {
         cat.setCategoryDescription(resultSet.getString(GetCategoriesQuery.CATEGORY_DESCRIPTION.getColumnName()));
         return cat;
     }
+
+    public Booking mapResultSetToHasBookingEnded(ResultSet resultSet) throws SQLException {
+        Booking booking = new Booking();
+        booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+        booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+        return booking;
+    }
 }

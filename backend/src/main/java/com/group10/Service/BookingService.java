@@ -11,6 +11,8 @@ import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Util.BookingUtil;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
+import com.group10.Util.StringUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -40,6 +42,7 @@ public class BookingService {
 
     @Autowired
     private EmailDetails emailDetails;
+    
 
     /**
      * Requests a reservation using the provided JWT token and booking information.
@@ -62,6 +65,19 @@ public class BookingService {
         int customerId = decodedJWT.getClaim("userId").asInt();
 
         try {
+            // Check if booking is in the past (i.e. start date is before booking date)
+            if (StringUtil.dateStringToDate(requestBookingModel.getStartDate()).before(StringUtil.dateStringToDate(requestBookingModel.getBookingDate()))) {
+                throw new SQLException("Booking cannot be made in the past");
+            }
+            // Check if booking is in the past (i.e. end date is before booking date)
+            if (StringUtil.dateStringToDate(requestBookingModel.getEndDate()).before(StringUtil.dateStringToDate(requestBookingModel.getBookingDate()))) {
+                throw new SQLException("Booking cannot be made in the past");
+            }
+            // Check if booking ends before it starts (i.e. end date is before start date)
+            if (StringUtil.dateStringToDate(requestBookingModel.getEndDate()).before(StringUtil.dateStringToDate(requestBookingModel.getStartDate()))) {
+                throw new SQLException("Booking cannot end before it starts");
+            }
+
             if (bookingRepository.requestReservation(customerId, requestBookingModel)) {
                 //send mail to vendor about the customer's request
                 com.group10.Model.Service vendorService = serviceRepository.getServiceDetails(requestBookingModel.getServiceID());
@@ -110,6 +126,11 @@ public class BookingService {
 
         DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
         String customerEmail = decodedJWT.getClaim("email").asString();
+         
+        // Check if booking has ended
+        if (bookingRepository.hasBookingEnded(bookingResponseRequest.getBookingID())) {
+            throw new SQLException("Booking has already ended");
+        }
 
         if (bookingRepository.respondToBooking(bookingResponseRequest)) {
             //send a mail to customer
