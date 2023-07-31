@@ -187,23 +187,23 @@ public class MapResultSetUtil {
         }
         while (resultSet.next()){
             // Get the row count for total bookings
-            int customerId = resultSet.getInt("user_id");
-            String bookingStatus = resultSet.getString("booking_status");
-            Date startDate = resultSet.getDate("start_date");
-            Date endDate = resultSet.getDate("end_date");
-            Date bookingDate = resultSet.getDate("booking_date");
+            int customerId = resultSet.getInt(VendorDashboardInfoQuery.USER_ID.getColumnName());
+            String bookingStatus = resultSet.getString(VendorDashboardInfoQuery.BOOKING_STATUS.getColumnName());
+            Date startDate = resultSet.getDate(VendorDashboardInfoQuery.START_DATE.getColumnName());
+            Date endDate = resultSet.getDate(VendorDashboardInfoQuery.END_DATE.getColumnName());
+            Date bookingDate = resultSet.getDate(VendorDashboardInfoQuery.BOOKING_DATE.getColumnName());
 
-            if (bookingStatus.equals("cancelled")){
+            if (bookingStatus.equals(BookingStatus.DECLINED.getBookingStatus())){
                 cancelledBookings++;
             }
-            else if (bookingStatus.equals("accepted")){
+            else if (bookingStatus.equals(BookingStatus.ACCEPTED.getBookingStatus())){
                 // if endDate is before today, increment completedBookings
                 if (endDate != null && endDate.before(new Date(System.currentTimeMillis()))){
                     completedBookings++;
                 }
                 acceptedBookings++;
             }
-            else if (bookingStatus.equals("awaiting")){
+            else if (bookingStatus.equals(BookingStatus.AWAITING.getBookingStatus())){
                 awaitingBookings++;
             }
             // if startDate is in this month, increment thisMonthBookings
@@ -239,32 +239,32 @@ public class MapResultSetUtil {
     public SignUpModel mapResultSetToSignUpModel(ResultSet rs) throws SQLException {
         int isVendor;
         try{
-            isVendor = rs.getInt("is_vendor");
+            isVendor = rs.getInt(GetUserByIdQueryColumns.IS_VENDOR.getColumnName());
         }
         catch (SQLException e){
             // do nothing
             isVendor = 0;
         }
-        return SignUpModel.builder().userId(rs.getInt("user_id")).
-                firstName((String) getValueOrNull(rs, "first_name")).
-                lastName((String) getValueOrNull(rs, "last_name")).
-                street((String) getValueOrNull(rs, "street")).
-                city((String) getValueOrNull(rs, "city")).
-                province((String) getValueOrNull(rs, "province")).
-                country((String) getValueOrNull(rs, "country")).
-                email((String) getValueOrNull(rs, "email")).
-                mobile((String) getValueOrNull(rs, "mobile")).
+        return SignUpModel.builder().userId(rs.getInt(GetUserByIdQueryColumns.USER_ID.getColumnName())).
+                firstName((String) getValueOrNull(rs, GetUserByIdQueryColumns.FIRST_NAME.getColumnName())).
+                lastName((String) getValueOrNull(rs, GetUserByIdQueryColumns.LAST_NAME.getColumnName())).
+                street((String) getValueOrNull(rs, GetUserByIdQueryColumns.STREET.getColumnName())).
+                city((String) getValueOrNull(rs, GetUserByIdQueryColumns.CITY.getColumnName())).
+                province((String) getValueOrNull(rs, GetUserByIdQueryColumns.PROVINCE.getColumnName())).
+                country((String) getValueOrNull(rs, GetUserByIdQueryColumns.COUNTRY.getColumnName())).
+                email((String) getValueOrNull(rs, GetUserByIdQueryColumns.EMAIL.getColumnName())).
+                mobile((String) getValueOrNull(rs, GetUserByIdQueryColumns.MOBILE.getColumnName())).
                 isVendor(isVendor).
-                password((String) getValueOrNull(rs,"password")).
-                userRole((String) getValueOrNull(rs, "user_role")).
-                companyName((String) getValueOrNull(rs, "company_name")).
-                companyEmail((String) getValueOrNull(rs, "company_email")).
-                companyRegistrationID((String) getValueOrNull(rs, "company_registration_number")).
-                companyMobile((String) getValueOrNull(rs, "company_mobile")).
-                companyStreet((String) getValueOrNull(rs, "company_street")).
-                companyCity((String) getValueOrNull(rs, "company_city")).
-                companyProvince((String) getValueOrNull(rs, "company_province")).
-                companyCountry((String) getValueOrNull(rs, "company_country")).
+                password((String) getValueOrNull(rs, GetUserByIdQueryColumns.PASSWORD.getColumnName())).
+                userRole((String) getValueOrNull(rs, GetUserByIdQueryColumns.USER_ROLE.getColumnName())).
+                companyName((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_NAME.getColumnName())).
+                companyEmail((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_EMAIL.getColumnName())).
+                companyRegistrationID((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_REGISTRATION_NUMBER.getColumnName())).
+                companyMobile((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_MOBILE.getColumnName())).
+                companyStreet((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_STREET.getColumnName())).
+                companyCity((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_CITY.getColumnName())).
+                companyProvince((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_PROVINCE.getColumnName())).
+                companyCountry((String) getValueOrNull(rs, GetUserByIdQueryColumns.COMPANY_COUNTRY.getColumnName())).
                 build();
     }
 

@@ -2,20 +2,19 @@ package com.group10.Controller;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-
-import com.group10.Service.Interfaces.IHomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
+import com.group10.Service.Interfaces.IHomeService;
 
 @RestController
 public class VendorDashboardController {
@@ -25,10 +24,9 @@ public class VendorDashboardController {
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
-    public ResponseEntity<VendorDashboard> getStatistics(@RequestBody Map<String, String> body) 
+    public ResponseEntity<VendorDashboard> getStatistics(@RequestHeader String jwtToken) 
     {
         // Get statistics from bookings, reviews, and users
-        String jwtToken = body.get("jwtToken");
         if (jwtToken == null || jwtToken.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
