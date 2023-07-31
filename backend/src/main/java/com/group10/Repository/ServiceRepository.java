@@ -250,19 +250,12 @@ public class ServiceRepository implements IServiceRepository {
     public boolean deleteService(Service serviceToDelete) throws SQLException
     {
         try(Connection connection = databaseService.connect();
-        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteAllServiceCategoryAssociation);
-        PreparedStatement statement2 = connection.prepareStatement(SQLQueries.deleteAllServiceImages);
-        PreparedStatement statement3 = connection.prepareStatement(SQLQueries.deleteService);)
+        PreparedStatement statement1 = connection.prepareStatement(SQLQueries.deleteService);)
         {
             connection.setAutoCommit(false);
+
             statement1.setInt(1, serviceToDelete.getServiceId());
             statement1.executeUpdate();
-
-            statement2.setInt(1, serviceToDelete.getServiceId());
-            statement2.executeUpdate();
-
-            statement3.setInt(1, serviceToDelete.getServiceId());
-            statement3.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
             return true;
