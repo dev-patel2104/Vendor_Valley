@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group10.Model.Review;
@@ -77,7 +77,7 @@ public class CustomerSelectsVendorController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/writeReviews")
-    public ResponseEntity<String> writeReviews(@RequestBody Review review, @RequestParam String JWTToken) 
+    public ResponseEntity<String> writeReviews(@RequestBody Review review, @RequestHeader String JWTToken) 
     {   
 
         if (review == null || JWTToken == null || JWTToken.equals(""))
@@ -120,11 +120,10 @@ public class CustomerSelectsVendorController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendEmail(@RequestBody Map<String, String> body) 
+    public ResponseEntity<String> sendEmail(@RequestHeader String JWTToken, @RequestBody Map<String, String> body) 
     {   
         String serviceId = body.get("serviceId");
         String emailText = body.get("emailText");
-        String JWTToken = body.get("JWTToken");
 
         if (serviceId == null || serviceId.equals("") || emailText == null || emailText.equals(""))
         {

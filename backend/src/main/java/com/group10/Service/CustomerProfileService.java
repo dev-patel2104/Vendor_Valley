@@ -1,6 +1,5 @@
 package com.group10.Service;
 
-import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Model.Booking;
 import com.group10.Repository.CustomerRepositoryImpl;

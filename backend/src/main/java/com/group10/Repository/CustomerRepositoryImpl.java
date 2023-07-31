@@ -190,11 +190,6 @@ public class CustomerRepositoryImpl implements ICustomerRepository {
               booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
               booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
               booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
-              if(booking == null)
-              {
-                  System.out.println("There is a booking in the database with no customer associated with it");
-                  continue;
-              }
               bookingList.add(booking);
           }
       }
