@@ -2,7 +2,11 @@
 Test set: com.group10.ServiceTests.SearchServiceTest
 -------------------------------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.658 s - in com.group10.ServiceTests.SearchServiceTest
 =======
 Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.691 s - in com.group10.ServiceTests.SearchServiceTest
+>>>>>>> asdc-project/Develop
+=======
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.595 s - in com.group10.ServiceTests.SearchServiceTest
 >>>>>>> asdc-project/Develop

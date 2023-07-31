@@ -37,6 +37,9 @@ public class SQLQueries {
                 "from services as s join bookings as b on b.service_id = s.service_id join users as u on u.user_id = b.user_id " +
                 "where s.user_id = ? \n" +
                 "group by s.service_id, b.booking_id, u.user_id order by u.user_id, b.booking_date;";
+        public static final String getCustomerBookings = "select b.booking_id, s.service_name, b.booking_date, b.start_date, b.end_date, b.booking_status " +
+                "from bookings as b join services as s on b.service_id = s.service_id " +
+                "where b.user_id = ?;";
         public static final String getCategories = "select category_id, category_name, category_description from service_categories";
         public static  final String insertService = "INSERT INTO services (user_id, service_name, service_description, service_price) " +
                 "VALUES (?, ?, ?, ?);";

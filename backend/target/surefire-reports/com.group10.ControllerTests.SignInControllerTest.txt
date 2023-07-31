@@ -2,7 +2,11 @@
 Test set: com.group10.ControllerTests.SignInControllerTest
 -------------------------------------------------------------------------------
 <<<<<<< HEAD
+<<<<<<< HEAD
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s - in com.group10.ControllerTests.SignInControllerTest
 =======
 Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 s - in com.group10.ControllerTests.SignInControllerTest
+>>>>>>> asdc-project/Develop
+=======
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s - in com.group10.ControllerTests.SignInControllerTest
 >>>>>>> asdc-project/Develop

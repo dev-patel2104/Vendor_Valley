@@ -1,5 +1,7 @@
 package com.group10.Repository;
 
+import com.group10.Enums.GetBookingDetailsQueryColumns;
+import com.group10.Model.Booking;
 import com.group10.Model.SignUpModel;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
@@ -41,10 +43,10 @@ public class CustomerRepositoryImpl implements IUserRepository{
     public User findByEmail(String email) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQueries.getUserByEmailID);)
+             PreparedStatement getUsersPreparedStatement = connection.prepareStatement(SQLQueries.getUserByEmailID))
         {
             getUsersPreparedStatement.setString(1, email);
-            try(ResultSet resultSet = getUsersPreparedStatement.executeQuery();)
+            try(ResultSet resultSet = getUsersPreparedStatement.executeQuery())
             {
                 // User found
                 if (resultSet.next()) {
@@ -73,7 +75,7 @@ public class CustomerRepositoryImpl implements IUserRepository{
     public boolean updateUser(User user) throws SQLException {
 
         try (Connection connection = databaseService.connect();
-             PreparedStatement statement = connection.prepareStatement(SQLQueries.updateUserQuery);) {
+             PreparedStatement statement = connection.prepareStatement(SQLQueries.updateUserQuery)) {
             
             if (user.getUserId() == Constants.USERDOESNTEXIST){
                 return false;
@@ -108,7 +110,7 @@ public class CustomerRepositoryImpl implements IUserRepository{
     /**
      * Adds a new user to the database and returns the generated user ID.
      *
-     * @param signUpModel The signUpModel object to add the user.
+     * @param signUpModel The user model from which either use or vendor can build as when required.
      * @return The generated user ID, or 0 if the user already exists.
      * @throws SQLException If there is an error executing the SQL query.
      */
@@ -116,7 +118,7 @@ public class CustomerRepositoryImpl implements IUserRepository{
 
         User user = signUpModel.buildUserModel();
         try (Connection connection = databaseService.connect();
-             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS);)
+             PreparedStatement addUserPreparedStatement = connection.prepareStatement(SQLQueries.addUserQuery, Statement.RETURN_GENERATED_KEYS))
         {
 
             if(findByEmail(user.getEmail()) != null) {
@@ -169,5 +171,32 @@ public class CustomerRepositoryImpl implements IUserRepository{
        return userList;
     }
 
+    public List<Booking> getBookings(int userId) throws SQLException {
+      Booking booking;
+      List<Booking> bookingList = new ArrayList<>();
+      try(Connection connection = databaseService.connect();
+      PreparedStatement statement = connection.prepareStatement(SQLQueries.getCustomerBookings))
+      {
+          ResultSet rs;
+          statement.setInt(1, userId);
+          rs = statement.executeQuery();
+          while(rs.next())
+          {
+              booking = new Booking();
+              booking.setServiceName(rs.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+              booking.setBookingId(rs.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+              booking.setBookingDate(rs.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
+              booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
+              booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+              booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+              bookingList.add(booking);
+          }
+      }
+      catch (SQLException e)
+      {
+          throw new SQLException(e.getMessage());
+      }
+      return bookingList;
+    }
 
 }
