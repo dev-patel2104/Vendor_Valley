@@ -7,7 +7,7 @@ import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.RequestBooking;
 import com.group10.Repository.BookingRepository;
-import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Util.BookingUtil;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
@@ -30,7 +30,7 @@ public class BookingService {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;

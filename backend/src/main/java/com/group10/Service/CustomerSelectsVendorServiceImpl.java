@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IReviewsRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -18,8 +20,6 @@ import com.group10.Model.EmailDetails;
 import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
-import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.ServiceReviewsRepository;
 import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
@@ -31,13 +31,13 @@ import com.group10.Util.JWTTokenHandler;
 public class CustomerSelectsVendorServiceImpl implements ICustomerSelectsVendorService{
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
 
     @Autowired
     private ICustomerRepository CustomerRepositoryImpl;
 
     @Autowired
-    private ServiceReviewsRepository serviceReviewsRepository;
+    private IReviewsRepository serviceReviewsRepository;
 
     @Autowired
     private JWTTokenHandler jwtTokenHandler;

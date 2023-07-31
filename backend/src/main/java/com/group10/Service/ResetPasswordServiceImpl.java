@@ -3,6 +3,7 @@ import java.security.SecureRandom;
 import java.sql.SQLException;
 
 import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IResetPasswordRepository;
 import com.group10.Service.Interfaces.IResetPasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
@@ -16,7 +17,6 @@ import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.User;
-import com.group10.Repository.ResetPasswordRepository;
 import com.group10.Util.EmailUtil;
 
 /**
@@ -29,7 +29,7 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
     private ICustomerRepository CustomerRepositoryImpl;
 
     @Autowired
-    private ResetPasswordRepository resetPasswordRepository;
+    private IResetPasswordRepository resetPasswordRepository;
 
     @Autowired
     private EmailUtil emailUtil;

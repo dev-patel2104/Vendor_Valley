@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
 
+import com.group10.Repository.Interfaces.IReviewsRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,7 @@ import com.group10.Model.Review;
  * Repository class for managing services in the database.
  */
 @Repository
-public class ServiceReviewsRepository {
+public class ServiceReviewsRepository implements IReviewsRepository {
 
     @Autowired
     IDatabaseService databaseService;

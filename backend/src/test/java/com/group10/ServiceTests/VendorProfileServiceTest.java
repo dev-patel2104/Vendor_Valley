@@ -11,11 +11,7 @@ import java.util.List;
 
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.*;
-import com.group10.Repository.Interfaces.ICategoryRepository;
-import com.group10.Repository.Interfaces.ICustomerRepository;
-import com.group10.Repository.Interfaces.IVendorRepository;
-import com.group10.Repository.ServiceImageRepository;
-import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.Interfaces.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,11 +29,11 @@ public class VendorProfileServiceTest
     @MockBean
     private ICustomerRepository CustomerRepositoryImpl;
     @MockBean
-    private ServiceImageRepository serviceImageRepository;
+    private IImageRepository serviceImageRepository;
     @MockBean
     private IVendorRepository VendorRepositoryImpl;
     @MockBean
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
     @MockBean
     private ICategoryRepository categoryRepository;
 

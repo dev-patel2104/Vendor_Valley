@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.group10.Repository.Interfaces.IImageRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Service.Interfaces.ISearchService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,17 +19,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Model.Service;
-import com.group10.Repository.ServiceImageRepository;
-import com.group10.Repository.ServiceRepository;
 
 @SpringBootTest
 public class SearchServiceTest {
     
     @MockBean 
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
     
     @MockBean 
-    private ServiceImageRepository serviceImageRepository;
+    private IImageRepository serviceImageRepository;
 
     @MockBean
     private Service service;

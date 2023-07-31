@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.group10.Repository.Interfaces.IImageRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.group10.Constants.Constants;
 import com.group10.Model.Service;
-import com.group10.Repository.ServiceImageRepository;
-import com.group10.Repository.ServiceRepository;
 import com.group10.Service.Interfaces.ISearchService;
 import com.group10.Util.BookingsComparator;
 import com.group10.Util.BookingsFilterImpl;
@@ -29,11 +29,11 @@ import com.group10.Util.Interfaces.IFilter;
 @org.springframework.stereotype.Service
 public class SearchServiceImpl implements ISearchService{
     @Autowired
-    private ServiceRepository searchRepository;
+    private IServiceRepository searchRepository;
 
 
     @Autowired
-    private ServiceImageRepository serviceImageRepository;
+    private IImageRepository serviceImageRepository;
     
     /**
      * Retrieves a list of services based on the provided search parameter.

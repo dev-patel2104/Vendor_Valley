@@ -6,9 +6,9 @@ import com.group10.Model.Booking;
 import com.group10.Model.Category;
 import com.group10.Model.SignUpModel;
 import com.group10.Repository.Interfaces.ICategoryRepository;
+import com.group10.Repository.Interfaces.IImageRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Repository.Interfaces.IVendorRepository;
-import com.group10.Repository.ServiceImageRepository;
-import com.group10.Repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +20,9 @@ public class VendorProfileService extends ProfileService
 {
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
     @Autowired
-    private ServiceImageRepository serviceImageRepository;
+    private IImageRepository serviceImageRepository;
     @Autowired
     private IVendorRepository VendorRepositoryImpl;
     @Autowired

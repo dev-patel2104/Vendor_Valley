@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.List;
 import java.sql.ResultSet;
 
+import com.group10.Repository.Interfaces.IImageRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,7 @@ import com.group10.Model.Service;
  * Repository class for managing services in the database.
  */
 @Repository
-public class ServiceImageRepository {
+public class ServiceImageRepository implements IImageRepository {
 
     @Autowired
     IDatabaseService databaseService;

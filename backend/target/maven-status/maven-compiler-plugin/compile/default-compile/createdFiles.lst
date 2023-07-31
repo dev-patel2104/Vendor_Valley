@@ -8,6 +8,7 @@ com\group10\Repository\ServiceRepository.class
 com\group10\Enums\SearchServiceQueryColumns.class
 com\group10\Util\BookingsFilterImpl.class
 com\group10\Service\SearchServiceImpl.class
+com\group10\Repository\Interfaces\IImageRepository.class
 com\group10\Constants\IntegerConstants.class
 com\group10\Service\ResetPasswordServiceImpl.class
 com\group10\Controller\HomeController.class
@@ -15,6 +16,7 @@ com\group10\Service\CustomerSelectsVendorServiceImpl.class
 com\group10\Model\Review.class
 com\group10\Model\EmailDetails.class
 com\group10\Repository\ResetPasswordRepository.class
+com\group10\Repository\Interfaces\IResetPasswordRepository.class
 com\group10\Service\BookingService.class
 com\group10\Service\Interfaces\ICustomerSelectsVendorService.class
 com\group10\Service\Interfaces\ISearchService.class
@@ -22,15 +24,16 @@ com\group10\Util\PriceFilterImpl.class
 com\group10\Service\Interfaces\IAuthenticationService.class
 com\group10\Model\Customer$CustomerBuilder.class
 com\group10\Model\SignUpModel.class
-com\group10\Repository\Interfaces\IServiceRepositoryWriter.class
 com\group10\Util\PasswordUtil.class
 com\group10\Controller\SearchController.class
+com\group10\Repository\Interfaces\IVendorRepository.class
 com\group10\Exceptions\UserDoesntExistException.class
 com\group10\Service\Interfaces\IResetPasswordService.class
 com\group10\Model\Customer.class
 com\group10\Controller\CustomerSelectsVendorController.class
 com\group10\Enums\GetReviewsByServiceQueryColumns.class
 com\group10\Model\Vendor.class
+com\group10\Repository\Interfaces\IServiceRepository.class
 com\group10\Service\AuthenticationServiceImpl.class
 com\group10\Model\Booking.class
 com\group10\Model\User$UserBuilder.class
@@ -40,7 +43,6 @@ com\group10\Repository\Interfaces\ICategoryRepository.class
 com\group10\Service\DatabaseServiceImpl.class
 com\group10\Model\BookingResponseRequest.class
 com\group10\Util\RatingComparator.class
-com\group10\Repository\Interfaces\IServiceRepositoryRetriever.class
 com\group10\VendorValleyApplication.class
 com\group10\Enums\BookingStatus.class
 com\group10\Util\SqlQueries\SQLQueries.class
@@ -58,6 +60,8 @@ com\group10\Util\Interfaces\IFilter.class
 com\group10\Service\Interfaces\IHomeService.class
 com\group10\Service\CustomerProfileService.class
 com\group10\Enums\UserTableColumns.class
+com\group10\Repository\Interfaces\ICustomerRepository.class
+com\group10\Repository\Interfaces\IReviewsRepository.class
 com\group10\Repository\Interfaces\IUserRepository.class
 com\group10\Controller\SearchController$1.class
 com\group10\Repository\CustomerRepositoryImpl.class

@@ -10,6 +10,7 @@ import java.util.List;
 import java.sql.ResultSet;
 
 import com.group10.Model.Category;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,14 +18,12 @@ import org.springframework.stereotype.Repository;
 import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.SqlQueries.SQLQueries;
 import com.group10.Model.Service;
-import com.group10.Repository.Interfaces.IServiceRepositoryRetriever;
-import com.group10.Repository.Interfaces.IServiceRepositoryWriter;
 
 /**
  * Repository class for managing services in the database.
  */
 @Repository
-public class ServiceRepository implements IServiceRepositoryRetriever, IServiceRepositoryWriter{
+public class ServiceRepository implements IServiceRepository {
     
     @Autowired
     IDatabaseService databaseService;

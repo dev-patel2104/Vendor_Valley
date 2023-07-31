@@ -33,7 +33,7 @@ public class ProfileController
     private List<Category> categories;
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/profile")
-    public ResponseEntity<SignUpModel> getProfile(@RequestHeader String jwtToken)
+    public ResponseEntity<SignUpModel> getProfile(@RequestParam String jwtToken)
     {
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         SignUpModel user;
@@ -104,7 +104,6 @@ public class ProfileController
         }
         return ResponseEntity.ok(changedDetails);
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addService")
     public ResponseEntity<Service> addService(@RequestBody Service service)
@@ -136,10 +135,9 @@ public class ProfileController
         }
         return ResponseEntity.ok(addedService);
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/services")
-    public ResponseEntity<List<Service>> getServices(@RequestHeader String jwtToken)
+    public ResponseEntity<List<Service>> getServices(@RequestParam String jwtToken)
     {
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         List<Service> serviceList = new ArrayList<>();
@@ -159,7 +157,6 @@ public class ProfileController
         }
         return ResponseEntity.ok().body(serviceList);
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/delete/service")
     public ResponseEntity<String> deleteService(@RequestBody Service serviceToDelete)
@@ -190,7 +187,6 @@ public class ProfileController
         }
         return ResponseEntity.ok("Service has been successfully deleted");
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/edit/service")
     public ResponseEntity<Service> editService(@RequestBody Service serviceToUpdate)
@@ -220,10 +216,9 @@ public class ProfileController
         }
         return ResponseEntity.ok(updatedService);
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/bookings")
-    public ResponseEntity<List<Booking>> getBookings(@RequestHeader String jwtToken)
+    public ResponseEntity<List<Booking>> getBookings(@RequestParam String jwtToken)
     {
         DecodedJWT token = jwtTokenHandler.decodeJWTToken(jwtToken);
         List<Booking> bookingList = new ArrayList<>();

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 import com.group10.Constants.Constants;
+import com.group10.Repository.Interfaces.IResetPasswordRepository;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
  * Repository class for storing and retrieving reset password verification codes in the database.
  */
 @Repository
-public class ResetPasswordRepository {
+public class ResetPasswordRepository implements IResetPasswordRepository {
 
     @Autowired
     IDatabaseService databaseService;

@@ -6,7 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.*;
 import com.group10.Repository.BookingRepository;
-import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Service.BookingService;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
@@ -32,7 +32,7 @@ public class BookingServiceTest {
     BookingRepository bookingRepository;
 
     @Mock
-    ServiceRepository serviceRepository;
+    IServiceRepository serviceRepository;
 
     @Mock
     JWTTokenHandler jwtTokenHandler;

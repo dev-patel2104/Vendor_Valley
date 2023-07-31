@@ -12,7 +12,7 @@ import java.util.List;
 import com.group10.Exceptions.NoInformationFoundException;
 import com.group10.Model.Booking;
 import com.group10.Model.Category;
-import com.group10.Repository.ServiceRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class ProfileControllerTest
     @MockBean
     private VendorProfileService vendorProfileService;
     @MockBean
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
     @MockBean
     private JWTTokenHandler jwtTokenHandler;
 

@@ -1,5 +1,6 @@
 com\group10\ServiceTests\ProfileServiceTest.class
 com\group10\UtilTests\EmailUtilTest.class
+com\group10\ExceptionTests\UserAlreadyPresentExceptionTest.class
 com\group10\ServiceTests\BookingServiceTest.class
 com\group10\UtilTests\PasswordUtilTest.class
 com\group10\ControllerTests\CheckHTTPResponse.class
@@ -11,6 +12,8 @@ com\group10\ServiceTests\VendorProfileServiceTest.class
 com\group10\ExceptionTests\PasswordsCantBeSameExceptionTest.class
 com\group10\ExceptionTests\UserDoesntExistExceptionTest.class
 com\group10\ControllerTests\ProfileControllerTest.class
+com\group10\ConstantTests\ConstantsTest.class
+com\group10\EnumTest\GetServiceDetailsQueryColumnsTest.class
 com\group10\ConstantTests\IntegerConstantsTest.class
 com\group10\RepositoryTests\BookingRepositoryTest.class
 com\group10\ControllerTests\ResetPasswordControllerTest.class
@@ -20,12 +23,17 @@ com\group10\ServiceTests\ResetPasswordServiceImplTest.class
 com\group10\RepositoryTests\VendorRepositoryImplTest.class
 com\group10\ControllerTests\HomeControllerTest.class
 com\group10\ExceptionTests\VendorDetailsAbsentForUserExceptionTest.class
+com\group10\EnumTest\UserTableColumnsTest.class
 com\group10\ControllerTests\LoginControllerTest.class
 com\group10\UtilTests\BookingUtilTest.class
+com\group10\EnumTest\GetBookingDetailsQueryColumnsTest.class
 com\group10\ExceptionTests\VerificationCodeExpiredExceptionTest.class
+com\group10\EnumTest\GetReviewsByServiceQueryColumnsTest.class
+com\group10\EnumTest\BookingStatusTest.class
 com\group10\UtilTests\UserUtilTest.class
 com\group10\ServiceTests\HomeServiceImplTest.class
 com\group10\ServiceTests\SearchServiceTest.class
 com\group10\ExceptionTests\NoInformationFoundExceptionTest.class
 com\group10\ControllerTests\SignInControllerTest.class
+com\group10\EnumTest\SearchServiceQueryColumnsTest.class
 com\group10\ServiceTests\CustomerProfileServiceTest.class

@@ -9,6 +9,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IReviewsRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
 import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Model.Review;
 import com.group10.Model.Service;
 import com.group10.Model.User;
-import com.group10.Repository.ServiceRepository;
-import com.group10.Repository.ServiceReviewsRepository;
-import com.group10.Repository.CustomerRepositoryImpl;
 import com.group10.Util.EmailUtil;
 import com.group10.Util.JWTTokenHandler;
 
@@ -34,10 +34,10 @@ import com.group10.Util.JWTTokenHandler;
 public class CustomerSelectsVendorServiceTest {
 
     @MockBean
-    private ServiceRepository serviceRepository;
+    private IServiceRepository serviceRepository;
 
     @MockBean
-    private ServiceReviewsRepository serviceReviewsRepository;
+    private IReviewsRepository serviceReviewsRepository;
 
     @MockBean
     private JWTTokenHandler jwtTokenHandler;
@@ -46,7 +46,7 @@ public class CustomerSelectsVendorServiceTest {
     private EmailUtil emailUtil;
 
     @MockBean
-    private CustomerRepositoryImpl CustomerRepositoryImpl;
+    private ICustomerRepository CustomerRepositoryImpl;
 
     @Autowired
     private ICustomerSelectsVendorService customerSelectsVendorService;

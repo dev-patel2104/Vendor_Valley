@@ -1,6 +1,7 @@
 package com.group10.ServiceTests;
 
 import com.group10.Repository.Interfaces.ICustomerRepository;
+import com.group10.Repository.Interfaces.IResetPasswordRepository;
 import com.group10.Service.Interfaces.IResetPasswordService;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.Assert.assertEquals;
@@ -25,7 +26,6 @@ import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VerificationCodeExpiredException;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.User;
-import com.group10.Repository.ResetPasswordRepository;
 import com.group10.Util.EmailUtil;
 
 @SpringBootTest
@@ -35,7 +35,7 @@ public class ResetPasswordServiceImplTest {
     private ICustomerRepository CustomerRepositoryImpl;
     
     @MockBean 
-    private ResetPasswordRepository resetPasswordRepository;
+    private IResetPasswordRepository resetPasswordRepository;
 
     @MockBean
     private EmailUtil emailUtil;

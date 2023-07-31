@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.group10.Service.Interfaces.IHomeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import com.group10.Controller.HomeController;
 import com.group10.Model.Category;
 import com.group10.Model.Service;
-import com.group10.Service.HomeServiceImpl;
 
 @SpringBootTest
 public class HomeControllerTest
@@ -25,7 +25,7 @@ public class HomeControllerTest
     @Autowired
     private HomeController homeController;
     @MockBean
-    private HomeServiceImpl homeService;
+    private IHomeService homeService;
     private List<Category> expectedCategories;
     private List<Service> expectedServices;
     
