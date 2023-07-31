@@ -59,7 +59,7 @@ public class CategoryRepository implements ICategoryRepository {
             serviceList = new ArrayList<>();
             Service ser;
 
-            // currently selects the trending services within 30 days period will later change this to a longer period
+            // currently selects the trending services within 30 days period
             while(rs.next() && cnt < numberOfTrendingServices)
             {
                 ser = mapResultSetUtilObj.mapResultSetToTrendingServiceQuery(rs);

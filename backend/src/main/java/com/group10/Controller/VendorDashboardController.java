@@ -16,12 +16,21 @@ import com.group10.Model.SignUpModel;
 import com.group10.Model.VendorDashboard;
 import com.group10.Service.Interfaces.IHomeService;
 
+/**
+ * The VendorDashboardController class is a Spring RestController responsible for handling endpoints related to the vendor's dashboard and customer information.
+ */
 @RestController
 public class VendorDashboardController {
 
     @Autowired
     private IHomeService homeService;
-    
+
+    /**
+     * Handles the "/getStatistics" endpoint and retrieves statistics for the vendor's dashboard.
+     *
+     * @param jwtToken The JWT token obtained from the request header.
+     * @return ResponseEntity with the vendor's dashboard information.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
     public ResponseEntity<VendorDashboard> getStatistics(@RequestHeader String jwtToken) 
@@ -42,6 +51,12 @@ public class VendorDashboardController {
         }
     }
 
+    /**
+     * Handles the "/getCustomerInfo" endpoint and retrieves customer information for the provided list of user IDs.
+     *
+     * @param body The list of user IDs for which customer information is requested.
+     * @return ResponseEntity with the list of customer information.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getCustomerInfo")
     public ResponseEntity<List<SignUpModel>> getCustomerInformation(@RequestBody List<Integer> body){
