@@ -2,8 +2,6 @@ package com.group10.Controller;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class VendorDashboardController {
     
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getStatistics")
-    public ResponseEntity<VendorDashboard> getStatistics(@RequestHeader String jwtToken, @RequestBody Map<String, String> body) 
+    public ResponseEntity<VendorDashboard> getStatistics(@RequestHeader String jwtToken) 
     {
         // Get statistics from bookings, reviews, and users
         if (jwtToken == null || jwtToken.isEmpty()) {
