@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.RepositoryTests.VendorRepositoryImplTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 s - in com.group10.RepositoryTests.VendorRepositoryImplTest
-=======
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.026 s - in com.group10.RepositoryTests.VendorRepositoryImplTest
->>>>>>> origin/Develop
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s - in com.group10.RepositoryTests.VendorRepositoryImplTest
