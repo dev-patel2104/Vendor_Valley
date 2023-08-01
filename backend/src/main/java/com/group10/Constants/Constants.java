@@ -58,6 +58,11 @@ public class Constants {
     public static final String CATEGORY = "category";
 
     /**
+     * Constant String representing the "location" attribute used in various contexts.
+     */
+    public static final String LOCATION = "location";
+
+    /**
      * Constant Boolean value representing the ascending sorting order.
      */
     public static final Boolean ASC = true;

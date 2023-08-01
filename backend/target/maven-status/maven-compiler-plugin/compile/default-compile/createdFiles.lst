@@ -32,6 +32,7 @@ com\group10\Repository\Interfaces\IReviewsRepository.class
 com\group10\Repository\Interfaces\IUserRepository.class
 com\group10\Controller\SearchController$1.class
 com\group10\Util\ComparatorUtil.class
+com\group10\Util\LocationFilterImpl.class
 com\group10\Util\JWTTokenHandler.class
 com\group10\Controller\ProfileController.class
 com\group10\Controller\VendorDashboardController.class
