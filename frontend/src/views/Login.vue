@@ -60,7 +60,7 @@
               localStorage.setItem('token',response.data.token);
               localStorage.setItem('role',response.data.role);
               this.msg = ""
-              this.$toast.success(`Login sucessful`, {position:"top", duration: 1000, });
+              this.$toast.success(`Login sucessful`, {position:"top", duration: 2000, });
               if(localStorage.getItem('role') == 1){
                 router.push('/vendorhome');
                

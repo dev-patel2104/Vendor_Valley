@@ -83,6 +83,7 @@ export default {
       localStorage.removeItem("email");
       localStorage.removeItem("token");
       localStorage.removeItem("role");
+      localStorage.removeItem("name");
       this.showLogout = false;
       router.push("/login");
     },

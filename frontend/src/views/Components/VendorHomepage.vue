@@ -169,10 +169,11 @@ export default {
         background: "rgba(255, 255, 255, 1)",
       });
       await axios
-        .post("https://vendor-valley.onrender.com/getStatistics", {
-          'jwtToken':
-            localStorage.getItem('token')
-        })
+        .post("https://vendor-valley.onrender.com/getStatistics",{ },{
+            headers: {
+              'jwtToken': localStorage.getItem("token"),
+            },
+          })
         .then((res) => {
           if(res.status === 204){
             loading.close();

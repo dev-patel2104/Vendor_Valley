@@ -30,57 +30,13 @@
                 class="btn btn-primary custom-button"
                 type="button"
                 @click.prevent="toggle()"
+                style="width: 100px;"
               >
                 Back
               </button>
             </div>
             <div>
-              <div class="d-flex justify-content-between">
-                <div>
-                  <!-- <el-dropdown trigger="click">
-                    <el-button type="primary">
-                      Filter<el-icon class="el-icon--right"
-                        ><arrow-down
-                      /></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item>
-                          <el-select
-                            v-model="catValue"
-                            value-key="id"
-                            placeholder="Categories"
-                          >
-                            <el-option
-                              @click="filterbycategories()"
-                              v-for="item in categories"
-                              :key="item.id"
-                              :label="item"
-                              :value="item"
-                            />
-                          </el-select>
-                        </el-dropdown-item>
-                        <el-dropdown-item>Action 2</el-dropdown-item>
-                        <el-dropdown-item>Action 3</el-dropdown-item>
-                        <el-dropdown-item>Action 4</el-dropdown-item>
-                        <el-dropdown-item>Action 5</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown> -->
-                  <el-select
-                    v-model="catValue"
-                    value-key="id"
-                    placeholder="Categories"
-                  >
-                    <el-option
-                      @click="filterbycategories()"
-                      v-for="item in categories"
-                      :key="item.id"
-                      :label="item"
-                      :value="item"
-                    />
-                  </el-select>
-                </div>
+              <div class="w-100 d-flex justify-content-between">
                 <div>
                   <el-select v-model="value" value-key="id" placeholder="Sort">
                     <el-option
@@ -92,103 +48,164 @@
                     />
                   </el-select>
                 </div>
-               
               </div>
             </div>
           </div>
 
           <!-- showing result -->
-          <div
-            class="bg-white rounded d-flex justify-content-center flex-column p-4"
-            v-if="resultModal"
-          >
-            <h4>Result</h4>
-            <div class="d-flex flex-column review-custom" v-loading="searchloading" element-loading-background="rgba(255, 255, 255, 1)">
-              <div>
-                {{
-                  result.length
-                    ? result.length +
-                      " results found for " +
-                      '"' +
-                      searchResult +
-                      '"'
-                    : "No result found"
-                }}
-              </div>
-
+          <div class="d-flex flex-row" v-if="resultModal">
+            <div
+              class="w-75 bg-white rounded d-flex flex-column p-4"
+            >
+              <h4>Result</h4>
               <div
-                class="cusor-custom review-card1 p-4 rounded"
-                v-for="item in result"
-                v-bind:key="item.userId"
+                class="d-flex flex-column review-custom"
+                v-loading="searchloading"
+                element-loading-background="rgba(255, 255, 255, 1)"
               >
-                <div class="d-flex">
-                  <div class="w-25">
-                    <img
-                      v-if="item.images.length"
-                      class="w-100"
-                      :src="'data:image/png;base64,' + item.images[0]"
-                      alt=""
-                    />
+                <div>
+                  {{
+                    result.length
+                      ? result.length +
+                        " results found for " +
+                        '"' +
+                        searchResult +
+                        '"'
+                      : "No result found"
+                  }}
+                </div>
 
-                    <div v-else>
-                      <el-empty description="No image"/>
+                <div
+                  class="cusor-custom review-card1 p-4 rounded"
+                  v-for="item in result"
+                  v-bind:key="item.userId"
+                >
+                  <div class="d-flex">
+                    <div class="w-25">
+                      <img
+                        v-if="item.images.length"
+                        class="w-100"
+                        :src="'data:image/png;base64,' + item.images[0]"
+                        alt=""
+                      />
+
+                      <div v-else>
+                        <el-empty description="No image" />
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    @click="openModals(item)"
-                    class="w-100 d-flex flex-column"
-                  >
-                    <div>
-                      <h5 class="custom-text">{{ item.serviceName }}</h5>
-                    </div>
-                    <div>
-                      <p class="custom-text">{{ item.serviceDescription }}</p>
-                    </div>
-                    <div>
-                      <p class="custom-text">price- {{ item.servicePrice }}$</p>
-                    </div>
-                    <div>
-                      <p class="custom-text">
-                        {{ item.companyStreet }}, {{ item.companyProvince }},
-                        {{ item.companyCity }}, {{ item.companyCountry }}
-                      </p>
-                    </div>
-                    <div>
-                      <p>Rating: {{ item.averageRating }}</p>
+                    <div
+                      @click="openModals(item)"
+                      class="w-100 d-flex flex-column"
+                    >
+                      <div>
+                        <h5 class="custom-text">{{ item.serviceName }}</h5>
+                      </div>
+                      <div>
+                        <p class="custom-text">{{ item.serviceDescription }}</p>
+                      </div>
+                      <div>
+                        <p class="custom-text">
+                          price- {{ item.servicePrice }}$
+                        </p>
+                      </div>
+                      <div>
+                        <p class="custom-text">
+                          {{ item.companyStreet }}, {{ item.companyProvince }},
+                          {{ item.companyCity }}, {{ item.companyCountry }}
+                        </p>
+                      </div>
+                      <div>
+                        <p>Rating: {{ item.averageRating }}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- modal -->
-          <!-- <modal v-model:show="modals">
-            <div>
+            <div
+              class="w-25 bg-white rounded d-flex flex-column p-4"
+              style="max-height: 450px"
+            >
               <div>
-                <h5>{{ selectedItem.serviceName }}</h5>
+                <h4>Filters</h4>
               </div>
               <div>
-                <p>{{ selectedItem.serviceDescription }}</p>
+                <p class="m-0">Category</p>
+                <el-select
+                  class="w-100"
+                  v-model="catValue"
+                  value-key="id"
+                  placeholder="Category"
+                >
+                  <el-option
+                    @click="filterbycategories()"
+                    v-for="item in categories"
+                    :key="item.id"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
               </div>
               <div>
-                <p>price- {{ selectedItem.servicePrice }}$</p>
+                <p class="m-0">price</p>
+                <el-select
+                  class="w-100"
+                  v-model="pricevalue"
+                  value-key="id"
+                  placeholder="Price"
+                >
+                  <el-option
+                    @click="filterbyprice()"
+                    v-for="item in price"
+                    :key="item.id"
+                    :label="'<'+item"
+                    :value="item"
+                  />
+                </el-select>
               </div>
               <div>
-                <p>
-                  {{ selectedItem.companyStreet }},
-                  {{ selectedItem.companyProvince }},
-                  {{ selectedItem.companyCity }},
-                  {{ selectedItem.companyCountry }}
-                </p>
+                <p class="m-0">Location</p>
+                <el-select
+                  class="w-100"
+                  v-model="location"
+                  value-key="id"
+                  placeholder="Location"
+                >
+                  <el-option
+                    @click="filterbylocation()"
+                    v-for="item in locationList"
+                    :key="item.id"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
               </div>
               <div>
-                <p>Rating: {{ selectedItem.averageRating }}</p>
+                <p class="m-0">Customer review</p>
+                <el-select
+                  class="w-100"
+                  v-model="rating"
+                  value-key="id"
+                  placeholder="Rating"
+                >
+                  <el-option
+                    @click="filterbyrating()"
+                    v-for="item in ratingList"
+                    :key="item.id"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
+              <div class="d-flex flex-row justify-content-center">
+                <button class="btn btn-outline-primary" @click.prevent="resetFilters()">
+                  reset
+                </button>
               </div>
             </div>
-          </modal> -->
-          <!-- modal ends here -->
+          </div>
 
+      
           <!-- Featured -->
           <div
             class="bg-white rounded d-flex justify-content-center flex-column p-4"
@@ -201,18 +218,17 @@
                 v-for="item in featured"
                 v-bind:key="item.categoryId"
               >
-                <div style="min-height: 300px; max-height: 500px;" class="review-card1 rounded p-3">
+                <div
+                  style="min-height: 300px; max-height: 500px"
+                  class="review-card1 rounded p-3"
+                >
                   <div class="w-100 mb-2">
                     <img
-                  
                       class="w-100 rounded"
                       v-bind:src="'data:image/png;base64,' + item.base64Image"
                       alt=""
                     />
-                    <!-- <div v-else>
-                      <el-empty/>
-                    </div>
-                     -->
+                    
                   </div>
                   <div>
                     <h5>{{ item.categoryName }}</h5>
@@ -224,7 +240,6 @@
                     <a href="#" @click="featuredSearch(item.categoryName)">
                       {{ item.totalServices }} services
                     </a>
-                    
                   </div>
                 </div>
               </div>
@@ -239,7 +254,11 @@
           >
             <h3>Trending</h3>
             <div class="d-flex flex-row review-custom">
-              <div class="trending" v-for="item in trending" v-bind:key="item.userId">
+              <div
+                class="trending"
+                v-for="item in trending"
+                v-bind:key="item.userId"
+              >
                 <div @click="openModals(item)" class="review-card1 p-4 rounded">
                   <div>
                     <h5>{{ item.serviceName }}</h5>
@@ -276,6 +295,9 @@ export default {
     return {
       searchloading: false,
       catValue: "",
+      pricevalue: "",
+      location:"",
+      rating: "",
       loading: true,
       modals: false,
       msg: "",
@@ -293,7 +315,11 @@ export default {
       filteredData: [],
       unsortedCategories: [],
       value: "",
-      categories: ["All"],
+      unsortedLocationList: [],
+      locationList: [],
+      categories: [],
+      ratingList: [1,2,3,4,5],
+      price: [100,500,900,1500],
       options: [
         { id: 1, label: "Price: low to high", desc: ["price", "true"] },
         { id: 2, label: "Price: high to low", desc: ["price", "false"] },
@@ -306,11 +332,16 @@ export default {
   },
 
   methods: {
+    resetFilters(){
+      this.catValue = ""
+      this.location = ""
+      this.rating = ""
+      this.pricevalue = ""
+      this.searchUserQuery()
+    },
     filterbycategories() {
-      this.searchloading = true
-      if (this.catValue == "All") {
-        this.searchQuery();
-      }
+      this.searchloading = true;
+     
       const catParam = { category: this.catValue };
       const jsonstring = JSON.stringify(catParam);
       console.log(encodeURIComponent(jsonstring));
@@ -323,13 +354,76 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.result = res.data;
-          this.searchloading = false
+          this.searchloading = false;
         })
         .catch((res) => {
           console.log(res.message);
         });
     },
-    openModals(item) {    
+    filterbyprice() {
+      this.searchloading = true;
+  
+      const catParam = { price: this.pricevalue };
+      const jsonstring = JSON.stringify(catParam);
+      console.log(encodeURIComponent(jsonstring));
+      axios
+        .post("https://vendor-valley.onrender.com/filter", this.result, {
+          params: {
+            filterParam: jsonstring,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.result = res.data;
+          this.searchloading = false;
+        })
+        .catch((res) => {
+          console.log(res.message);
+        });
+    },
+    filterbylocation() {
+      this.searchloading = true;
+  
+      const catParam = { location: this.location };
+      const jsonstring = JSON.stringify(catParam);
+      console.log(encodeURIComponent(jsonstring));
+      axios
+        .post("https://vendor-valley.onrender.com/filter", this.result, {
+          params: {
+            filterParam: jsonstring,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.result = res.data;
+          this.searchloading = false;
+        })
+        .catch((res) => {
+          console.log(res.message);
+        });
+    },
+    filterbyrating() {
+      this.searchloading = true;
+  
+      const catParam = { rating: this.rating };
+      const jsonstring = JSON.stringify(catParam);
+      console.log(encodeURIComponent(jsonstring));
+      axios
+        .post("https://vendor-valley.onrender.com/filter", this.result, {
+          params: {
+            filterParam: jsonstring,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.result = res.data;
+          this.searchloading = false;
+        })
+        .catch((res) => {
+          console.log(res.message);
+        });
+    },
+    openModals(item) {
       const encodedItem = btoa(JSON.stringify(item));
       this.$router.push({
         name: "selectVendorService",
@@ -339,7 +433,7 @@ export default {
 
     //sort?sortParam=price&sortOrder=false
     sort() {
-      this.searchloading = true
+      this.searchloading = true;
       this.filteredData = this.result;
       this.result = [];
       axios
@@ -352,21 +446,21 @@ export default {
         )
         .then((response) => {
           this.result = response.data;
-          this.searchloading = false
+          this.searchloading = false;
         })
         .catch((error) => {
           this.msg = error.message;
         });
     },
-    featuredSearch(search){
-      if(search.length){
-        this.searchQuery = search
-        this.searchUserQuery()
+    featuredSearch(search) {
+      if (search.length) {
+        this.searchQuery = search;
+        this.searchUserQuery();
       }
     },
     searchUserQuery() {
-      this.searchloading = true
-      
+      this.searchloading = true;
+
       if (this.searchQuery.length) {
         this.showFeatured = false;
         this.showTrending = false;
@@ -380,16 +474,21 @@ export default {
           .then((response) => {
             console.log(response.data);
             this.result = response.data;
-           
 
             this.searchResult = this.searchQuery;
             response.data.forEach((element) =>
-              this.unsortedCategories.push(...element.categoryNames)
+              this.unsortedCategories.push(...element.categoryNames),
+             
             );
+            response.data.forEach((element) =>
+            
+          this.unsortedLocationList.push(element.companyProvince)
+            );
+            
+            this.locationList = [...new Set(this.unsortedLocationList)]
             this.categories = [...new Set(this.unsortedCategories)];
 
-            
-            this.searchloading = false
+            this.searchloading = false;
           })
           .catch((error) => {
             this.msg = error.message;
@@ -418,7 +517,7 @@ export default {
         // this.featured.forEach((element, index) => {
         //   this.featured[index].base64Image = atob(this.featured[index].base64Image)
         // });
-    
+
         console.log(this.featured);
         if (this.featured.length) {
           this.showFeatured = true;
@@ -475,7 +574,7 @@ export default {
   margin: 0;
 }
 
-.trending:hover{
+.trending:hover {
   cursor: pointer;
 }
 </style>

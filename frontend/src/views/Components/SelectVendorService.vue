@@ -85,6 +85,7 @@
                   </p>
                 </div>
                 <el-date-picker
+                :picker-options="pickerOptions"
                   class="w-100"
                   v-model="date"
                   type="daterange"
@@ -107,7 +108,7 @@
                   <el-button type="primary" @click="BookService"
                     >Book</el-button
                   >
-                  <el-button @click="showBookingModal = false"
+                  <el-button @click="closeBooking()"
                     >Cancel</el-button
                   >
                 </div>
@@ -256,7 +257,7 @@
             />{{ writeReview.reviewRating }}
           </div>
         </div>
-        <div class="w-100 d-flex justify-content-end">
+        <div class="w-100 d-flex justify-content-start">
           <button
             class="btn btn-primary rounded-pill"
             @click="writeuserReview()"
@@ -315,21 +316,7 @@
       </div>
     </div>
   </div>
-  <!-- <div>
-    <p>{{ item.serviceId }}</p>
-    <p>{{ item.userId }}</p>
-    <p>{{ item.serviceName }}</p>
-    <p>{{ item.serviceDescription }}</p>
-    <p>{{ item.servicePrice }}</p>
-    <p>{{ item.categoryNames }}</p>
-    <p>{{ item.companyStreet }}</p>
-    <p>{{ item.companyProvince }}</p>
-    <p>{{ item.companyCity }}</p>
-    <p>{{ item.companyCountry }}</p>
-    <p>{{ item.totalBookings }}</p>
-
-
-  </div> -->
+ 
 </template>
 
 <script>
@@ -364,6 +351,14 @@ export default {
     };
   },
   methods: {
+    closeBooking(){
+      this.bookingDates.serviceID=""
+      this.bookingDates.bookingDate= ""
+      this.bookingDates.startDate= ""
+      this.bookingDates.endDate=""
+      this.date =[]
+      this.showBookingModal = false
+    },
     BookService() {
       this.bookingDates.serviceID = this.item.serviceId;
       this.bookingDates.startDate = this.date[0];
@@ -375,7 +370,7 @@ export default {
           "https://vendor-valley.onrender.com/booking",this.bookingDates,
           {
             headers: {
-              'jwtToken': localStorage.getItem("token"),
+              jwtToken: localStorage.getItem("token"),
             },
           }
           
@@ -394,6 +389,11 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          this.$toast.error(`Booking request failed`, {
+            position: "top",
+            duration: 1000,
+          });
+          this.closeBooking()
         });
     },
     writeuserReview() {
@@ -404,7 +404,7 @@ export default {
           "https://vendor-valley.onrender.com/writeReviews",
           this.writeReview,
           {
-            params: {
+            headers: {
               JWTToken: localStorage.getItem("token"),
             },
           }
@@ -414,15 +414,20 @@ export default {
             position: "top",
             duration: 1000,
           });
-          this.writeReview.serviceId = "";
+          
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.$toast.error(`Review can't be sent`, {
+            position: "top",
+            duration: 1000,
+          });
+        });
+        this.writeReview.serviceId = "";
           this.writeReview.bookingId = "";
           this.writeReview.reviewTitle = "";
           this.writeReview.reviewRating = "";
           this.writeReview.reviewComment = "";
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
     },
     changeList() {
       this.newList = this.reviewList;
@@ -432,8 +437,11 @@ export default {
         axios
           .post("https://vendor-valley.onrender.com/sendEmail", {
             serviceId: this.item.serviceId,
-            JWTToken: localStorage.getItem("token"),
             emailText: this.writeEmail,
+          }, {
+            headers: {
+              'JWTToken': localStorage.getItem("token"),
+            },
           })
           .then(() => {
             this.$toast.info(`Message sent to vendor`, {
