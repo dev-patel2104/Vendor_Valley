@@ -351,8 +351,13 @@ public class MapResultSetUtil {
 
     public Booking mapResultSetToHasBookingEnded(ResultSet resultSet) throws SQLException {
         Booking booking = new Booking();
+        User user = new User();
+        user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
+        user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
+        user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
         booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
         booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+        booking.setUser(user);
         return booking;
     }
 }
