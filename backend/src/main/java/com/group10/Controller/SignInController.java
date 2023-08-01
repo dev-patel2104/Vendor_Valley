@@ -15,13 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 
-
+/**
+ * The SignInController class is a Spring RestController responsible for handling user registration and sign-in related endpoints.
+ */
 @RestController
 public class SignInController {
     @Autowired
     private IAuthenticationService authenticationService;
 
-    
+    /**
+     * Handles the "/register" endpoint and allows users to sign up and register for the application.
+     *
+     * @param signUpModel The user's sign-up information as a SignUpModel object.
+     * @return ResponseEntity with a success message if the user has been registered successfully.
+     */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/register")
     public ResponseEntity<String> signIn(@RequestBody SignUpModel signUpModel) {
