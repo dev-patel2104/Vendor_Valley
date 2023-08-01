@@ -77,7 +77,7 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
      */
     public boolean generateVerificationCode(User user) throws SQLException, MailAuthenticationException, MailSendException, MailParseException {
         SecureRandom rand = new SecureRandom();
-        int code = rand.nextInt(900000) + 100000;
+        int code = rand.nextInt(Constants.VERIFICATIONCODEBOUND) + Constants.VARIATION;
         int userId = user.getUserId();
         if (userId == Constants.USERDOESNTEXIST){
             return false;
@@ -172,7 +172,7 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
              * @return The verification code associated with the email.
              */
             int code = resetPasswordRepository.getVerificationCode(email);
-            if (code==0){
+            if (code== Constants.VERIFICATIONCODEEXPIRED){
                 throw new VerificationCodeExpiredException("Oops! The verification code has expired!");
             }
             if (code == -1){

@@ -59,27 +59,27 @@ public class VendorProfileService extends ProfileService
         }
         else if(service.getServiceDescription() == null || service.getServiceDescription().isEmpty())
         {
-            throw new NoInformationFoundException("service name is absent");
+            throw new NoInformationFoundException("service description is absent");
 
         }
         else if(service.getServicePrice() == null || service.getServicePrice().isEmpty())
         {
-            throw new NoInformationFoundException("service name is absent");
+            throw new NoInformationFoundException("service price is absent");
 
         }
         else if(service.getCategoryNames() == null || service.getCategoryNames().isEmpty())
         {
-            throw new NoInformationFoundException("service name is absent");
+            throw new NoInformationFoundException("service category is absent");
 
         }
         else if(service.getImages() == null || service.getImages().isEmpty())
         {
-            throw new NoInformationFoundException("service name is absent");
+            throw new NoInformationFoundException("service images are absent");
 
         }
         if(categoryList == null || categoryList.isEmpty())
         {
-            throw new NoInformationFoundException("service name is absent");
+            throw new NoInformationFoundException("No category list is present");
 
         }
 

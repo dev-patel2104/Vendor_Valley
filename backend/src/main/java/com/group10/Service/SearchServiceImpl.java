@@ -140,9 +140,4 @@ public class SearchServiceImpl implements ISearchService{
         }
         return filteredServices;
     }
-
-    public List<Service> sortSearchResults(List<Service> services, String sortParam, String sortOrder)
-    {
-        return null;
-    }
 }

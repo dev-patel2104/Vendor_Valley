@@ -34,6 +34,8 @@ public class Constants {
      * Constant value representing a user that does not exist in the system.
      */
     public static final int USERDOESNTEXIST = -4;
+    public static final int VERIFICATIONCODEBOUND = 900000;
+    public static final int VARIATION = 100000;
 
     /**
      * Constant String representing the "price" attribute used in various contexts.
