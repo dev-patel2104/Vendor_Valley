@@ -38,6 +38,7 @@ build-frontend:
     - npm install
     - npm install -g @vue/cli-service
     - npm install @vue/cli-plugin-babel
+    - npm install resize-observer-polyfill
     - npm run build
   tags:
     - dalfcs_docker_autoscale
