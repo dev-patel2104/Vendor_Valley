@@ -1,10 +1,12 @@
 package com.group10.Repository;
 
 import com.group10.Enums.BookingStatus;
+import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.RequestBooking;
 import com.group10.Service.Interfaces.IDatabaseService;
 import com.group10.Util.SqlQueries.SQLQueries;
+import com.group10.Util.MapResultSetUtil;
 import com.group10.Util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -24,6 +27,9 @@ public class BookingRepository {
 
     @Autowired
     IDatabaseService databaseService;
+
+    @Autowired
+    private MapResultSetUtil mapResultSetUtilObj;
 
     /**
      * Requests a reservation by inserting booking information into the database.
@@ -85,5 +91,28 @@ public class BookingRepository {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
+    }
+
+    public boolean hasBookingEnded(int bookingId) throws SQLException {
+
+        try(
+            Connection connection = databaseService.connect();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.getBoookingByBookingId);
+        ){
+            preparedStatement.setInt(1, bookingId);
+            
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+
+                Booking booking = mapResultSetUtilObj.mapResultSetToHasBookingEnded(resultSet);
+
+                if(booking == null) throw new SQLException("Booking does not exist");
+                
+                if(StringUtil.dateStringToDate(booking.getEndDate()).before(new java.util.Date())) return true;
+            
+            }
+        }
+        return false;
     }
 }

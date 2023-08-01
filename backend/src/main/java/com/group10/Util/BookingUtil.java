@@ -18,7 +18,7 @@ public class BookingUtil {
         if (bookingStatus.isEmpty() || bookingStatus.isBlank()) return false;
 
         for (BookingStatus status : BookingStatus.values()) {
-            if (status.getBookingStatus().equals(bookingStatus)) {
+            if (status.getBookingStatus().equalsIgnoreCase(bookingStatus)) {
                 return true;
             }
         }

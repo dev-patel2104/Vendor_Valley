@@ -155,7 +155,6 @@ public class CustomerRepositoryImpl implements ICustomerRepository {
         {
             getCustomerPreparedStatement.setInt(1,user_id);
             ResultSet rs = getCustomerPreparedStatement.executeQuery();
-            //ToDo: add the check to see if cnt is greater than 1 then throw and exception saying more than one user
             while(rs.next())
             {
                 user =  mapResultSetUtilObj.mapResultSetToSignUpModel(rs);

@@ -16,6 +16,7 @@ import com.group10.Util.BookingsComparator;
 import com.group10.Util.BookingsFilterImpl;
 import com.group10.Util.CategoryFilterImpl;
 import com.group10.Util.ComparatorUtil;
+import com.group10.Util.LocationFilterImpl;
 import com.group10.Util.PriceComparator;
 import com.group10.Util.PriceFilterImpl;
 import com.group10.Util.RatingComparator;
@@ -133,16 +134,14 @@ public class SearchServiceImpl implements ISearchService{
             else if (key.equalsIgnoreCase(Constants.CATEGORY)) {
                 filterUtilObj = new CategoryFilterImpl(value);
             }
+            else if (key.equalsIgnoreCase(Constants.LOCATION)) {
+                filterUtilObj = new LocationFilterImpl(value);
+            }
             else {
                 return services;
             }
             filteredServices = filterUtilObj.execute(services);
         }
         return filteredServices;
-    }
-
-    public List<Service> sortSearchResults(List<Service> services, String sortParam, String sortOrder)
-    {
-        return null;
     }
 }
