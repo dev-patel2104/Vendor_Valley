@@ -50,7 +50,6 @@ com\group10\Controller\LoginController.class
 com\group10\Enums\SearchServiceQueryColumns.class
 com\group10\Enums\VendorDashboardInfoQuery.class
 com\group10\Repository\Interfaces\IImageRepository.class
-com\group10\Constants\IntegerConstants.class
 com\group10\Service\ResetPasswordServiceImpl.class
 com\group10\Controller\HomeController.class
 com\group10\Model\Review.class
