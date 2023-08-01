@@ -104,11 +104,9 @@ public class BookingServiceTest {
 
     @Test
     public void nullBookingResponseRequest_respondToBooking() throws NoInformationFoundException, SQLException {
-        BookingResponseRequest bookingResponseRequest = null;
-
         BookingService newBookingService = mock(BookingService.class);
-        when(newBookingService.respondToBooking("jwt token", bookingResponseRequest)).thenThrow(new NoInformationFoundException("test"));
-        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking("jwt token", bookingResponseRequest));
+        when(newBookingService.respondToBooking("jwt token", null)).thenThrow(new NoInformationFoundException("test"));
+        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking("jwt token", null));
     }
 
     @Test
@@ -118,12 +116,9 @@ public class BookingServiceTest {
         bookingResponseRequest.setBookingID(342);
         bookingResponseRequest.setServiceID(23);
 
-        DecodedJWT decodedJWT = mock(DecodedJWT.class);
-        Claim claim = mock(Claim.class);
-
         String token = "jwt_token";
         String email = "boon@dal.ca";
-        int id = 5;
+
         Booking booking = new Booking();
         User user = new User();
         user.setEmail(email);
@@ -131,9 +126,7 @@ public class BookingServiceTest {
 
         Mockito.doReturn(booking).when(bookingRepository).hasBookingEnded(anyInt());
         Mockito.doReturn(true).when(bookingRepository).respondToBooking(any(BookingResponseRequest.class));
-        //when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
         Mockito.doReturn(true).when(emailUtil).sendSimpleMail(any(EmailDetails.class));
-        //when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
 
         assertTrue(bookingService.respondToBooking(token, bookingResponseRequest));
     }
