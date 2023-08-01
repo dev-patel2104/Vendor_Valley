@@ -3,6 +3,7 @@ package com.group10.Service;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.group10.Exceptions.NoInformationFoundException;
+import com.group10.Model.Booking;
 import com.group10.Model.BookingResponseRequest;
 import com.group10.Model.EmailDetails;
 import com.group10.Model.RequestBooking;
@@ -84,7 +85,7 @@ public class BookingService {
 
                 if (vendorService != null && vendorService.getServiceName() != null && vendorService.getCompanyEmail() != null) {
                     String subject = "VendorValley: A customer has requested for " + vendorService.getServiceName();
-                    String body = "Respond to the customer's request on the vendor valley website !!"; // todo: add site url ?
+                    String body = "Respond to the customer's request on the vendor valley website !!";
 
                     emailDetails.setRecipient(vendorService.getCompanyEmail());
                     emailDetails.setSubject(subject);
@@ -124,11 +125,10 @@ public class BookingService {
         if (bookingResponseRequest.getBookingStatus() == null) return false;
         if (!BookingUtil.isValidBookingStatus(bookingResponseRequest.getBookingStatus())) return false;
 
-        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(jwtToken);
-        String customerEmail = decodedJWT.getClaim("email").asString();
          
         // Check if booking has ended
-        if (bookingRepository.hasBookingEnded(bookingResponseRequest.getBookingID())) {
+        Booking booking = bookingRepository.hasBookingEnded(bookingResponseRequest.getBookingID());
+        if (booking == null || booking.getUser() == null || booking.getUser().getEmail() == null) {
             throw new SQLException("Booking has already ended");
         }
 
@@ -137,7 +137,7 @@ public class BookingService {
             String subject = "VendorValley: You have received a response to your booking request";
             String body = "Request for the service: " + bookingResponseRequest.getServiceID() + " has been " + bookingResponseRequest.getBookingStatus();
 
-            emailDetails.setRecipient(customerEmail);
+            emailDetails.setRecipient(booking.getUser().getEmail());
             emailDetails.setSubject(subject);
             emailDetails.setMsgBody(body);
 

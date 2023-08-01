@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -122,13 +123,17 @@ public class BookingServiceTest {
 
         String token = "jwt_token";
         String email = "boon@dal.ca";
-        Mockito.doReturn(email).when(claim).asString();
-        Mockito.doReturn(claim).when(decodedJWT).getClaim("email");
-        Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
+        int id = 5;
+        Booking booking = new Booking();
+        User user = new User();
+        user.setEmail(email);
+        booking.setUser(user);
 
-        when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
-
-        when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
+        Mockito.doReturn(booking).when(bookingRepository).hasBookingEnded(anyInt());
+        Mockito.doReturn(true).when(bookingRepository).respondToBooking(any(BookingResponseRequest.class));
+        //when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
+        Mockito.doReturn(true).when(emailUtil).sendSimpleMail(any(EmailDetails.class));
+        //when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
 
         assertTrue(bookingService.respondToBooking(token, bookingResponseRequest));
     }
