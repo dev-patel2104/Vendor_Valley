@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -103,11 +104,9 @@ public class BookingServiceTest {
 
     @Test
     public void nullBookingResponseRequest_respondToBooking() throws NoInformationFoundException, SQLException {
-        BookingResponseRequest bookingResponseRequest = null;
-
         BookingService newBookingService = mock(BookingService.class);
-        when(newBookingService.respondToBooking("jwt token", bookingResponseRequest)).thenThrow(new NoInformationFoundException("test"));
-        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking("jwt token", bookingResponseRequest));
+        when(newBookingService.respondToBooking("jwt token", null)).thenThrow(new NoInformationFoundException("test"));
+        assertThrows(NoInformationFoundException.class, () -> newBookingService.respondToBooking("jwt token", null));
     }
 
     @Test
@@ -117,18 +116,17 @@ public class BookingServiceTest {
         bookingResponseRequest.setBookingID(342);
         bookingResponseRequest.setServiceID(23);
 
-        DecodedJWT decodedJWT = mock(DecodedJWT.class);
-        Claim claim = mock(Claim.class);
-
         String token = "jwt_token";
         String email = "boon@dal.ca";
-        Mockito.doReturn(email).when(claim).asString();
-        Mockito.doReturn(claim).when(decodedJWT).getClaim("email");
-        Mockito.doReturn(decodedJWT).when(jwtTokenHandler).decodeJWTToken(token);
 
-        when(bookingRepository.respondToBooking(any(BookingResponseRequest.class))).thenReturn(true);
+        Booking booking = new Booking();
+        User user = new User();
+        user.setEmail(email);
+        booking.setUser(user);
 
-        when(emailUtil.sendSimpleMail(any(EmailDetails.class))).thenReturn(true);
+        Mockito.doReturn(booking).when(bookingRepository).hasBookingEnded(anyInt());
+        Mockito.doReturn(true).when(bookingRepository).respondToBooking(any(BookingResponseRequest.class));
+        Mockito.doReturn(true).when(emailUtil).sendSimpleMail(any(EmailDetails.class));
 
         assertTrue(bookingService.respondToBooking(token, bookingResponseRequest));
     }

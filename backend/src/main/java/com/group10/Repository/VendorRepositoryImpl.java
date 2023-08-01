@@ -98,9 +98,7 @@ public class VendorRepositoryImpl implements IVendorRepository {
         ){
             preparedStatement.setInt(1, vendorId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()){
-               vendorDashboard = mapResultSetUtilObj.mapResultSetToVendorDashboard(resultSet);
-            }
+            vendorDashboard = mapResultSetUtilObj.mapResultSetToVendorDashboard(resultSet);
         }
         return vendorDashboard;
     }

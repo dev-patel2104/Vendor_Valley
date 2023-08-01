@@ -37,7 +37,7 @@
           <el-input v-model="form.mobile" />
         </el-form-item>
         <el-form-item label="email">
-          <el-input v-model="form.email" disabled/>
+          <el-input v-model="form.email"/>
         </el-form-item>
        
       </el-form>
@@ -52,8 +52,32 @@
 
     <div v-if="showBooking" class="w-100 m-4 p-4 border rounded">
       <div class="mb-4"><h4>Bookings</h4></div>
+  
       <div>
-        <h4>Coming soon....</h4>
+        <el-table :data="bookingList" style="width: 100%">
+          <el-table-column prop="user" label="Service">
+            <template v-slot="{ row }">
+              <div>
+                <h6>{{ row.serviceName }}</h6>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Booking ID"
+            prop="bookingId"
+
+          ></el-table-column>
+          <el-table-column
+            prop="startDate"
+            label="Start date"
+          ></el-table-column>
+          <el-table-column prop="endDate" label="End date"></el-table-column>
+          <el-table-column
+            prop="bookingStatus"
+            label="Status"
+            width="180"
+          ></el-table-column>
+        </el-table>
       </div>
     </div>
   </div>
@@ -82,6 +106,7 @@ export default {
         password: "",
         is_vendor: 0
       },
+      bookingList: []
     };
   },
   methods: {
@@ -106,15 +131,14 @@ export default {
     async getUserDetails() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Loading",
         background: "rgba(255, 255, 255, 1)",
       });
       await axios
         .get("https://vendor-valley.onrender.com/profile", {
-          params: {
-            jwtToken: localStorage.getItem("token"),
-          },
-        })
+            headers: {
+              'jwtToken': localStorage.getItem("token"),
+            },
+          })
         .then((res) => {
           console.log(res.data);
           this.form.userId = res.data.user_id;
@@ -134,9 +158,23 @@ export default {
           console.log(error);
         });
     },
+    getCustomerBookings(){
+      axios.get('https://vendor-valley.onrender.com/bookings', {
+            headers: {
+              'jwtToken': localStorage.getItem("token"),
+            },
+          }
+      ).then((res)=>{
+        this.bookingList = res.data
+        console.log(this.bookingList);
+      }).catch((err)=>{
+        console.log(err);
+      })
+    }
   },
   mounted() {
     this.getUserDetails();
+    this.getCustomerBookings();
   },
 };
 </script>

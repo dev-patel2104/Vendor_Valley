@@ -25,6 +25,7 @@
 
     <!-- profile -->
     <div v-if="showProfile" class="w-100 m-4 p-4 border rounded">
+      <el-scrollbar style="max-height: 700px;">
       <div class="mb-4"><h4>Personal details</h4></div>
       <el-form :model="personalInfo" label-width="120px">
         <el-form-item label="First name">
@@ -55,10 +56,12 @@
       <div class="w-100 justify-content-end d-flex">
         <button class="btn btn-primary" @click="updatePerPro()">Update</button>
       </div>
+      </el-scrollbar>
     </div>
 
     <!-- my business -->
     <div v-if="showBusiness" class="w-100 m-4 p-4 border rounded">
+      <el-scrollbar style="max-height:700px;">
       <div class="mb-4"><h4>My Business</h4></div>
       <el-form :model="companyInfo" label-width="150px">
         <el-form-item label="Role">
@@ -88,20 +91,22 @@
         <el-form-item label="Mobile">
           <el-input v-model="companyInfo.company_mobile" />
         </el-form-item>
+        
       </el-form>
       <div class="w-100 justify-content-end d-flex">
         <button class="btn btn-primary" @click="updateComPro()">Update</button>
       </div>
+      </el-scrollbar>
     </div>
     <!-- business end -->
 
     <!-- booking -->
 
-    <div v-if="showBooking" class="w-100 m-4 p-4 border rounded">
+    <div v-if="showBooking && !showProfile && !showService && !showBusiness" class="w-100 m-4 p-4 border rounded">
       <div class="mb-4"><h4>Bookings</h4></div>
       <div>
         <el-table :data="bookingList" style="width: 100%">
-          <el-table-column prop="user">
+          <el-table-column prop="user" label="Service">
             <template v-slot="{ row }">
               <div>
                 <h6>{{ row.serviceName }}</h6>
@@ -127,7 +132,7 @@
             label="Status"
             width="180"
           ></el-table-column>
-          <el-table-column>
+          <el-table-column width="120">
             <template v-slot="{ row }">
               <a href="#" @click="openModal(row)">show more</a>
             </template>
@@ -140,16 +145,19 @@
     <div v-if="showService" class="w-100 m-4 p-4 border rounded">
       <div class="d-flex flex-row justify-content-between">
         <div class="mb-4"><h4>Your services</h4></div>
-        <!-- <div>
+        <div>
           <button class="btn btn-primary" @click="openAddService()">
             + Add service
           </button>
-        </div> -->
+        </div>
       </div>
 
-      <div class="w-100">
+      <modal  v-model:show="showAddServiceModal" class="w-100">
         <div class="p-4">
-          <h6>Add new service</h6>
+        <div class="mb-4">
+            <h4>Add new service</h4>
+          </div>
+        
           <div>
             <el-form :model="form" label-width="120px">
               <el-form-item label="Serive name">
@@ -198,7 +206,7 @@
                     </div>
                   </template>
                 </el-upload>
-                <el-image
+                <el-image v-if="fileList[0]"
                   style="width: 100px; height: 100px"
                   :src="fileList[0]"
                   :preview-src-list="fileList"
@@ -209,11 +217,87 @@
                 <el-button type="primary" @click="addService()"
                   >Submit</el-button
                 >
+                <el-button @click="closeServiceModal()"
+                  >Cancel</el-button
+                >
               </el-form-item>
             </el-form>
           </div>
         </div>
-      </div>
+      </modal>
+
+      <!-- edit service modal -->
+      <modal v-model:show="showEditServiceModal">
+        <div class="p-4">
+          <div class="mb-4">
+            <h4>Edit service details</h4>
+          </div>
+          <el-form :model="editServiceForm" label-width="120px">
+              <el-form-item label="Serive name">
+                <el-input v-model="editServiceForm.serviceName" />
+              </el-form-item>
+              <el-form-item label="Description">
+                <el-input v-model="editServiceForm.serviceDescription" type="textarea" />
+              </el-form-item>
+
+              <el-form-item label="Category">
+                <el-select
+                  v-model="editServiceForm.categoryNames"
+                  multiple
+                  placeholder="Categories"
+                  class="w-100"
+                >
+                  <el-option
+                    v-for="item in categories"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="Price">
+                <el-input v-model="editServiceForm.servicePrice" class="w-25" />
+              </el-form-item>
+
+              <el-form-item label="Upload images">
+                <el-upload
+                  drag
+                  type="file"
+                  accept="image/*"
+                  :on-change="onchange"
+                  ref="upload"
+                >
+                  <i class="fa fa-cloud-arrow-up" style="color: lightgreen"></i>
+                  <div class="el-upload__text">
+                    Drop file here or <em>click to upload</em>
+                  </div>
+                  <template #tip>
+                    <div class="el-upload__tip">
+                      Max file size : 5MB. File format : pdf, docx, png, jpeg,
+                      ...
+                    </div>
+                  </template>
+                </el-upload>
+                <el-image v-if="fileList[0]"
+                  style="width: 100px; height: 100px"
+                  :src="fileList[0]"
+                  :preview-src-list="fileList"
+                >
+                </el-image>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="editService()"
+                  >Submit</el-button
+                >
+                <el-button @click="showEditServiceModal = false, fileList = []"
+                  >Cancel</el-button
+                >
+              </el-form-item>
+            </el-form>
+          
+        </div>
+      </modal>
 
       <el-divider />
       <!-- services -->
@@ -233,11 +317,18 @@
           <el-table-column label="Price" prop="servicePrice"> </el-table-column>
 
           <el-table-column>
+           
             <template v-slot="{ row }">
-              <button class="btn btn-danger" href="#" @click="Delete(row)">
+              <div class="d-flex flex-row">
+              <button class="btn btn-danger" href="#" @click.prevent="Delete(row)">
                 Delete
               </button>
+              <button class="btn btn-primary" href="#" @click.prevent="EditService(row)">
+                Edit
+              </button>
+            </div>
             </template>
+      
           </el-table-column>
         </el-table>
       </div>
@@ -274,12 +365,11 @@
         </div>
       </div>
     </modal>
-
-    <!-- service modal -->
   </div>
 </template>
 
 <script>
+import 'resize-observer-polyfill';
 import axios from "axios";
 import { ElLoading } from "element-plus";
 import Modal from "@/components/Modal.vue";
@@ -290,6 +380,7 @@ export default {
   name: "customerprofile",
   data() {
     return {
+      editfileList: [],
       fileList: [],
       myimage: [],
       activeNo: "",
@@ -302,9 +393,17 @@ export default {
       showBooking: false,
       showBusiness: false,
       categories: [],
-
       selectedItem: [],
       serviceList: [],
+      editServiceForm: {
+        serviceId: "",
+        serviceName: "",
+        serviceDescription: "",
+        servicePrice: "",
+        images: [],
+        categoryNames: [],
+      },
+      showEditServiceModal: false,
       form: {
         userId: "",
         serviceName: "",
@@ -370,25 +469,64 @@ export default {
         })
         .then((res) => {
           console.log(res.data);
+          this.$toast.info(`Service deleted`, {
+            position: "top",
+            duration: 2000,
+          });
           this.getVendorServices()
         })
         .catch((err) => {
           console.log(err);
         });
     },
+    EditService(row){
+         
+      this.editServiceForm.serviceId = row.serviceId
+      this.editServiceForm.serviceName = row.serviceName
+      this.editServiceForm.servicePrice = row.servicePrice
+      this.editServiceForm.serviceDescription = row.serviceDescription
+      this.editServiceForm.categoryNames = row.categoryNames 
+      this.showEditServiceModal = true
+      
+    },
     onchange(file) {
       const reader = new FileReader();
-
-      // Read the contents of the file as a Base64 string
       reader.readAsDataURL(file.raw);
 
-      // When the file is loaded, get the Base64 data and add it to the fileList
       reader.onload = () => {
         this.fileList.push(reader.result);
-        console.log(this.fileList[0].replace("data:image/png;base64,", ""));
+        console.log(this.fileList[0]);
       };
-      // this.fileList.push(URL.createObjectURL(file.raw));
-      // console.log(this.fileList);
+     
+    },
+    editService(){
+      if (this.fileList[0].startsWith("data:image/png;base64,")) {
+        this.editServiceForm.images[0] =
+          this.fileList[0].replace("data:image/png;base64,", "")
+        
+      } else if (this.fileList[0].startsWith("data:image/jpg;base64,")) {
+        this.editServiceForm.images[0] =
+          this.fileList[0].replace("data:image/jpg;base64,", "")
+  
+      } else if (this.fileList[0].startsWith("data:image/jpeg;base64,")) {
+        this.editServiceForm.images[0] = 
+          this.fileList[0].replace("data:image/jpeg;base64,", "")
+      
+      }
+      console.log(this.editServiceForm);
+      axios.put('https://vendor-valley.onrender.com/edit/service', this.editServiceForm).then((res)=>{
+        console.log(res.data);
+        this.$toast.success(`Services Updated`, {
+            position: "top",
+            duration: 2000,
+          });
+          this.showEditServiceModal = false
+          this.fileList = []
+          this.getVendorServices()
+      }).catch((err)=>{
+        console.log(err);
+      })
+      
     },
     userProfile() {
       this.showProfile = true;
@@ -434,14 +572,18 @@ export default {
       console.log(this.form);
       axios
         .post("https://vendor-valley.onrender.com/addService", this.form)
-        .then((res) => {
-          console.log("done", res.data);
+        .then(() => {
+          this.$toast.info(`Service added`, {
+            position: "top",
+            duration: 2000,
+          });
           this.form.serviceName = "";
           this.form.serviceDescription = "";
           this.form.servicePrice = "";
           this.form.images = [];
           this.form.categoryNames = [];
           this.fileList = [];
+          this.showAddServiceModal = false
           this.getVendorServices()
         })
         .catch((err) => {
@@ -483,7 +625,8 @@ export default {
         });
     },
     openAddService() {
-      this.showAddServiceModal = true;
+      
+        this.showAddServiceModal = true;
     },
 
     openModal(item) {
@@ -496,7 +639,7 @@ export default {
  
       axios
         .get("https://vendor-valley.onrender.com/bookings", {
-          params: {
+          headers: {
             jwtToken:
               localStorage.getItem('token'),
           },
@@ -513,12 +656,11 @@ export default {
     async getUserDetails() {
       const loading = ElLoading.service({
         lock: true,
-        text: "Loading",
         background: "rgba(255, 255, 255, 1)",
       });
       await axios
         .get("https://vendor-valley.onrender.com/profile", {
-          params: {
+          headers: {
             jwtToken: localStorage.getItem("token"),
           },
         })
@@ -534,6 +676,7 @@ export default {
           this.personalInfo.street = res.data.street;
           this.personalInfo.country = res.data.country;
           this.personalInfo.is_vendor = res.data.is_vendor;
+          this.personalInfo.password = res.data.password;
 
           // company
           this.companyInfo.userId = res.data.user_id;
@@ -569,19 +712,37 @@ export default {
     getVendorServices() {
       axios
         .get("https://vendor-valley.onrender.com/services", {
-          params: {
+          headers: {
             jwtToken: localStorage.getItem("token"),
           },
         })
         .then((res) => {
           this.serviceList = res.data;
+          console.log(this.serviceList);
         })
         .catch((err) => {
           console.log(err.response);
         });
     },
+    closeServiceModal(){
+        this.form.userId= ""
+        this.form.serviceName= ""
+        this.form.serviceDescription= ""
+        this.form.servicePrice= ""
+        this.form.images= []
+        this.form.categoryNames= []
+        this.fileList = []
+        this.showAddServiceModal = false
+    },
+    closeEditService(){
+      this.showEditServiceModal = false
+    }
   },
   mounted() {
+    this.showProfile = true
+    this.showBooking = false
+    this.showBusiness = false
+    this.showService = false
     this.activeNo = "1";
     const show = this.$route.query.show;
     if (show == "true") {

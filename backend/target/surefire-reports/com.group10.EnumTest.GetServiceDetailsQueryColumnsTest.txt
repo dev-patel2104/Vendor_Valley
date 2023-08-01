@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.EnumTest.GetServiceDetailsQueryColumnsTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s - in com.group10.EnumTest.GetServiceDetailsQueryColumnsTest
+=======
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s - in com.group10.EnumTest.GetServiceDetailsQueryColumnsTest
+>>>>>>> origin/Develop

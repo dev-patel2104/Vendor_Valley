@@ -93,7 +93,7 @@ public class BookingRepository {
         }
     }
 
-    public boolean hasBookingEnded(int bookingId) throws SQLException {
+    public Booking hasBookingEnded(int bookingId) throws SQLException {
 
         try(
             Connection connection = databaseService.connect();
@@ -109,10 +109,10 @@ public class BookingRepository {
 
                 if(booking == null) throw new SQLException("Booking does not exist");
                 
-                if(StringUtil.dateStringToDate(booking.getEndDate()).before(new java.util.Date())) return true;
+                if(StringUtil.dateStringToDate(booking.getEndDate()).before(new java.util.Date())) return booking;
             
             }
         }
-        return false;
+        return null;
     }
 }

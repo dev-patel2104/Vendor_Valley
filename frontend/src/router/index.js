@@ -32,7 +32,7 @@ const routes = [
           next();
         }
       } else {
-        next('/login');
+        next('/');
       }
     }
   },
@@ -45,7 +45,7 @@ const routes = [
       if (token) {
         next(); 
       } else {
-        next('/login');
+        next('/');
       }
     }
   },
@@ -61,7 +61,7 @@ const routes = [
         }
         
       } else {
-        next('/login');
+        next('/');
       }
     }
   },
@@ -76,7 +76,7 @@ const routes = [
           next(); 
         } 
       } else {
-        next('/login');
+        next('/');
       }
     }
   },
@@ -91,7 +91,7 @@ const routes = [
           next(); 
         } 
       } else {
-        next('/login');
+        next('/');
       }
     }
   },
@@ -106,7 +106,7 @@ const routes = [
           next(); 
         } 
       } else {
-        next('/login');
+        next('/');
       }
     }
   },

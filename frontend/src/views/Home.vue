@@ -20,7 +20,7 @@
             </p>
           </div>
           <div class="d-flex justify-content-end"><button type="button" class="btn btn-outline-primary">
-              Know more
+              No more
             </button></div>
         </div>
         <div class="bg-white rounded d-flex justify-content-center flex-column p-4">

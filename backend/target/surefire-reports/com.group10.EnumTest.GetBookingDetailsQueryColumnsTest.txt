@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.group10.EnumTest.GetBookingDetailsQueryColumnsTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s - in com.group10.EnumTest.GetBookingDetailsQueryColumnsTest
+=======
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 s - in com.group10.EnumTest.GetBookingDetailsQueryColumnsTest
+>>>>>>> origin/Develop

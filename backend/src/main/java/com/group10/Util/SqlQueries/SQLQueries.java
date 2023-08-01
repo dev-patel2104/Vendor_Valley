@@ -47,5 +47,5 @@ public class SQLQueries {
         public static final String insertServiceImages = "Insert into service_images (service_id, image, time_stamp) values (?,?,NOW());";
         public static final String insertBookingEntry = "INSERT INTO bookings (user_id, service_id, booking_date, start_date, end_date, booking_status) VALUES (?, ?, ?, ?, ?, ?);";
         public static final String updateBookingEntry = "update bookings set booking_status = ? where booking_id = ?;";
-        public static final String getBoookingByBookingId = "select * from bookings where booking_id = ?;";
+        public static final String getBoookingByBookingId = "select * from bookings as b left join users as u on b.user_id = u.user_id where booking_id = ?;";
 }
