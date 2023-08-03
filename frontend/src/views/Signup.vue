@@ -1,6 +1,6 @@
 <template>
-
-  <form class="form-signin d-flex flex-column rounded shadow p-3 bg-white mt-4" @submit.prevent="signup()">
+  <div class="py-4">
+  <form class="form-signin d-flex flex-column rounded shadow p-3 bg-white" @submit.prevent="signup()">
       <div class="text-center">
         <h2>Register</h2>
       </div>
@@ -277,6 +277,7 @@
   
       <p class="text-danger">{{ msg }}</p>
     </form>
+    </div>
   </template>
   
   <script>
@@ -327,7 +328,8 @@
             router.push("/login");
           })
           .catch((error) => {
-            this.msg = error.response.data;
+            console.log(error);
+            this.msg = error.response.data
           });
       },
     },

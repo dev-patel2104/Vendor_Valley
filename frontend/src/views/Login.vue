@@ -54,15 +54,25 @@
         login(){   
           axios.post('https://vendor-valley.onrender.com/login', this.form)
             .then((response) => {
+              localStorage.setItem('name', response.data.name)
               localStorage.setItem('userID', this.form.email);
-              localStorage.setItem('password', this.form.password);
-              localStorage.setItem('token',response.data);
+              localStorage.setItem('email', this.form.email);
+              localStorage.setItem('token',response.data.token);
+              localStorage.setItem('role',response.data.role);
               this.msg = ""
-              this.$toast.success(`Login sucessful`, {position:"top", duration: 1000, });
-              router.push('/homepage');
+              this.$toast.success(`Login sucessful`, {position:"top", duration: 2000, });
+              if(localStorage.getItem('role') == 1){
+                router.push('/vendorhome');
+               
+              }else if(localStorage.getItem('role') == 0){
+                router.push('/homepage')
+
+              } 
+              location.reload();
             })
             .catch((error) => {
-              this.msg = error.response.data
+              console.log(error.response)
+              this.msg = error.response.data.error
             });
         }
       },

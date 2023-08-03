@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--referred: https://github.com/serlesen/backend-social-network/blob/chapter_10/src/main/resources/log4j2.xml-->
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%-30d %p [%t] %-30.30C: %msg%n%throwable" />
+        </Console>
+
+        <RollingFile name="File" fileName="./logs/vendor-valley-log4j2.log" filePattern="./logs/app-%d{-dd-MMMM-yyyy}-%i.log4j2.log.gz">
+            <PatternLayout>
+                <pattern>%d %p [%t] %C: %msg%n%throwable</pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+
+</Configuration>

@@ -1,42 +1,34 @@
 package com.group10.ControllerTests;
 
-import com.group10.Controller.HomeController;
-import com.group10.Model.Category;
-import com.group10.Model.Service;
-import com.group10.Service.HomeService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.group10.Service.Interfaces.IHomeService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@RunWith(SpringRunner.class)
+import com.group10.Controller.HomeController;
+import com.group10.Model.Category;
+import com.group10.Model.Service;
+
 @SpringBootTest
 public class HomeControllerTest
 {
-    @InjectMocks
+    @Autowired
     private HomeController homeController;
-    @Mock
-    private HomeService homeService;
+    @MockBean
+    private IHomeService homeService;
     private List<Category> expectedCategories;
     private List<Service> expectedServices;
-    @Before
-    public void setUp()
-    {
-        MockitoAnnotations.initMocks(this);
-    }
+    
 
     private void initializeCategoryList()
     {

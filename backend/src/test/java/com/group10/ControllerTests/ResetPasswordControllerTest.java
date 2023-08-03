@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.group10.Service.Interfaces.IAuthenticationService;
+import com.group10.Service.Interfaces.IResetPasswordService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +26,15 @@ import com.group10.Exceptions.PasswordsCantBeSameException;
 import com.group10.Exceptions.UserDoesntExistException;
 import com.group10.Exceptions.VerificationCodeExpiredException;
 import com.group10.Model.User;
-import com.group10.Service.LoginService;
-import com.group10.Service.ResetPasswordService;
 
 @SpringBootTest
 public class ResetPasswordControllerTest {
     
     @MockBean 
-    private ResetPasswordService resetPasswordService;
-    
-    @MockBean 
-    private LoginService loginService;
+    private IResetPasswordService resetPasswordService;
+
+    @MockBean
+    private IAuthenticationService authenticationService;
 
     @Autowired
     private ResetPasswordController resetPasswordController;

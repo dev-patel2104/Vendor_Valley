@@ -1,40 +1,35 @@
 package com.group10.ControllerTests;
 
-import com.group10.Controller.SignInController;
-import com.group10.Exceptions.UserAlreadyPresentException;
-import com.group10.Model.SignUpModel;
-import com.group10.Service.SignInService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.group10.Service.Interfaces.IAuthenticationService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@RunWith(SpringRunner.class)
+import com.group10.Controller.SignInController;
+import com.group10.Exceptions.UserAlreadyPresentException;
+import com.group10.Model.SignUpModel;
+
 @SpringBootTest
 public class SignInControllerTest
 {
-    @InjectMocks
+    @Autowired
     private SignInController signInController;
-
-    @Mock
-    private SignInService signInService;
+    @MockBean
+    private IAuthenticationService authenticationService;
 
     private SignUpModel signUpModel;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         initializeUser();
     }
 
@@ -66,7 +61,7 @@ public class SignInControllerTest
 
     @Test
     public void SignInSuccessful() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenReturn(true);
+        when(authenticationService.SignIn(signUpModel)).thenReturn(true);
         ResponseEntity<String> res;
         res = ResponseEntity.ok("User has been added successfully");
         assertEquals(res, signInController.signIn(signUpModel));
@@ -74,7 +69,7 @@ public class SignInControllerTest
 
     @Test
     public void SignIn_SQLException() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenThrow(new SQLException("DBMS connection error"));
+        when(authenticationService.SignIn(signUpModel)).thenThrow(new SQLException("DBMS connection error"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("DBMS connection error");
         assertEquals(res, signInController.signIn(signUpModel));
@@ -82,7 +77,7 @@ public class SignInControllerTest
 
     @Test
     public void SignIn_UserAlreadyPresentException() throws UserAlreadyPresentException, SQLException {
-        when(signInService.SignIn(signUpModel)).thenThrow(new UserAlreadyPresentException("The user is already present"));
+        when(authenticationService.SignIn(signUpModel)).thenThrow(new UserAlreadyPresentException("The user is already present"));
         ResponseEntity<String> res;
         res = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user is already present");
         assertEquals(res, signInController.signIn(signUpModel));

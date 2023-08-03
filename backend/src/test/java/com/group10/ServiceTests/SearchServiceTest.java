@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.group10.Repository.Interfaces.IImageRepository;
+import com.group10.Repository.Interfaces.IServiceRepository;
+import com.group10.Service.Interfaces.ISearchService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +19,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.group10.Model.Service;
-import com.group10.Repository.SearchRepository;
-import com.group10.Service.SearchService;
 
 @SpringBootTest
 public class SearchServiceTest {
     
     @MockBean 
-    private SearchRepository searchRepository;
+    private IServiceRepository serviceRepository;
+    
+    @MockBean 
+    private IImageRepository serviceImageRepository;
 
     @MockBean
     private Service service;
 
     @Autowired
-    private SearchService searchService;
+    private ISearchService searchService;
 
 
     @Test
     public void testNullReturn_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doReturn(null).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(null).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
+        Mockito.doReturn(null).when(serviceImageRepository).getImagesForService(null, searchParam);
         assertNull(searchService.getSearchResults(searchParam));
     }
 
@@ -45,7 +50,7 @@ public class SearchServiceTest {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertEquals(expected, searchService.getSearchResults(searchParam));
     }
 
@@ -55,7 +60,8 @@ public class SearchServiceTest {
         String searchParam = "test";
         List<Service> expected = new ArrayList<>();
         expected.add(service);
-        Mockito.doReturn(expected).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doReturn(expected).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
+        Mockito.doReturn(expected).when(serviceImageRepository).getImagesForService(expected, searchParam);
         assertEquals(expected.size(), searchService.getSearchResults(searchParam).size());
     }
     
@@ -63,7 +69,7 @@ public class SearchServiceTest {
     public void testSQLException_getSearchResults() throws SQLException {
         // Mock repository layer and check if the correct results are returned
         String searchParam = "test";
-        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(searchRepository).getSearchResults(searchParam);
+        Mockito.doThrow(new SQLException("Db Connection Lost!")).when(serviceRepository).getServicesBasedOnSearchParam(searchParam);
         assertThrows(SQLException.class, () -> searchService.getSearchResults(searchParam).size());
     }
 
@@ -72,7 +78,7 @@ public class SearchServiceTest {
         // Mock repository layer and check if the correct results are returned
         List<Service> services = null;
         String sortParam = "test";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertNull(searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -80,7 +86,7 @@ public class SearchServiceTest {
     public void testEmptyList_sortSearchResults(){
         List<Service> services = new ArrayList<>();
         String sortParam = "test";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -89,7 +95,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = null;
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -98,7 +104,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -107,7 +113,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "test";
-        String sortOrder = null;
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -116,7 +122,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "test";
-        String sortOrder = "";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -125,7 +131,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "test";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -134,7 +140,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "test";
-        String sortOrder = "desc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -143,7 +149,7 @@ public class SearchServiceTest {
         List<Service> services = new ArrayList<>();
         services.add(service);
         String sortParam = "test";
-        String sortOrder = "invalid";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -157,7 +163,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "price";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -171,7 +177,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "price";
-        String sortOrder = "desc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -185,7 +191,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "price";
-        String sortOrder = "invalid";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -199,7 +205,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "rating";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -213,7 +219,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "rating";
-        String sortOrder = "desc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -227,7 +233,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "rating";
-        String sortOrder = "invalid";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -241,7 +247,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "booking";
-        String sortOrder = "asc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -255,7 +261,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "booking";
-        String sortOrder = "desc";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 
@@ -269,7 +275,7 @@ public class SearchServiceTest {
         services.add(service1);
         services.add(service2);
         String sortParam = "booking";
-        String sortOrder = "invalid";
+        Boolean sortOrder = true;
         assertEquals(services, searchService.sortSearchResults(services, sortParam, sortOrder));
     }
 

@@ -38,6 +38,7 @@ build-frontend:
     - npm install
     - npm install -g @vue/cli-service
     - npm install @vue/cli-plugin-babel
+    - npm install resize-observer-polyfill
     - npm run build
   tags:
     - dalfcs_docker_autoscale
@@ -70,7 +71,7 @@ deploy-frontend:
     - echo "Deploying Success"
     - apt update
     - apt -y install curl
-    - curl -X POST -d {} https://api.netlify.com/build_hooks/648d24e694a8663c58b939b0
+    - curl -k -X POST -d {} https://api.netlify.com/build_hooks/648d24e694a8663c58b939b0
   tags:
     - dalfcs_docker_autoscale
   only:
