@@ -14,6 +14,7 @@ import java.util.Set;
 
 import com.group10.Enums.*;
 import com.group10.Model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import com.group10.Constants.Constants;
@@ -22,6 +23,7 @@ import com.group10.Constants.Constants;
  * Utility class for mapping a ResultSet to a User object.
  */
 @Component
+@Slf4j
 public class MapResultSetUtil {
     /**
      * Maps a ResultSet object to a User object.
@@ -31,21 +33,30 @@ public class MapResultSetUtil {
      * @throws SQLException If there is an error accessing the ResultSet.
      */
     public User mapResultSetToUser(ResultSet resultSet) throws SQLException {
+        log.debug("Mapping ResultSet to User object");
+
         User user = new User();
-        int columnIndex = resultSet.findColumn(UserTableColumns.USER_ID.getColumnName());
-        Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : Constants.USERDOESNTEXIST;
-        user.setUserId(value instanceof Integer ? (Integer) value : Integer.parseInt((String) value));
-        user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
-        user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
-        user.setMobile(resultSet.getString(UserTableColumns.MOBILE.getColumnName()));
-        user.setVendor(resultSet.getInt(UserTableColumns.IS_VENDOR.getColumnName()));
-        user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
-        user.setStreet(resultSet.getString(UserTableColumns.STREET.getColumnName()));
-        user.setCity(resultSet.getString(UserTableColumns.CITY.getColumnName()));
-        user.setProvince(resultSet.getString(UserTableColumns.PROVINCE.getColumnName()));
-        user.setCountry(resultSet.getString(UserTableColumns.COUNTRY.getColumnName()));
-        user.setPassword(resultSet.getString(UserTableColumns.PASSWORD.getColumnName()));
-        // Set other properties as needed
+        try {
+            int columnIndex = resultSet.findColumn(UserTableColumns.USER_ID.getColumnName());
+            Object value = resultSet.getObject(columnIndex) != null ? resultSet.getObject(columnIndex) : Constants.USERDOESNTEXIST;
+            user.setUserId(value instanceof Integer ? (Integer) value : Integer.parseInt((String) value));
+            user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
+            user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
+            user.setMobile(resultSet.getString(UserTableColumns.MOBILE.getColumnName()));
+            user.setVendor(resultSet.getInt(UserTableColumns.IS_VENDOR.getColumnName()));
+            user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
+            user.setStreet(resultSet.getString(UserTableColumns.STREET.getColumnName()));
+            user.setCity(resultSet.getString(UserTableColumns.CITY.getColumnName()));
+            user.setProvince(resultSet.getString(UserTableColumns.PROVINCE.getColumnName()));
+            user.setCountry(resultSet.getString(UserTableColumns.COUNTRY.getColumnName()));
+            user.setPassword(resultSet.getString(UserTableColumns.PASSWORD.getColumnName()));
+            // Set other properties as needed
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to User object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped User: " + user);
         return user;
     }
 
@@ -56,18 +67,27 @@ public class MapResultSetUtil {
      * @return The Review object with the mapped data
      * @throws SQLException If there is an error accessing the data from the ResultSet
      */
-    public Review mapResultSetToReview(ResultSet resultSet) throws SQLException{
+    public Review mapResultSetToReview(ResultSet resultSet) throws SQLException {
+        log.debug("Mapping ResultSet to Review object");
+
         Review review = new Review();
-        review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.SERVICE_ID.getColumnName()));
-        review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.BOOKING_ID.getColumnName()));
-        review.setReviewerId(resultSet.getInt(GetReviewsByServiceQueryColumns.USER_ID.getColumnName()));
-        review.setReviewTitle(resultSet.getString(GetReviewsByServiceQueryColumns.TITLE.getColumnName()));
-        review.setReviewComment(resultSet.getString(GetReviewsByServiceQueryColumns.COMMENT_TEXT.getColumnName()));
-        review.setReviewDate(resultSet.getString(GetReviewsByServiceQueryColumns.REVIEW_DATE.getColumnName()));
-        review.setReviewRating(resultSet.getInt(GetReviewsByServiceQueryColumns.RATING.getColumnName()));
-        review.setReviewerName(resultSet.getString(GetReviewsByServiceQueryColumns.NAME.getColumnName()));
-        review.setReviewerCity(resultSet.getString(GetReviewsByServiceQueryColumns.CITY.getColumnName()));
-        review.setReviewerCountry(resultSet.getString(GetReviewsByServiceQueryColumns.COUNTRY.getColumnName()));
+        try {
+            review.setServiceId(resultSet.getInt(GetReviewsByServiceQueryColumns.SERVICE_ID.getColumnName()));
+            review.setBookingId(resultSet.getInt(GetReviewsByServiceQueryColumns.BOOKING_ID.getColumnName()));
+            review.setReviewerId(resultSet.getInt(GetReviewsByServiceQueryColumns.USER_ID.getColumnName()));
+            review.setReviewTitle(resultSet.getString(GetReviewsByServiceQueryColumns.TITLE.getColumnName()));
+            review.setReviewComment(resultSet.getString(GetReviewsByServiceQueryColumns.COMMENT_TEXT.getColumnName()));
+            review.setReviewDate(resultSet.getString(GetReviewsByServiceQueryColumns.REVIEW_DATE.getColumnName()));
+            review.setReviewRating(resultSet.getInt(GetReviewsByServiceQueryColumns.RATING.getColumnName()));
+            review.setReviewerName(resultSet.getString(GetReviewsByServiceQueryColumns.NAME.getColumnName()));
+            review.setReviewerCity(resultSet.getString(GetReviewsByServiceQueryColumns.CITY.getColumnName()));
+            review.setReviewerCountry(resultSet.getString(GetReviewsByServiceQueryColumns.COUNTRY.getColumnName()));
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Review object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped Review: " + review);
         return review;
     }
 
@@ -79,37 +99,47 @@ public class MapResultSetUtil {
      * @throws SQLException If there is an error accessing the ResultSet data
      */
     public Service mapResultSetToService(ResultSet resultSet, boolean getCompanyInfo) throws SQLException {
+        log.debug("Mapping ResultSet to Service object");
+
         Service service = new Service();
-        service.setServiceId(resultSet.getInt(SearchServiceQueryColumns.SERVICE_ID.getColumnName()));
-        service.setUserId(resultSet.getInt(SearchServiceQueryColumns.USER_ID.getColumnName()));
-        service.setServiceName(resultSet.getString(SearchServiceQueryColumns.SERVICE_NAME.getColumnName()));
-        service.setServiceDescription(resultSet.getString(SearchServiceQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
-        service.setServicePrice(resultSet.getString(SearchServiceQueryColumns.SERVICE_PRICE.getColumnName()));
-        service.setImages(new ArrayList<>());
-        String categories = resultSet.getString(SearchServiceQueryColumns.CATEGORIES.getColumnName());
-        if (categories != null){
-            service.setCategoryNames(Arrays.asList(categories.split(",")));
+        try {
+            service.setServiceId(resultSet.getInt(SearchServiceQueryColumns.SERVICE_ID.getColumnName()));
+            service.setUserId(resultSet.getInt(SearchServiceQueryColumns.USER_ID.getColumnName()));
+            service.setServiceName(resultSet.getString(SearchServiceQueryColumns.SERVICE_NAME.getColumnName()));
+            service.setServiceDescription(resultSet.getString(SearchServiceQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
+            service.setServicePrice(resultSet.getString(SearchServiceQueryColumns.SERVICE_PRICE.getColumnName()));
+            service.setImages(new ArrayList<>());
+            String categories = resultSet.getString(SearchServiceQueryColumns.CATEGORIES.getColumnName());
+            if (categories != null){
+                service.setCategoryNames(Arrays.asList(categories.split(",")));
+            } else {
+                service.setCategoryNames(new ArrayList<>());
+            }
+
+            if (!getCompanyInfo) {
+                return service;
+            }
+
+            service.setCompanyStreet(resultSet.getString(SearchServiceQueryColumns.COMPANY_STREET.getColumnName()));
+            service.setCompanyCity(resultSet.getString(SearchServiceQueryColumns.COMPANY_CITY.getColumnName()));
+            service.setCompanyProvince(resultSet.getString(SearchServiceQueryColumns.COMPANY_PROVINCE.getColumnName()));
+            service.setCompanyCountry(resultSet.getString(SearchServiceQueryColumns.COMPANY_COUNTRY.getColumnName()));
+
+            String ratingString =  resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName());
+            if (ratingString != null && ratingString.contains(".")) {
+                Double rating = Double.parseDouble(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+                service.setAverageRating(String.format("%.1f", rating));
+            } else {
+                service.setAverageRating(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
+            }
+
+            service.setTotalBookings(resultSet.getString(SearchServiceQueryColumns.TOTAL_BOOKINGS.getColumnName()));
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Service object: " + e.getMessage());
+            throw e;
         }
-        else{
-            service.setCategoryNames(new ArrayList<>());
-        }
-        if(getCompanyInfo == false)
-        {
-            return service;
-        }
-        service.setCompanyStreet(resultSet.getString(SearchServiceQueryColumns.COMPANY_STREET.getColumnName()));
-        service.setCompanyCity(resultSet.getString(SearchServiceQueryColumns.COMPANY_CITY.getColumnName()));
-        service.setCompanyProvince(resultSet.getString(SearchServiceQueryColumns.COMPANY_PROVINCE.getColumnName()));
-        service.setCompanyCountry(resultSet.getString(SearchServiceQueryColumns.COMPANY_COUNTRY.getColumnName()));
-        String ratingString =  resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName());
-        if (ratingString!=null && ratingString.contains(".")){
-            Double rating =Double.parseDouble(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
-            service.setAverageRating(String.format("%.1f", rating));
-        }
-        else{
-            service.setAverageRating(resultSet.getString(SearchServiceQueryColumns.AVERAGE_RATING.getColumnName()));
-        }
-        service.setTotalBookings(resultSet.getString(SearchServiceQueryColumns.TOTAL_BOOKINGS.getColumnName()));
+
+        log.debug("Mapped Service: " + service);
         return service;
     }
 
@@ -120,14 +150,23 @@ public class MapResultSetUtil {
      * @return A Service object with the mapped data.
      * @throws SQLException If there is an error accessing the data from the ResultSet.
      */
-    public Service mapResultSetToPrivateService(ResultSet resultSet) throws SQLException{
+    public Service mapResultSetToPrivateService(ResultSet resultSet) throws SQLException {
+        log.debug("Mapping ResultSet to private Service object");
+
         Service service = new Service();
-        service.setServiceId(resultSet.getInt(GetServiceDetailsQueryColumns.SERVICE_ID.getColumnName()));
-        service.setUserId(resultSet.getInt(GetServiceDetailsQueryColumns.USER_ID.getColumnName()));
-        service.setServiceName(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_NAME.getColumnName()));
-        service.setServiceDescription(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
-        service.setServicePrice(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_PRICE.getColumnName()));
-        service.setCompanyEmail(resultSet.getString(GetServiceDetailsQueryColumns.COMPANY_EMAIL.getColumnName()));
+        try {
+            service.setServiceId(resultSet.getInt(GetServiceDetailsQueryColumns.SERVICE_ID.getColumnName()));
+            service.setUserId(resultSet.getInt(GetServiceDetailsQueryColumns.USER_ID.getColumnName()));
+            service.setServiceName(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+            service.setServiceDescription(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_DESCRIPTION.getColumnName()));
+            service.setServicePrice(resultSet.getString(GetServiceDetailsQueryColumns.SERVICE_PRICE.getColumnName()));
+            service.setCompanyEmail(resultSet.getString(GetServiceDetailsQueryColumns.COMPANY_EMAIL.getColumnName()));
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to private Service object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped private Service: " + service);
         return service;
     }
 
@@ -138,27 +177,33 @@ public class MapResultSetUtil {
      * @return the mapped Booking object
      * @throws SQLException if a database access error occurs or if the ResultSet is not valid
      */
-    public Booking mapResultSetToVendorsBooking(ResultSet resultSet) throws SQLException
-    {
+    public Booking mapResultSetToVendorsBooking(ResultSet resultSet) throws SQLException {
+        log.debug("Mapping ResultSet to vendor's Booking object");
+
         Booking booking = new Booking();
         User user;
-        booking = new Booking();
-        booking.setServiceName(resultSet.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
-        booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
-        booking.setBookingDate(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
-        booking.setStartDate(resultSet.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
-        booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
-        booking.setBookingStatus(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
-        booking.setServiceId(resultSet.getInt(GetBookingDetailsQueryColumns.SERVICE_ID.getColumnName()));
+        try {
+            booking.setServiceName(resultSet.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+            booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+            booking.setBookingDate(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
+            booking.setStartDate(resultSet.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
+            booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+            booking.setBookingStatus(resultSet.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+            booking.setServiceId(resultSet.getInt(GetBookingDetailsQueryColumns.SERVICE_ID.getColumnName()));
 
-        user = mapResultSetToUser(resultSet);
-        if(user.getUserId() == Constants.USERDOESNTEXIST)
-        {
-            return null;
+            user = mapResultSetToUser(resultSet);
+            if (user.getUserId() == Constants.USERDOESNTEXIST) {
+                log.debug("No valid user found for the booking");
+                return null;
+            }
+
+            booking.setUser(user);
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to vendor's Booking object: " + e.getMessage());
+            throw e;
         }
 
-        booking.setUser(user);
-
+        log.debug("Mapped vendor's Booking: " + booking);
         return booking;
     }
 
@@ -286,78 +331,131 @@ public class MapResultSetUtil {
         }
         return value;
     }
-    
+
     public Booking mapResultSetToCustomerBookings(ResultSet rs) throws SQLException {
+        log.debug("Mapping ResultSet to Customer's Booking object");
+
         Booking booking = new Booking();
-        booking.setServiceName(rs.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
-        booking.setBookingId(rs.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
-        booking.setBookingDate(rs.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
-        booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
-        booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
-        booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+        try {
+            booking.setServiceName(rs.getString(GetBookingDetailsQueryColumns.SERVICE_NAME.getColumnName()));
+            booking.setBookingId(rs.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+            booking.setBookingDate(rs.getString(GetBookingDetailsQueryColumns.BOOKING_DATE.getColumnName()));
+            booking.setStartDate(rs.getString(GetBookingDetailsQueryColumns.START_DATE.getColumnName()));
+            booking.setEndDate(rs.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+            booking.setBookingStatus(rs.getString(GetBookingDetailsQueryColumns.BOOKING_STATUS.getColumnName()));
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Customer's Booking object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped Customer's Booking: " + booking);
         return booking;
     }
 
     public Category mapResultSetToFeaturedCategories(ResultSet rs1) throws SQLException {
+        log.debug("Mapping ResultSet to Featured Category object");
+
         Category cat = new Category();
-        cat.setTotalServices(rs1.getInt(FeaturedCategories.TOTAL_SERVICES.getColumnName()));
-        cat.setCategoryId(rs1.getInt(FeaturedCategories.CATEGORY_ID.getColumnName()));
-        cat.setCategoryName(rs1.getString(FeaturedCategories.CATEGORY_NAME.getColumnName()));
-        cat.setCategoryDescription(rs1.getString(FeaturedCategories.CATEGORY_DESCRIPTION.getColumnName()));
-        byte[] imageData = rs1.getBytes(FeaturedCategories.CATEGORY_IMAGE.getColumnName());
-        if(imageData != null)
-        {
-            cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
+        try {
+            cat.setTotalServices(rs1.getInt(FeaturedCategories.TOTAL_SERVICES.getColumnName()));
+            cat.setCategoryId(rs1.getInt(FeaturedCategories.CATEGORY_ID.getColumnName()));
+            cat.setCategoryName(rs1.getString(FeaturedCategories.CATEGORY_NAME.getColumnName()));
+            cat.setCategoryDescription(rs1.getString(FeaturedCategories.CATEGORY_DESCRIPTION.getColumnName()));
+            byte[] imageData = rs1.getBytes(FeaturedCategories.CATEGORY_IMAGE.getColumnName());
+            if (imageData != null) {
+                cat.setBase64Image(Base64.getEncoder().encodeToString(imageData));
+            } else {
+                cat.setBase64Image("");
+            }
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Featured Category object: " + e.getMessage());
+            throw e;
         }
-        else
-        {
-            cat.setBase64Image("");
-        }
+
+        log.debug("Mapped Featured Category: " + cat);
         return cat;
     }
 
+
     public Service mapResultSetToTrendingServiceQuery(ResultSet rs) throws SQLException {
-        int totalBookings;
-        try{
-            totalBookings = rs.getInt(TrendingServiceQuery.TOTAL_BOOKINGS_FOR_SERVICE.getColumnName());
+        log.debug("Mapping ResultSet to Trending Service object");
+
+        Service ser = new Service();
+        try {
+            int totalBookings;
+            try {
+                totalBookings = rs.getInt(TrendingServiceQuery.TOTAL_BOOKINGS_FOR_SERVICE.getColumnName());
+            } catch (SQLException e) {
+                totalBookings = 0;
+            }
+            ser.setServiceId(rs.getInt(TrendingServiceQuery.SERVICE_ID.getColumnName()));
+            ser.setTotalBookingsForService(totalBookings);
+            ser.setServiceName(rs.getString(TrendingServiceQuery.SERVICE_NAME.getColumnName()));
+            ser.setServiceDescription(rs.getString(TrendingServiceQuery.SERVICE_DESCRIPTION.getColumnName()));
+            ser.setServicePrice(rs.getString(TrendingServiceQuery.SERVICE_PRICE.getColumnName()));
+            byte[] imageData = rs.getBytes(TrendingServiceQuery.SERVICE_IMAGE.getColumnName());
+            if (imageData != null) {
+                ser.setImages(new ArrayList<>());
+                ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
+            }
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Trending Service object: " + e.getMessage());
+            throw e;
         }
-        catch(SQLException e){
-            totalBookings = 0;
-        }
-        Service ser;
-        ser = new Service();
-        ser.setServiceId(rs.getInt(TrendingServiceQuery.SERVICE_ID.getColumnName()));
-        ser.setTotalBookingsForService(totalBookings);
-        ser.setServiceName(rs.getString(TrendingServiceQuery.SERVICE_NAME.getColumnName()));
-        ser.setServiceDescription(rs.getString(TrendingServiceQuery.SERVICE_DESCRIPTION.getColumnName()));
-        ser.setServicePrice(rs.getString(TrendingServiceQuery.SERVICE_PRICE.getColumnName()));
-        byte[] imageData = rs.getBytes(TrendingServiceQuery.SERVICE_IMAGE.getColumnName());
-        if(imageData != null)
-        {
-            ser.setImages(new ArrayList<>());
-            ser.getImages().add(Base64.getEncoder().encodeToString(imageData));
-        }
+
+        log.debug("Mapped Trending Service: " + ser);
         return ser;
     }
 
+    /**
+     * Maps a ResultSet to a Category object containing category details.
+     *
+     * @param resultSet The ResultSet containing the category details.
+     * @return A Category object with category details mapped from the ResultSet.
+     * @throws SQLException If there's an issue accessing the ResultSet.
+     */
     public Category mapResultSetToGetCategoriesQuery(ResultSet resultSet) throws SQLException {
-        Category cat;
-        cat = new Category();
-        cat.setCategoryId(resultSet.getInt(GetCategoriesQuery.CATEGORY_ID.getColumnName()));
-        cat.setCategoryName(resultSet.getString(GetCategoriesQuery.CATEGORY_NAME.getColumnName()));
-        cat.setCategoryDescription(resultSet.getString(GetCategoriesQuery.CATEGORY_DESCRIPTION.getColumnName()));
+        log.debug("Mapping ResultSet to Category object");
+
+        Category cat = new Category();
+        try {
+            cat.setCategoryId(resultSet.getInt(GetCategoriesQuery.CATEGORY_ID.getColumnName()));
+            cat.setCategoryName(resultSet.getString(GetCategoriesQuery.CATEGORY_NAME.getColumnName()));
+            cat.setCategoryDescription(resultSet.getString(GetCategoriesQuery.CATEGORY_DESCRIPTION.getColumnName()));
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Category object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped Category: " + cat);
         return cat;
     }
 
+    /**
+     * Maps a ResultSet to a Booking object containing booking details.
+     *
+     * @param resultSet The ResultSet containing the booking details.
+     * @return A Booking object with booking details mapped from the ResultSet.
+     * @throws SQLException If there's an issue accessing the ResultSet.
+     */
     public Booking mapResultSetToHasBookingEnded(ResultSet resultSet) throws SQLException {
+        log.debug("Mapping ResultSet to Booking object");
+
         Booking booking = new Booking();
         User user = new User();
-        user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
-        user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
-        user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
-        booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
-        booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
-        booking.setUser(user);
+        try {
+            user.setEmail(resultSet.getString(UserTableColumns.EMAIL.getColumnName()));
+            user.setFirstName(resultSet.getString(UserTableColumns.FIRST_NAME.getColumnName()));
+            user.setLastName(resultSet.getString(UserTableColumns.LAST_NAME.getColumnName()));
+            booking.setEndDate(resultSet.getString(GetBookingDetailsQueryColumns.END_DATE.getColumnName()));
+            booking.setBookingId(resultSet.getInt(GetBookingDetailsQueryColumns.BOOKING_ID.getColumnName()));
+            booking.setUser(user);
+        } catch (SQLException e) {
+            log.error("Error mapping ResultSet to Booking object: " + e.getMessage());
+            throw e;
+        }
+
+        log.debug("Mapped Booking: " + booking);
         return booking;
     }
 }
