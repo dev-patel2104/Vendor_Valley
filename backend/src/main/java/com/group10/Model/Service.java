@@ -138,4 +138,24 @@ public class Service
     public void setTotalBookings(String totalBookings) {
         this.totalBookings = totalBookings;
     }
+
+    @Override
+    public String toString() {
+        return "Service{" +
+                "serviceId=" + serviceId +
+                ", userId=" + userId +
+                ", serviceName='" + serviceName + '\'' +
+                ", serviceDescription='" + serviceDescription + '\'' +
+                ", servicePrice='" + servicePrice + '\'' +
+                ", images=" + images +
+                ", categoryNames=" + categoryNames +
+                ", companyStreet='" + companyStreet + '\'' +
+                ", companyProvince='" + companyProvince + '\'' +
+                ", companyCity='" + companyCity + '\'' +
+                ", companyCountry='" + companyCountry + '\'' +
+                ", averageRating='" + averageRating + '\'' +
+                ", totalBookings='" + totalBookings + '\'' +
+                ", companyEmail='" + companyEmail + '\'' +
+                '}';
+    }
 }

@@ -75,5 +75,20 @@ public class Review {
     public void setReviewRating(int reviewRating) {
         this.reviewRating = reviewRating;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "reviewerId=" + reviewerId +
+                ", serviceId=" + serviceId +
+                ", bookingId=" + bookingId +
+                ", reviewerName='" + reviewerName + '\'' +
+                ", reviewerCity='" + reviewerCity + '\'' +
+                ", reviewerCountry='" + reviewerCountry + '\'' +
+                ", reviewDate='" + reviewDate + '\'' +
+                ", reviewTitle='" + reviewTitle + '\'' +
+                ", reviewComment='" + reviewComment + '\'' +
+                ", reviewRating=" + reviewRating +
+                '}';
+    }
 }

@@ -89,4 +89,29 @@ public class SignUpModel {
                 companyCountry(getCompanyCountry()).
                 build();
     }
+
+    @Override
+    public String toString() {
+        return "SignUpModel{" +
+                "userId=" + userId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", isVendor=" + isVendor +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", country='" + country + '\'' +
+                ", email='" + email + '\'' +
+                ", userRole='" + userRole + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", companyEmail='" + companyEmail + '\'' +
+                ", companyRegistrationID='" + companyRegistrationID + '\'' +
+                ", companyMobile='" + companyMobile + '\'' +
+                ", companyStreet='" + companyStreet + '\'' +
+                ", companyCity='" + companyCity + '\'' +
+                ", companyProvince='" + companyProvince + '\'' +
+                ", companyCountry='" + companyCountry + '\'' +
+                '}';
+    }
 }
