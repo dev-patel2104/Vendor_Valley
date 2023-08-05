@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.group10.Repository.Interfaces.IImageRepository;
 import com.group10.Repository.Interfaces.IServiceRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.group10.Constants.Constants;
@@ -28,6 +29,7 @@ import com.group10.Util.Interfaces.IFilter;
  * This service is responsible for retrieving search results based on a search parameter.
  */
 @org.springframework.stereotype.Service
+@Slf4j
 public class SearchServiceImpl implements ISearchService{
     @Autowired
     private IServiceRepository searchRepository;
@@ -45,26 +47,17 @@ public class SearchServiceImpl implements ISearchService{
      */
     @Override
     public List<Service> getSearchResults(String searchParam) throws SQLException {
-        try{
-            /**
-             * Retrieves a list of services based on the given search parameter.
-             *
-             * @param searchParam The search parameter used to filter the services.
-             * @return A list of services that match the search parameter.
-             */
+        try {
+            // Retrieve a list of services based on the search parameter
             List<Service> servicesList = searchRepository.getServicesBasedOnSearchParam(searchParam);
-            
-            /**
-             * Retrieves images for a given service and search parameter.
-             *
-             * @param servicesList A list of services to search for images.
-             * @param searchParam The search parameter to use when retrieving images.
-             * @return A list of images related to the given service and search parameter.
-             */
-            return serviceImageRepository.getImagesForService(servicesList, searchParam);
-        }
-        catch (SQLException e)
-        {
+
+            // Retrieve images for the services based on the search parameter
+            List<Service> servicesWithImages = serviceImageRepository.getImagesForService(servicesList, searchParam);
+
+            log.info("Retrieved search results for parameter: " + searchParam);
+            return servicesWithImages;
+        } catch (SQLException e) {
+            log.error("Error occurred while retrieving search results: " + e.getMessage());
             throw new SQLException(e.getMessage());
         }
     }
@@ -79,28 +72,29 @@ public class SearchServiceImpl implements ISearchService{
      * @return The sorted list of services
      */
     public List<Service> sortSearchResults(List<Service> services, String sortParam, Boolean sortOrder) {
-        // Sort the services based on the sort params one by one
-        if (sortOrder == null ){
+        if (sortOrder == null) {
             sortOrder = Constants.ASC;
         }
         ComparatorUtil comparatorUtilObj;
-    
-        if (sortParam == null || sortParam.isEmpty()){
+
+        if (sortParam == null || sortParam.isEmpty()) {
             return services;
         }
-        if (sortParam.equalsIgnoreCase(Constants.PRICE)){
+
+        if (sortParam.equalsIgnoreCase(Constants.PRICE)) {
             comparatorUtilObj = new ComparatorUtil(new PriceComparator(), sortOrder);
-        }
-        else if (sortParam.equalsIgnoreCase(Constants.RATING)){
+        } else if (sortParam.equalsIgnoreCase(Constants.RATING)) {
             comparatorUtilObj = new ComparatorUtil(new RatingComparator(), sortOrder);
-        }
-        else if (sortParam.equalsIgnoreCase(Constants.BOOKINGS)){
+        } else if (sortParam.equalsIgnoreCase(Constants.BOOKINGS)) {
             comparatorUtilObj = new ComparatorUtil(new BookingsComparator(), sortOrder);
-        }
-        else {
+        } else {
             return services;
         }
-        comparatorUtilObj.sort(services);   
+
+        // Perform sorting using the specified comparator and order
+        comparatorUtilObj.sort(services);
+
+        log.info("Sorted search results based on parameter: " + sortParam + ", Order: " + sortOrder);
         return services;
     }
     
@@ -112,35 +106,35 @@ public class SearchServiceImpl implements ISearchService{
      * @param filterValues A map of filter keys and values
      * @return The filtered list of services
      */
-    public List<Service> filterSearchResults(List<Service> services, Map<String, String> filterValues){
-        // Filter the services based on the filter params one by one
-        if (filterValues == null || filterValues.size() == 0){
+    public List<Service> filterSearchResults(List<Service> services, Map<String, String> filterValues) {
+        if (filterValues == null || filterValues.isEmpty()) {
             return services;
         }
+
         List<Service> filteredServices = new ArrayList<>();
         for (Map.Entry<String, String> entry : filterValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            IFilter filterUtilObj = null;  
+            IFilter filterUtilObj = null;
+
             if (key.equalsIgnoreCase(Constants.PRICE)) {
                 filterUtilObj = new PriceFilterImpl(Integer.parseInt(value));
-            } 
-            else if (key.equalsIgnoreCase(Constants.RATING)) {
+            } else if (key.equalsIgnoreCase(Constants.RATING)) {
                 filterUtilObj = new RatingsFilterImpl(Double.parseDouble(value));
-            } 
-            else if (key.equalsIgnoreCase(Constants.BOOKINGS)) {
+            } else if (key.equalsIgnoreCase(Constants.BOOKINGS)) {
                 filterUtilObj = new BookingsFilterImpl(Integer.parseInt(value));
-            } 
-            else if (key.equalsIgnoreCase(Constants.CATEGORY)) {
+            } else if (key.equalsIgnoreCase(Constants.CATEGORY)) {
                 filterUtilObj = new CategoryFilterImpl(value);
-            }
-            else if (key.equalsIgnoreCase(Constants.LOCATION)) {
+            } else if (key.equalsIgnoreCase(Constants.LOCATION)) {
                 filterUtilObj = new LocationFilterImpl(value);
-            }
-            else {
+            } else {
                 return services;
             }
-            filteredServices = filterUtilObj.execute(services);
+
+            // Apply the filter and update the filteredServices list
+            filteredServices = filterUtilObj.execute(filteredServices.isEmpty() ? services : filteredServices);
+
+            log.info("Filtered search results based on filter: " + key + "=" + value);
         }
         return filteredServices;
     }

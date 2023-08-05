@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.group10.Repository.Interfaces.ICustomerRepository;
 import com.group10.Repository.Interfaces.IResetPasswordRepository;
 import com.group10.Service.Interfaces.IResetPasswordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -23,6 +24,7 @@ import com.group10.Util.EmailUtil;
  * Service class for resetting user passwords.
  */
 @Service
+@Slf4j
 public class ResetPasswordServiceImpl implements IResetPasswordService {
     
     @Autowired
@@ -47,19 +49,17 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
      */
     public User checkIfUserExists(String email) throws SQLException, UserDoesntExistException {
         User user = null;
-        try{
-            /**
-             * Retrieves a user from the user repository based on their email.
-             *
-             * @param email The email of the user to retrieve.
-             * @return The user entity associated with the given email, or null if no user is found.
-             */
+        try {
+            // Retrieve a user from the user repository based on their email
             user = CustomerRepositoryImpl.findByEmail(email);
+
+            // Check if the user exists, and throw an exception if not found
             if (user == null) {
-               throw new UserDoesntExistException("User Doesn't Exists!");
+                throw new UserDoesntExistException("User Doesn't Exist!");
             }
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
+            // Log and rethrow the SQLException
+            log.error("Error occurred while checking user existence: " + e.getMessage());
             throw new SQLException(e.getMessage());
         }
         return user;
@@ -79,41 +79,26 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
         SecureRandom rand = new SecureRandom();
         int code = rand.nextInt(Constants.VERIFICATIONCODEBOUND) + Constants.VARIATION;
         int userId = user.getUserId();
-        if (userId == Constants.USERDOESNTEXIST){
+        if (userId == Constants.USERDOESNTEXIST) {
+            log.warn("Attempted to generate verification code for non-existing user");
             return false;
         }
         String email = user.getEmail();
         boolean result;
         try {
-            /**
-             * Stores the verification code for a user's password reset request.
-             *
-             * @param userId The ID of the user requesting the password reset
-             * @param code The verification code to be stored
-             * @return The result of the storage operation
-             */
+            // Store the verification code for the user's password reset request
             result = resetPasswordRepository.storeVerificationCode(userId, code);
-            if (result){
-                /**
-                 * Sends a verification code to the specified email address.
-                 *
-                 * @param email The email address to send the verification code to.
-                 * @param code The verification code to send.
-                 */
+            if (result) {
+                // Send the verification code to the user's email address
                 sendVerificationCode(email, code);
             }
             return true;
         } catch (SQLException e) {
+            log.error("Error occurred while generating verification code: " + e.getMessage());
             throw new SQLException(e.getMessage());
-        }
-        catch (MailAuthenticationException e) {
-           throw new MailAuthenticationException(e.getMessage());
-        }
-        catch (MailSendException e) {
-           throw new MailSendException(e.getMessage());
-        }
-        catch (MailParseException e) {
-           throw new MailSendException(e.getMessage());
+        } catch (MailAuthenticationException | MailSendException | MailParseException e) {
+            log.error("Error occurred while sending email: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -128,28 +113,19 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
      */
     public void sendVerificationCode(String email, int code) throws MailAuthenticationException, MailSendException, MailParseException {
         String subject = "Password Reset Request";
-        String body = "Verficiation Code for resetting password is ";
-        body = body + code;
-        
+        String body = "Verification Code for resetting password is " + code;
+
         emailDetails.setRecipient(email);
         emailDetails.setSubject(subject);
         emailDetails.setMsgBody(body);
+
         try {
-            /**
-             * Sends a simple email using the provided email details.
-             *
-             * @param emailDetails The details of the email to be sent
-             */
+            // Send the verification code email
             emailUtil.sendSimpleMail(emailDetails);
-        }
-        catch (MailAuthenticationException e) {
-           throw new MailAuthenticationException(e.getMessage());
-        }
-        catch (MailSendException e) {
-           throw new MailSendException(e.getMessage());
-        }
-        catch (MailParseException e) {
-           throw new MailParseException(e.getMessage());
+            log.info("Verification code email sent successfully to: " + email);
+        } catch (MailAuthenticationException | MailSendException | MailParseException e) {
+            log.error("Error occurred while sending verification code email: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -165,24 +141,23 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
      */
     public void verifyCode(String email, String enteredCode) throws IllegalArgumentException, NoInformationFoundException, VerificationCodeExpiredException, SQLException {
         try {
-            /**
-             * Retrieves the verification code associated with the given email from the reset password repository.
-             *
-             * @param email The email for which to retrieve the verification code.
-             * @return The verification code associated with the email.
-             */
+            // Retrieve the verification code from the reset password repository
             int code = resetPasswordRepository.getVerificationCode(email);
-            if (code== Constants.VERIFICATIONCODEEXPIRED){
+
+            if (code == Constants.VERIFICATIONCODEEXPIRED) {
                 throw new VerificationCodeExpiredException("Oops! The verification code has expired!");
             }
-            if (code == -1){
+            if (code == -1) {
                 throw new NoInformationFoundException("There seems to be no such information with us!");
             }
-            if(Integer.parseInt(enteredCode) != code){
+            if (Integer.parseInt(enteredCode) != code) {
                 throw new IllegalArgumentException("You entered the wrong code, try again!");
             }
+
+            log.info("Verification code verified successfully for email: " + email);
         } catch (SQLException e) {
-           throw new SQLException(e.getMessage());
+            log.error("Error occurred while verifying verification code: " + e.getMessage());
+            throw new SQLException(e.getMessage());
         }
     }
 
@@ -196,25 +171,23 @@ public class ResetPasswordServiceImpl implements IResetPasswordService {
      * @throws PasswordsCantBeSameException If the new password is the same as the old password.
      */
     public void updatePassword(String email, String newPassword) throws SQLException, UserDoesntExistException, PasswordsCantBeSameException {
-        
-        try{
-            /**
-             * Checks if a user with the given email exists in the system.
-             *
-             * @param email The email of the user to check
-             * @return The User object if the user exists, null otherwise
-             */
+        try {
+            // Check if the user exists and retrieve the user object
             User user = checkIfUserExists(email);
-            if(newPassword.equals(user.getPassword())){
+
+            if (newPassword.equals(user.getPassword())) {
                 throw new PasswordsCantBeSameException("Your new password cannot be your old password!");
             }
-            // update user object's password
+
+            // Update user object's password
             user.setPassword(newPassword);
-            // update the same in db
+            // Update the password in the database
             CustomerRepositoryImpl.updateUser(user);
-        }
-        catch(SQLException e){
-           throw new SQLException(e.getMessage());
+
+            log.info("Password updated successfully for user: " + email);
+        } catch (SQLException e) {
+            log.error("Error occurred while updating password: " + e.getMessage());
+            throw new SQLException(e.getMessage());
         }
     }
 }
