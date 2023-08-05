@@ -10,6 +10,7 @@ import com.group10.Repository.Interfaces.IVendorRepository;
 import com.group10.Service.Interfaces.IHomeService;
 import com.group10.Util.JWTTokenHandler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class HomeServiceImpl implements IHomeService
 {
 
@@ -35,9 +37,16 @@ public class HomeServiceImpl implements IHomeService
      * @return A list of featured categories.
      * @throws SQLException If there is an error connecting to the database or executing the query.
      */
-    public List<Category> featuredCategories() throws SQLException
-    {
-        return categoryRepository.getFeaturedCategories();
+    @Override
+    public List<Category> featuredCategories() throws SQLException {
+        try {
+            List<Category> categories = categoryRepository.getFeaturedCategories();
+            log.info("Retrieved {} featured categories.", categories.size());
+            return categories;
+        } catch (SQLException e) {
+            log.error("Failed to retrieve featured categories: {}", e.getMessage());
+            throw new SQLException("Failed to retrieve featured categories: " + e.getMessage());
+        }
     }
 
     /**
@@ -49,7 +58,14 @@ public class HomeServiceImpl implements IHomeService
      */
     @Override
     public List<com.group10.Model.Service> trendingServices() throws SQLException {
-        return categoryRepository.getTrendingServices();
+        try {
+            List<com.group10.Model.Service> services = categoryRepository.getTrendingServices();
+            log.info("Retrieved {} trending services.", services.size());
+            return services;
+        } catch (SQLException e) {
+            log.error("Failed to retrieve trending services: {}", e.getMessage());
+            throw new SQLException("Failed to retrieve trending services: " + e.getMessage());
+        }
     }
 
     /**
@@ -61,15 +77,28 @@ public class HomeServiceImpl implements IHomeService
      * @throws JWTVerificationException If there is an issue with JWT token verification.
      * @throws NullPointerException If the JWT token is null.
      */
-    public VendorDashboard getVendorDashboardInfo(String JWTToken) throws SQLException, JWTVerificationException, NullPointerException
-    {
-        // Get user id from JWT token
-        DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(JWTToken);
-        int userId = decodedJWT.getClaim("userId").asInt();
-        if (userId == 0) {
-            return null;
+    public VendorDashboard getVendorDashboardInfo(String JWTToken) throws SQLException, JWTVerificationException, NullPointerException {
+        try {
+            // Get user id from JWT token
+            DecodedJWT decodedJWT = jwtTokenHandler.decodeJWTToken(JWTToken);
+            int userId = decodedJWT.getClaim("userId").asInt();
+            if (userId == 0) {
+                return null;
+            }
+
+            VendorDashboard dashboard = VendorRepositoryImpl.getStatistics(userId);
+            log.info("Retrieved dashboard statistics for vendor with userId: {}", userId);
+            return dashboard;
+        } catch (JWTVerificationException e) {
+            log.error("JWT token verification failed: {}", e.getMessage());
+            throw e;
+        } catch (NullPointerException e) {
+            log.error("JWTToken is null: {}", e.getMessage());
+            throw e;
+        } catch (SQLException e) {
+            log.error("Failed to retrieve dashboard statistics: {}", e.getMessage());
+            throw new SQLException("Failed to retrieve dashboard statistics: " + e.getMessage());
         }
-        return VendorRepositoryImpl.getStatistics(userId);
     }
 
     /**
@@ -79,8 +108,14 @@ public class HomeServiceImpl implements IHomeService
      * @return A list of User objects representing the customer information.
      * @throws SQLException If there is an error connecting to the database or executing the query.
      */
-    public List<SignUpModel> getCustomerInfo(List<Integer> userIds) throws SQLException{
-        
-        return VendorRepositoryImpl.getUsers(userIds);
+    public List<SignUpModel> getCustomerInfo(List<Integer> userIds) throws SQLException {
+        try {
+            List<SignUpModel> customerInfo = VendorRepositoryImpl.getUsers(userIds);
+            log.info("Retrieved customer information for user IDs: {}", userIds);
+            return customerInfo;
+        } catch (SQLException e) {
+            log.error("Failed to retrieve customer information: {}", e.getMessage());
+            throw new SQLException("Failed to retrieve customer information: " + e.getMessage());
+        }
     }
 }
