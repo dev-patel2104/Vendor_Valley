@@ -1,4 +1,5 @@
 package com.group10.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailAuthenticationException;
@@ -14,6 +15,7 @@ import com.group10.Model.EmailDetails;
  * Utility class for email-related operations.
  */
 @Component
+@Slf4j
 public class EmailUtil {
 
     private static final String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -33,37 +35,28 @@ public class EmailUtil {
      * @throws MailAuthenticationException If there was an error authenticating the email service.
      * @throws MailParseException If there was an error parsing the email.
      */
-    public boolean sendSimpleMail(EmailDetails email) throws MailSendException, MailAuthenticationException, MailParseException
-    {
-        
-        // Try block to check for exceptions
+    public boolean sendSimpleMail(EmailDetails email) throws MailSendException, MailAuthenticationException, MailParseException {
         try {
-            // Creating a simple mail message
+            log.debug("Sending a simple email to: " + email.getRecipient());
+
             SimpleMailMessage mailMessage = new SimpleMailMessage();
- 
-            // Setting up necessary details
             mailMessage.setFrom(sender);
             mailMessage.setTo(email.getRecipient());
             mailMessage.setText(email.getMsgBody());
             mailMessage.setSubject(email.getSubject());
- 
-            /**
-             * Sends an email using the configured JavaMailSender.
-             *
-             * @param mailMessage The email message to send
-             */
+
             javaMailSender.send(mailMessage);
+
+            log.debug("Email sent successfully to: " + email.getRecipient());
             return true;
-        }
- 
-        // Catch block to handle the exceptions
-        catch (MailSendException e) {
+        } catch (MailSendException e) {
+            log.error("Error sending email: " + e.getMessage());
             throw new MailSendException("Uh-Oh! Email couldn't be sent due to an error!");
-        }
-        catch (MailAuthenticationException e) {
+        } catch (MailAuthenticationException e) {
+            log.error("Email authentication error: " + e.getMessage());
             throw new MailAuthenticationException("Our email service is down! Try again later!");
-        }
-        catch (MailParseException e) {
+        } catch (MailParseException e) {
+            log.error("Email parse error: " + e.getMessage());
             throw new MailParseException("Improper email format!");
         }
     }
@@ -75,7 +68,16 @@ public class EmailUtil {
      * @return true if the email ID is valid, false otherwise.
      */
     public static boolean isValidEmail(String emailID) {
-        return emailID.matches(emailRegex);
-    }
+        log.debug("Validating email: " + emailID);
 
+        boolean isValid = emailID.matches(emailRegex);
+
+        if (isValid) {
+            log.debug("Email is valid: " + emailID);
+        } else {
+            log.debug("Email is not valid: " + emailID);
+        }
+
+        return isValid;
+    }
 }
