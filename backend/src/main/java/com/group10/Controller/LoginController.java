@@ -1,5 +1,7 @@
 package com.group10.Controller;
+
 import com.group10.Service.Interfaces.IAuthenticationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.Map;
  * Controller class for handling login requests.
  */
 @RestController
+@Slf4j
 public class LoginController {
 
     @Value("${secret.key}")
@@ -40,34 +43,45 @@ public class LoginController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
+        log.debug("Handling /login request");
 
         Map<String, String> response = new HashMap<>();
         if (credentials == null) {
+            log.warn("Invalid arguments received. Returning BAD_REQUEST.");
             response.put("error", "Invalid Arguments!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-        boolean credentialsMapCheck =  credentials.size() == 0;
+
+        boolean credentialsMapCheck = credentials.size() == 0;
         if (credentialsMapCheck){
+            log.warn("Invalid arguments received. Returning BAD_REQUEST.");
             response.put("error", "Invalid Arguments!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
         boolean emailCheck = !credentials.containsKey("email") ||  credentials.get("email").equals("");
         boolean passwordCheck = !credentials.containsKey("password") || credentials.get("password").equals("");
         if (emailCheck || passwordCheck){
+            log.warn("Invalid arguments received. Returning BAD_REQUEST.");
             response.put("error", "Invalid Arguments!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+
         String email = credentials.get("email");
         String password = credentials.get("password");
         try{
+            log.debug("Attempting to log in user with email: {}", email);
+
             /**
              * Logs in a user with the provided email and password.
              *
              * @param email The email of the user
              * @param password The password of the user
-             * @return The logged in user object
+             * @return The logged-in user object
              */
             User user = authenticationService.login(email, password);
+
+            log.info("User with email {} logged in successfully.", email);
 
             /**
              * Generates a JWT token for the given user using the token handler.
@@ -83,15 +97,16 @@ public class LoginController {
             return ResponseEntity.ok(response);
         }
         catch(UserDoesntExistException | InvalidPasswordException e){
+            log.warn("Login failed for user with email {}. Error: {}", email, e.getMessage());
             // Login failed
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         catch(SQLException e){
+            log.error("Database error while logging in user with email {}: {}", email, e.getMessage());
             // Database error
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
 }

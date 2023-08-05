@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.group10.Service.Interfaces.ISearchService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import com.group10.Model.Service;
  * Controller class for handling search requests.
  */
 @RestController
+@Slf4j
 public class SearchController {
     @Autowired
     private ISearchService searchService;
@@ -35,11 +37,12 @@ public class SearchController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/search")
-    public ResponseEntity<List<Service>> getSearchResults(@RequestBody Map<String, String> body)
-    {   
+    public ResponseEntity<List<Service>> getSearchResults(@RequestBody Map<String, String> body) {
+        log.info("Received search request: {}", body);
+
         String searchParam = body.get("searchParam");
-        if (searchParam == null || searchParam.equals(""))
-        {
+        if (searchParam == null || searchParam.equals("")) {
+            log.warn("Invalid search request: empty or missing search parameter");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         try
@@ -52,14 +55,12 @@ public class SearchController {
              * @return A list of services that match the search parameter.
              */
             List<Service> services = searchService.getSearchResults(searchParam);
-            
+            log.info("Search successful, returning {} results", services.size());
             return ResponseEntity.ok(services);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
+            log.error("SQLException occurred while processing search request.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
     }
 
     /**
@@ -72,14 +73,19 @@ public class SearchController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/sort")
-    public ResponseEntity<List<Service>> getSortedResults(@RequestBody List<Service> services, @RequestParam String sortParam, @RequestParam Boolean sortOrder)
-    {   
-        if (services == null)
-        {
+    public ResponseEntity<List<Service>> getSortedResults(
+            @RequestBody List<Service> services,
+            @RequestParam String sortParam,
+            @RequestParam Boolean sortOrder) {
+        log.info("Received sort request");
+
+        if (services == null) {
+            log.warn("Invalid sort request: null list of services");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        if (sortParam == null || sortParam == "" || services.size() == 0)
-        {
+
+        if (sortParam == null || sortParam.equals("") || services.size() == 0) {
+            log.warn("Invalid sort request: missing sort parameter or empty service list");
             return ResponseEntity.ok(services);
         }
         try
@@ -94,14 +100,12 @@ public class SearchController {
              * @return The sorted list of services
              */
             services = searchService.sortSearchResults(services, sortParam, sortOrder);
-            
+            log.info("Sort successful");
             return ResponseEntity.ok(services);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
+            log.error("Error occurred while processing sort request.", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
     }
 
     /**
@@ -113,43 +117,32 @@ public class SearchController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/filter")
-    public ResponseEntity<List<Service>> getFilteredResults(@RequestBody List<Service> services, @RequestParam String filterParam)
-    {   
+    public ResponseEntity<List<Service>> getFilteredResults(
+            @RequestBody List<Service> services,
+            @RequestParam String filterParam) {
+        log.info("Received filter request: {}", services);
 
         try {
-            if (services == null)
-            {
+            if (services == null) {
+                log.warn("Invalid filter request: null list of services");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
-            if (filterParam == null || filterParam == "" || services.size() == 0)
-            {
+
+            if (filterParam == null || filterParam.equals("") || services.size() == 0) {
+                log.warn("Invalid filter request: missing filter parameter or empty service list");
                 return ResponseEntity.ok(services);
             }
-            
-            /**
-             * Converts a JSON string into a Map<String, String> object using the Jackson ObjectMapper.
-             *
-             * @param filterParam The JSON string to be converted.
-             * @return A Map<String, String> object representing the JSON data.
-             * @throws IOException If there is an error reading the JSON string.
-             */
-            Map<String, String> filterParamMap = new ObjectMapper().readValue(filterParam, new TypeReference<Map<String, String>>(){});
 
-            /**
-             * Filters the search results based on the given filter parameters.
-             *
-             * @param services The list of services to be filtered
-             * @param filterParamMap The map of filter parameters
-             * @return The filtered list of services
-             */
+            log.info("Converting filter parameter JSON to Map");
+            Map<String, String> filterParamMap = new ObjectMapper().readValue(filterParam, new TypeReference<Map<String, String>>(){});
+            log.info("Filtering services based on filter parameters");
             services = searchService.filterSearchResults(services, filterParamMap);
-        }
-        catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.info("Filtering successful");
+        } catch (JsonProcessingException e) {
+            log.error("Error occurred while processing filter request (JSON processing)", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
+            log.error("Error occurred while processing filter request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(services);
