@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.group10.Service.Interfaces.ICustomerSelectsVendorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import com.group10.Model.Review;
  * Controller class for handling customer selecting vendor service operations.
  */
 @RestController
+@Slf4j
 public class CustomerSelectsVendorController {
     
     @Autowired
@@ -34,17 +36,22 @@ public class CustomerSelectsVendorController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/getReviews")
-    public ResponseEntity<List<Review>> getReviews(@RequestBody Map<String, String> body) 
-    {   
+    public ResponseEntity<List<Review>> getReviews(@RequestBody Map<String, String> body)
+    {
+        log.debug("Received request to get reviews for serviceId: {}", body.get("serviceId"));
+
         String serviceId = body.get("serviceId");
 
         if (serviceId == null || serviceId.equals(""))
         {
+            log.warn("Invalid or missing serviceId received. Returning BAD_REQUEST.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         try
         {
             List<Review> reviews = new ArrayList<>();
+            log.debug("Retrieving reviews for serviceId: {}", serviceId);
+
             /**
              * Retrieves the reviews for a specific service.
              *
@@ -52,21 +59,27 @@ public class CustomerSelectsVendorController {
              * @return A list of reviews for the specified service.
              */
             reviews = customerSelectsVendorService.getReviews(serviceId);
-            
+
+            log.info("Retrieved {} reviews for serviceId: {}", reviews.size(), serviceId);
+
             return ResponseEntity.ok(reviews);
         }
         catch (SQLException e)
         {
+            log.error("SQLException occurred while fetching reviews for serviceId {}: {}", serviceId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         catch (NumberFormatException e){
+            log.error("NumberFormatException occurred while parsing serviceId {}: {}", serviceId, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         catch (Exception e){
+            log.error("An unexpected exception occurred while fetching reviews for serviceId {}: {}", serviceId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
     }
+
 
     /**
      * Endpoint for writing reviews.
@@ -77,11 +90,12 @@ public class CustomerSelectsVendorController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/writeReviews")
-    public ResponseEntity<String> writeReviews(@RequestBody Review review, @RequestHeader String JWTToken) 
-    {   
-
+    public ResponseEntity<String> writeReviews(@RequestBody Review review, @RequestHeader String JWTToken)
+    {
+        log.debug("Write Review payload: {}", review.toString());
         if (review == null || JWTToken == null || JWTToken.equals(""))
         {
+            log.warn("Invalid or missing arguments received. Returning BAD_REQUEST.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
         try
@@ -94,14 +108,18 @@ public class CustomerSelectsVendorController {
              * @return true if the review was successfully written, false otherwise.
              */
             boolean result = customerSelectsVendorService.writeReviews(review, JWTToken);
+
             if (result){
+                log.info("Review added successfully using JWTToken");
                 return ResponseEntity.ok("Review added successfully!");
             }
             else{
+                log.error("Review could not be added using given JWTToken");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Review could not be added!");
             }
         }
         catch (Exception e){
+            log.error("An unexpected exception occurred while writing review using JWTToken: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -120,17 +138,21 @@ public class CustomerSelectsVendorController {
      */
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendEmail( @RequestHeader String JWTToken, @RequestBody Map<String, String> body) 
-    {   
+    public ResponseEntity<String> sendEmail( @RequestHeader String JWTToken, @RequestBody Map<String, String> body)
+    {
+        log.debug("Received request to send email - .");
+
         String serviceId = body.get("serviceId");
         String emailText = body.get("emailText");
 
         if (serviceId == null || serviceId.equals("") || emailText == null || emailText.equals(""))
         {
+            log.warn("Invalid or missing arguments received. Returning BAD_REQUEST.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Arguments!");
         }
         try
         {
+            log.debug("Sending email for serviceId: {}", serviceId);
 
             /**
              * Sends an email to the customer for the selected vendor service.
@@ -140,13 +162,18 @@ public class CustomerSelectsVendorController {
              * @param JWTToken The JWT token for authentication
              * @return true if the email was successfully sent, false otherwise
              */
-            boolean result = customerSelectsVendorService.sendEmail(serviceId, emailText,JWTToken);
+            boolean result = customerSelectsVendorService.sendEmail(serviceId, emailText, JWTToken);
+
             if (!result){
+                log.error("Email could not be sent for serviceId: {}", serviceId);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Email could not be sent!");
             }
+
+            log.info("Email sent successfully for serviceId: {}", serviceId);
             return ResponseEntity.ok("Email sent successfully!");
         }
         catch (Exception e){
+            log.error("An unexpected exception occurred while sending email for serviceId {}: {}", serviceId, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

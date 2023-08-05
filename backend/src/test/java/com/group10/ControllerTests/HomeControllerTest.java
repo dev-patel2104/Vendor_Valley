@@ -95,7 +95,7 @@ public class HomeControllerTest
     public void getTrendingServicesTest() throws SQLException
     {
         initializeServiceList();
-        when(homeService.TrendingServices()).thenReturn(expectedServices);
+        when(homeService.trendingServices()).thenReturn(expectedServices);
         ResponseEntity<List<Service>> res;
         res = ResponseEntity.ok(expectedServices);
         assertEquals(homeController.getTrendingServices().toString(), res.toString());
@@ -106,7 +106,7 @@ public class HomeControllerTest
     {
         initializeServiceList();
         expectedServices.clear();
-        when(homeService.TrendingServices()).thenReturn(expectedServices);
+        when(homeService.trendingServices()).thenReturn(expectedServices);
         ResponseEntity<List<Service>> res;
         res = ResponseEntity.ok(expectedServices);
         assertEquals(homeController.getTrendingServices().toString(), res.toString());
@@ -115,7 +115,7 @@ public class HomeControllerTest
     public void getTrendingServicesTest_SQLException() throws  SQLException
     {
         initializeServiceList();
-        when(homeService.TrendingServices()).thenThrow(new SQLException("Some issue while retrieving the data"));
+        when(homeService.trendingServices()).thenThrow(new SQLException("Some issue while retrieving the data"));
         ResponseEntity<List<Service>> res;
         res = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         assertEquals(homeController.getTrendingServices(), res);

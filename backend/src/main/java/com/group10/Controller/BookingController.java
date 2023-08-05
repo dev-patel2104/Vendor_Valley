@@ -36,13 +36,13 @@ public class BookingController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking")
     public ResponseEntity<String> requestReservation(@RequestHeader String jwtToken, @RequestBody RequestBooking requestBookingModel) {
-        log.debug("Request reservation payload - BookingController: {}", requestBookingModel.toString());
+        log.debug("Request reservation payload: {}", requestBookingModel.toString());
         try {
             if (bookingService.requestReservation(jwtToken, requestBookingModel)) {
-                log.info("Reservation request is successful - BookingController: {}", requestBookingModel);
+                log.info("Reservation request is successful: {}", requestBookingModel);
                 return ResponseEntity.ok("Booking request has been made");
             } else {
-                log.info("Reservation request failed - BookingController: {}", requestBookingModel);
+                log.info("Reservation request failed: {}", requestBookingModel);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cannot request the service now, Please try again");
             }
         } catch (SQLException | JWTVerificationException e) {
@@ -60,13 +60,13 @@ public class BookingController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/booking/respond")
     public ResponseEntity<String> respondToBookingRequest(@RequestHeader String jwtToken, @RequestBody BookingResponseRequest bookingResponseRequestModel) {
-        log.debug("respond to bookingRequest - BookingController: {}", bookingResponseRequestModel.toString());
+        log.debug("respond to bookingRequest: {}", bookingResponseRequestModel.toString());
         try {
             if (bookingService.respondToBooking(jwtToken, bookingResponseRequestModel)) {
-                log.info("Respond to booking is successful - BookingController: {}", bookingResponseRequestModel);
+                log.info("Respond to booking is successful: {}", bookingResponseRequestModel);
                 return ResponseEntity.ok("Booking status updated by vendor");
             } else {
-                log.info("Respond to booking failed - BookingController: {}", bookingResponseRequestModel);
+                log.info("Respond to booking failed: {}", bookingResponseRequestModel);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status of the service request");
             }
         } catch (SQLException e) {

@@ -104,7 +104,7 @@ public class HomeServiceImplTest
     {
         initializeServiceList();
         when(categoryRepository.getTrendingServices()).thenReturn(expectedServices);
-        assertEquals(homeServiceImpl.TrendingServices().size(), expectedServices.size());
+        assertEquals(homeServiceImpl.trendingServices().size(), expectedServices.size());
     }
     @Test
     public void trendingServicesTest_EmptyList() throws  SQLException
@@ -112,14 +112,14 @@ public class HomeServiceImplTest
         initializeServiceList();
         expectedServices.clear();
         when(categoryRepository.getTrendingServices()).thenReturn(expectedServices);
-        assertEquals(homeServiceImpl.TrendingServices().size(), expectedServices.size());
+        assertEquals(homeServiceImpl.trendingServices().size(), expectedServices.size());
     }
     @Test
     public void trendingServicesTest_SQLException() throws SQLException
     {
         initializeServiceList();
         when(categoryRepository.getTrendingServices()).thenThrow(new SQLException("Some issue while retrieving data"));
-        assertThrows(SQLException.class, () -> homeServiceImpl.TrendingServices());
+        assertThrows(SQLException.class, () -> homeServiceImpl.trendingServices());
     }
 
     @Test

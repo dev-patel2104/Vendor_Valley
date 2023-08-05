@@ -47,8 +47,8 @@ public class HomeServiceImpl implements IHomeService
      * @return A list of trending services.
      * @throws SQLException If there is an error connecting to the database or executing the query.
      */
-    public List<com.group10.Model.Service> TrendingServices() throws SQLException
-    {
+    @Override
+    public List<com.group10.Model.Service> trendingServices() throws SQLException {
         return categoryRepository.getTrendingServices();
     }
 
