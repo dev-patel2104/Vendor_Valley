@@ -74,7 +74,7 @@ public class HomeController {
 
         trendingServices = new ArrayList<>();
         try {
-            trendingServices = homeService.TrendingServices();
+            trendingServices = homeService.trendingServices();
             log.info("Retrieved {} trending services", trendingServices.size());
         } catch (SQLException e) {
             log.error("SQL exception occurred while retrieving trending services: {}", e.getMessage());
